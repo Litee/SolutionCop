@@ -1,31 +1,40 @@
 # SolutionCop
-Tool for static analysis of Visual Studio solutions
+Tool for static analysis of Visual Studio solutions. 
+
+TODO command-line parameters description
 
 ## Supported Rules
+
 ### Verify target version of the .NET Framework
 
 Description: Checks <TargetFrameworkVersion> property in *.csproj files and fails if incompatible value was found
 
-Example parameters:
+Id: TargetFrameworkVersion
+
+Example parameter:
+
     <TargetFrameworkVersion enabled="true">4.5</TargetFrameworkVersion>
-    <TargetFrameworkVersion enabled="false"/>
 
 ### Should reference binaries only in NuGet packages
 
 Description: Looks into all <HintPath> values and fails if path doesn't points to NuGet package
 
-Example parameters:
-    <ReferencePackagesOnly/>
-    <ReferencePackagesOnly enabled="false"/>
+Id: ReferencePackagesOnly
 
+### Verify that all warnings are treated as errors
 
-TODO:
+Description: Fails if "Treat warnings as errors" is not enabled in all build configurations
+
+Id: TreatWarningsAsErrors
+
+### TODO rules:
 * Copy Local
-* No duplicate packages
+* No duplicate NuGet packages
 * Package binary referenced, but package is not used
-* Same version for packages
-* Solution version
-* Package versions
-* StyleCop used
+* Same package versions are used for in project (support exceptions)
+* VS solution version
+* NuGet package versions
+* StyleCop enabled for all projects
 * Suppress specific warnings
-* New NuGet initialization
+* New NuGet initialization approach
+* Same name for Assembly and root namespace
