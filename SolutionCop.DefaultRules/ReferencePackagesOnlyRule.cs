@@ -9,7 +9,7 @@ namespace SolutionCop.DefaultRules
     {
         public override string DisplayName
         {
-            get { return "Verify version of the target .NET framework"; }
+            get { return "Should reference binaries only in NuGet packages"; }
         }
 
         public override string Id

@@ -34,7 +34,7 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_skip_disabled_rule()
         {
-            const string parameters = "<TargetFrameworkVersion enabled=\"false\">4.5</TargetFrameworkVersion>";
+            const string parameters = "<TargetFrameworkVersion enabled=\"false\"></TargetFrameworkVersion>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TargetFramework3_5.csproj").FullName, XElement.Parse(parameters));
             Assert.Empty(errors);
         }
