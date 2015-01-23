@@ -50,6 +50,7 @@
     <Compile Include="ReferencePackagesOnlyRuleTests.cs" />
     <Compile Include="TargetFrameworkVersionRuleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreatWarningsAsErrorsRuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
