@@ -9,7 +9,7 @@ namespace SolutionCop.DefaultRules
     {
         public override string DisplayName
         {
-            get { return "Verify that only specific warnings are suppressed"; }
+            get { return "Verify that only approved warnings are suppressed"; }
         }
 
         public override string Id

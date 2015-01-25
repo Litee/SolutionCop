@@ -49,6 +49,14 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_pass_if_rule_is_disabled()
+        {
+            const string config = "<SuppressOnlySpecificWarnings enabled=\"false\">0465</SuppressOnlySpecificWarnings>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressTwoWarnings.csproj").FullName, XElement.Parse(config));
+            Assert.Empty(errors);
+        }
+
+        [Fact]
         public void Should_fail_if_two_unapproved_warnings_suppressed()
         {
             const string config = "<SuppressOnlySpecificWarnings></SuppressOnlySpecificWarnings>";
