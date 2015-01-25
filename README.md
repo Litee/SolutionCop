@@ -27,13 +27,19 @@ Description: Fails if "Treat warnings as errors" is not enabled in all build con
 
 Id: TreatWarningsAsErrors
 
+### Verify that only approved warnings are suppressed
+
+Description: Fails if project suppresses warning that is not in the white list
+
+Id: SuppressOnlySpecificWarnings
+
 ### TODO rules:
 * Copy Local
 * No duplicate NuGet packages
 * Package binary referenced, but package is not used
 * Same package versions are used for in project (support exceptions)
 * VS solution version
-* NuGet package versions
+* NuGet package versions should match specific ranges
 * StyleCop enabled for all projects
 * New NuGet initialization approach
 * Same name for Assembly and root namespace
