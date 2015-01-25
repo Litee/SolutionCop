@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SolutionCop</id>
+    <version>$version$</version>
+    <title>SolutionCop</title>
+    <authors>Andrey "Litee" Lipatkin</authors>
+    <owners>litee</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/Litee/SolutionCop</projectUrl>
+    <!--<iconUrl></iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Tool for static analysis of Visual Studio solutions and projects.</description>
+    <language>en-US</language>
+    <tags>VS, VisualStudio, StyleCop, FxCop</tags>
+    <releaseNotes>https://github.com/Litee/SolutionCop/releases</releaseNotes>
+  </metadata>
+  <files>
+    <file src="Bin/Debug/SolutionCop.exe" target="tools" />
+    <file src="Bin/Debug/SolutionCop.API.dll" target="tools" />
+    <file src="Bin/Debug/SolutionCop.DefaultRules.dll" target="tools" />
+    <file src="Bin/Debug/CommandLine.dll" target="tools" />
+  </files>
+</package>

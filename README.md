@@ -1,7 +1,9 @@
 # SolutionCop
-Tool for static analysis of Visual Studio solutions. 
+Tool for static analysis of Visual Studio solutions and projects. 
 
-TODO command-line parameters description
+Usage: SolutionCop.exe -s <path-to-vs-solution> [-c <path-to-solutioncop-config>]
+
+If <path-to-solutioncop-config> is not provided then tool looks for SolutionCop.xml file next to target *.sln. If config file cannot be found then default one is created.
 
 ## Supported Rules
 
@@ -56,3 +58,4 @@ Id: WarningLevel
 * New NuGet initialization approach should be used
 * Name must be same for Assembly and its root namespace
 * Unapproved packages
+* Unapproved build configurations

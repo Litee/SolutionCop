@@ -81,7 +81,7 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_fail_if_two_warnings_must_be_treated_as_errors_and_project_treats_those_specific_two_as_errors_but_only_in_configuration()
+        public void Should_fail_if_two_warnings_must_be_treated_as_errors_and_project_treats_those_but_only_in_one_configuration()
         {
             const string config = "<TreatWarningsAsErrors>0420,0465</TreatWarningsAsErrors>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, XElement.Parse(config));
