@@ -22,7 +22,7 @@ namespace SolutionCop.DefaultRules
             var xmlHintPaths = xmlProject.Descendants(Namespace + "HintPath").Where(x => !x.Value.Contains(@"\packages\"));
             foreach (var xmlHintPath in xmlHintPaths)
             {
-                yield return string.Format("Reference '{0}' is not pointing to NuGet package in project: {1}", xmlHintPath.Value, Path.GetFileName(projectFilePath));
+                yield return string.Format("Reference '{0}' is not pointing to NuGet package in project {1}", xmlHintPath.Value, Path.GetFileName(projectFilePath));
             }
         }
     }

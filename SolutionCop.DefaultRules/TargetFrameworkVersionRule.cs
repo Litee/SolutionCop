@@ -23,7 +23,7 @@ namespace SolutionCop.DefaultRules
             var invalidFrameworkVersions = xmlProject.Descendants(Namespace + "TargetFrameworkVersion").Select(x => x.Value.Substring(1)).Where(x => x != targetFrameworkVersion);
             if (invalidFrameworkVersions.Any())
             {
-                yield return string.Format("Invalid target .NET framework version '{0}' in project: {1}", invalidFrameworkVersions.First(), Path.GetFileName(projectFilePath));
+                yield return string.Format("Invalid target .NET framework version '{0}' in project {1}", invalidFrameworkVersions.First(), Path.GetFileName(projectFilePath));
             }
         }
     }

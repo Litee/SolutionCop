@@ -38,7 +38,7 @@ Id: WarningLevel
 ## Sample config file:
     <Rules>
       <TargetFrameworkVersion enabled="true">4.5</TargetFrameworkVersion>
-      <ReferenceNuGetPackagesOnlyRule enabled="true"/>
+      <ReferenceNuGetPackagesOnly enabled="true"/>
       <TreatWarningsAsErrors>All</TreatWarningsAsErrors>
       <!--<TreatWarningsAsErrors>0123,0234</TreatWarningsAsErrors>-->
       <SuppressWarnings>0123,0234</SuppressWarnings>

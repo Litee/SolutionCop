@@ -1,0 +1,7 @@
+<Rules>
+  <TargetFrameworkVersion enabled="true">4.5</TargetFrameworkVersion>
+  <ReferenceNuGetPackagesOnly enabled="true"/>
+  <TreatWarningsAsErrors enabled="true">All</TreatWarningsAsErrors>
+  <SuppressWarnings enabled="false"></SuppressWarnings>
+  <WarningLevel enabled="true">4</WarningLevel>
+</Rules>

@@ -32,19 +32,19 @@ namespace SolutionCop.DefaultRules
                 {
                     if (allWarningsMustBeTreatedAsErrors)
                     {
-                        yield return string.Format("Not all warnings are treated as an error in project: {0}", Path.GetFileName(projectFilePath));
+                        yield return string.Format("Not all warnings are treated as an error in project {0}", Path.GetFileName(projectFilePath));
                         yield break;
                     }
                     var warningsTreatedAsErrorsInProject = xmlWarningsAsErrors == null ? new string[0] : xmlWarningsAsErrors.Value.Split(',').Select(x => x.Trim());
                     var warningsThatHasNotBeenTreatedAsErrorsInProject = warningsThatMustBeTreatedAsErrors.Except(warningsTreatedAsErrorsInProject);
                     if (warningsThatHasNotBeenTreatedAsErrorsInProject.Count() == 1)
                     {
-                        yield return string.Format("Warning {0} is not treated as an error in project: {1}", warningsThatHasNotBeenTreatedAsErrorsInProject.First(), Path.GetFileName(projectFilePath));
+                        yield return string.Format("Warning {0} is not treated as an error in project {1}", warningsThatHasNotBeenTreatedAsErrorsInProject.First(), Path.GetFileName(projectFilePath));
                         yield break;
                     }
                     if (warningsThatHasNotBeenTreatedAsErrorsInProject.Count() > 1)
                     {
-                        yield return string.Format("Warnings {0} are not treated as errors in project: {1}", string.Join(", ", warningsThatHasNotBeenTreatedAsErrorsInProject), Path.GetFileName(projectFilePath));
+                        yield return string.Format("Warnings {0} are not treated as errors in project {1}", string.Join(", ", warningsThatHasNotBeenTreatedAsErrorsInProject), Path.GetFileName(projectFilePath));
                         yield break;
                     }
                 }

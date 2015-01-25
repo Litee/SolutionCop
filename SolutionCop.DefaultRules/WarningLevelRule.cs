@@ -23,7 +23,7 @@ namespace SolutionCop.DefaultRules
             int requiredWarningLevel;
             if (!Int32.TryParse(xmlRuleConfigs.Value.Trim(), out requiredWarningLevel))
             {
-                yield return string.Format("Cannot parse parameter for rule: {0}", Id);
+                yield return string.Format("Bad parameter format in config for rule {0}. Must be an integer.", Id);
                 yield break;
             }
             var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
@@ -33,7 +33,7 @@ namespace SolutionCop.DefaultRules
                 var warningLevelInProject = xmlWarningLevel == null ? 0 : Int32.Parse(xmlWarningLevel.Value);
                 if (warningLevelInProject < requiredWarningLevel)
                 {
-                    yield return string.Format("Warning level {0} is lower than required {1} in project: {2}", warningLevelInProject, requiredWarningLevel, Path.GetFileName(projectFilePath));
+                    yield return string.Format("Warning level {0} is lower than required {1} in project {2}", warningLevelInProject, requiredWarningLevel, Path.GetFileName(projectFilePath));
                     yield break;
                 }
             }

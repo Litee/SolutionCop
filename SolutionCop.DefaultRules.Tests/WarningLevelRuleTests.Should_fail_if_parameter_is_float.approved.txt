@@ -1,0 +1,1 @@
+﻿Errors[0] = Bad parameter format in config for rule WarningLevel. Must be an integer.

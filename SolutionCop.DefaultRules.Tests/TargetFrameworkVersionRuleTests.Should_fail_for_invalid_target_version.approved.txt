@@ -1,1 +1,1 @@
-﻿Errors[0] = Invalid target .NET framework version '3.5' in project: TargetFramework3_5.csproj
+﻿Errors[0] = Invalid target .NET framework version '3.5' in project TargetFramework3_5.csproj

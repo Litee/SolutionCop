@@ -1,2 +1,2 @@
-﻿Errors[0] = Reference '..\Lib\ApprovalTests.dll' is not pointing to NuGet package in project: HasReferencesToLocalBinaries.csproj
-Errors[1] = Reference '..\Lib\ApprovalUtilities.dll' is not pointing to NuGet package in project: HasReferencesToLocalBinaries.csproj
+﻿Errors[0] = Reference '..\Lib\ApprovalTests.dll' is not pointing to NuGet package in project HasReferencesToLocalBinaries.csproj
+Errors[1] = Reference '..\Lib\ApprovalUtilities.dll' is not pointing to NuGet package in project HasReferencesToLocalBinaries.csproj

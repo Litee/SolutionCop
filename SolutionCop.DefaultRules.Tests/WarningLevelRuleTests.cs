@@ -63,5 +63,13 @@ namespace SolutionCop.DefaultRules.Tests
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
+
+        [Fact]
+        public void Should_fail_if_parameter_is_float()
+        {
+            const string config = "<WarningLevel>4.2</WarningLevel>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, XElement.Parse(config));
+            Approvals.VerifyAll(errors, "Errors");
+        }
     }
 }
