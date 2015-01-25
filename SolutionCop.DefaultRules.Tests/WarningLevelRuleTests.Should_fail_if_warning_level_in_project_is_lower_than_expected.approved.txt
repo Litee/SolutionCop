@@ -1,0 +1,1 @@
+﻿Errors[0] = Warning level 2 is lower than required 4 in project: WarningLevelTwoInAllConfigurations.csproj

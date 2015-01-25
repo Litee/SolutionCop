@@ -7,49 +7,52 @@ TODO command-line parameters description
 
 ### Verify target version of the .NET Framework
 
-Description: Checks <TargetFrameworkVersion> property in *.csproj files and fails if incompatible value was found
+Description: Fails if one of projects has target version different from one specified
 
 Id: TargetFrameworkVersion
 
-Parameter example:
-
-    <TargetFrameworkVersion enabled="true">4.5</TargetFrameworkVersion>
-
-### Should reference binaries only in NuGet packages
+### Verify that all referenced binaries come from NuGet packages
 
 Description: Fails if project references binaries outside NuGet *packages* folder
 
 Id: ReferenceNuGetPackagesOnlyRule
 
-### Verify that all or specific warnings are treated as errors
+### Verify warnings treatment as errors
 
 Description: Fails if "Treat warnings as errors" is not enabled in all build configurations or if not all specified warnings are treated as errors
 
 Id: TreatWarningsAsErrors
 
-Parameter example:
+### Verify suppressed warnings
 
-    <TreatWarningsAsErrors>All</TreatWarningsAsErrors>
-
-    <TreatWarningsAsErrors>0123,0234</TreatWarningsAsErrors>
-
-### Verify that unapproved warnings are not suppressed
-
-Description: Fails if project suppresses warning that is not in the white list
+Description: Fails if project suppresses any warning that is not in the specified white list
 
 Id: SuppressWarnings
 
-Parameter example:
+### Verify warning level
 
-    <SuppressWarnings>0123,0234</SuppressWarnings>
+Description: Fails if any project has warning level lower than one specified
+
+Id: WarningLevel
+
+## Sample config file:
+    <Rules>
+      <TargetFrameworkVersion enabled="true">4.5</TargetFrameworkVersion>
+      <ReferenceNuGetPackagesOnlyRule enabled="true"/>
+      <TreatWarningsAsErrors>All</TreatWarningsAsErrors>
+      <!--<TreatWarningsAsErrors>0123,0234</TreatWarningsAsErrors>-->
+      <SuppressWarnings>0123,0234</SuppressWarnings>
+      <WarningLevel>4</WarningLevel>
+    </Rules>
 
 ### TODO rules:
 * Copy Local
 * No duplicate NuGet packages
-* Package binary referenced, but package is not used
+* Binary within NuGet package is referenced without proper reference in projects.config
 * Same package versions are used for in project (support exceptions)
 * VS solution version
 * NuGet package versions should match specific ranges
-* StyleCop enabled for all projects
-* New NuGet initialization approach
-* Same name for Assembly and root namespace
+* StyleCop must be enabled for all projects
+* New NuGet initialization approach should be used
+* Name must be same for Assembly and its root namespace
+* Unapproved packages

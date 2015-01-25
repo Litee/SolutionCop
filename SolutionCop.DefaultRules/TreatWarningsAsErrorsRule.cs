@@ -10,7 +10,7 @@ namespace SolutionCop.DefaultRules
     {
         public override string DisplayName
         {
-            get { return "Verify that all warnings are treated as errors"; }
+            get { return "Verify warnings treatment as errors"; }
         }
 
         public override string Id
