@@ -13,17 +13,17 @@ namespace SolutionCop.DefaultRules
 
         public abstract string DisplayName { get; }
 
-        public IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleParameters)
+        public IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfigs)
         {
-            var xmlEnabled = xmlRuleParameters.Attribute("enabled");
+            var xmlEnabled = xmlRuleConfigs.Attribute("enabled");
             if (xmlEnabled == null || xmlEnabled.Value.ToLower() != "false")
             {
             var xmlProject = XDocument.Load(projectFilePath);
-                return ValidateProjectWithEnabledRule(projectFilePath, xmlRuleParameters, xmlProject);
+                return ValidateProjectWithEnabledRule(projectFilePath, xmlRuleConfigs, xmlProject);
             }
             return Enumerable.Empty<string>();
         }
 
-        protected abstract IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleParameters, XDocument xmlProject);
+        protected abstract IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleConfigs, XDocument xmlProject);
     }
 }

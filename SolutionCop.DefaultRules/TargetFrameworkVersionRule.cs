@@ -17,9 +17,9 @@ namespace SolutionCop.DefaultRules
             get { return "TargetFrameworkVersion"; }
         }
 
-        protected override IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleParameters, XDocument xmlProject)
+        protected override IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleConfigs, XDocument xmlProject)
         {
-            var targetFrameworkVersion = xmlRuleParameters.Value;
+            var targetFrameworkVersion = xmlRuleConfigs.Value;
             var invalidFrameworkVersions = xmlProject.Descendants(Namespace + "TargetFrameworkVersion").Select(x => x.Value.Substring(1)).Where(x => x != targetFrameworkVersion);
             if (invalidFrameworkVersions.Any())
             {

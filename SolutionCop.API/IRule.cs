@@ -7,6 +7,6 @@ namespace SolutionCop.API
     {
         string Id { get; }
         string DisplayName { get; }
-        IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleParameters);
+        IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfigs);
     }
 }

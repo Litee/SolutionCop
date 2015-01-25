@@ -17,7 +17,7 @@ namespace SolutionCop.DefaultRules
             get { return "ReferencePackagesOnly"; }
         }
 
-        protected override IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleParameters, XDocument xmlProject)
+        protected override IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleConfigs, XDocument xmlProject)
         {
             var xmlHintPaths = xmlProject.Descendants(Namespace + "HintPath").Where(x => !x.Value.Contains(@"\packages\"));
             foreach (var xmlHintPath in xmlHintPaths)

@@ -19,24 +19,24 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_accept_project_references_to_packages_only()
         {
-            const string parameters = "<ReferencePackagesOnly/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\PackageRefsOnly.csproj").FullName, XElement.Parse(parameters));
+            const string config = "<ReferencePackagesOnly/>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\PackageRefsOnly.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
         [Fact]
         public void Should_fail_for_project_with_direct_references_to_binaries()
         {
-            const string parameters = "<ReferencePackagesOnly/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(parameters));
+            const string config = "<ReferencePackagesOnly/>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
             Approvals.VerifyAll(errors, "Errors");
         }
 
         [Fact]
         public void Should_pass_for_disabled_verification()
         {
-            const string parameters = "<ReferencePackagesOnly enabled=\"false\"/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(parameters));
+            const string config = "<ReferencePackagesOnly enabled=\"false\"/>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
     }

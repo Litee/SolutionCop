@@ -17,7 +17,7 @@ namespace SolutionCop.DefaultRules
             get { return "TreatWarningsAsErrors"; }
         }
 
-        protected override IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleParameters, XDocument xmlProject)
+        protected override IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleConfigs, XDocument xmlProject)
         {
             var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
             foreach (var xmlPropertyGroupsWithCondition in xmlPropertyGroupsWithConditions)

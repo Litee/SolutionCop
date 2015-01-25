@@ -1,0 +1,5 @@
+﻿PathsToProjects[0] = SolutionCop.csproj
+PathsToProjects[1] = SolutionCop.DefaultRules.csproj
+PathsToProjects[2] = SolutionCop.API.csproj
+PathsToProjects[3] = SolutionCop.DefaultRules.Tests.csproj
+PathsToProjects[4] = SolutionCop.Tests.csproj
