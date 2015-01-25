@@ -1,1 +1,0 @@
-﻿Errors[0] = 'Treat warnings as errors' is not enabled in project: TreatWarningsAsErrorsDisabled.csproj

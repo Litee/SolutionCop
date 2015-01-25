@@ -1,0 +1,1 @@
+﻿Errors[0] = Not all warnings are treated as an error in project: TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj
