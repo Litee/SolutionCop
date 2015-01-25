@@ -1,0 +1,1 @@
+﻿Errors[0] = Unapproved warning 0420 is suppressed in project: SuppressTwoWarnings.csproj

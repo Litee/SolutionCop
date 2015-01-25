@@ -44,9 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StandardProjectRule.cs" />
-    <Compile Include="SuppressOnlySpecificWarningsRule.cs" />
+    <Compile Include="SuppressWarningsRule.cs" />
     <Compile Include="TargetFrameworkVersionRule.cs" />
-    <Compile Include="ReferencePackagesOnlyRule.cs" />
+    <Compile Include="ReferenceNuGetPackagesOnlyRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TreatWarningsAsErrorsRule.cs" />
   </ItemGroup>

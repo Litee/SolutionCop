@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ApprovalTests">
-      <HintPath>..\packages\ApprovalTests.2.2\lib\ApprovalTests.dll</HintPath>
+      <HintPath>..\Lib\ApprovalTests.dll</HintPath>
     </Reference>
     <Reference Include="ApprovalUtilities">
       <HintPath>..\Lib\ApprovalUtilities.dll</HintPath>

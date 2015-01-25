@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class SuppressOnlySpecificWarningsRule : StandardProjectRule
+    public class SuppressWarningsRule : StandardProjectRule
     {
         public override string DisplayName
         {
@@ -14,7 +14,7 @@ namespace SolutionCop.DefaultRules
 
         public override string Id
         {
-            get { return "SuppressOnlySpecificWarnings"; }
+            get { return "SuppressWarnings"; }
         }
 
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
@@ -30,15 +30,16 @@ namespace SolutionCop.DefaultRules
                     var warningsNotAllowedToSuppress = suppressedWarnings.Except(warningsAllowedToSuppress);
                     if (warningsNotAllowedToSuppress.Count() == 1)
                     {
-                        return Enumerable.Repeat(string.Format("Warning {0} is suppressed in project: {1}", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath)), 1);
+                        yield return string.Format("Unapproved warning {0} is suppressed in project: {1}", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath));
+                        yield break;
                     }
-                    else if (warningsNotAllowedToSuppress.Count() > 1)
+                    if (warningsNotAllowedToSuppress.Count() > 1)
                     {
-                        return Enumerable.Repeat(string.Format("Warnings {0} are suppressed in project: {1}", string.Join(", ", warningsNotAllowedToSuppress), Path.GetFileName(projectFilePath)), 1);
+                        yield return string.Format("Unapproved warnings {0} are suppressed in project: {1}", string.Join(", ", warningsNotAllowedToSuppress), Path.GetFileName(projectFilePath));
+                        yield break;
                     }
                 }
             }
-            return Enumerable.Empty<string>();
         }
     }
 }

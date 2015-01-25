@@ -11,27 +11,37 @@ Description: Checks <TargetFrameworkVersion> property in *.csproj files and fail
 
 Id: TargetFrameworkVersion
 
-Example parameter:
+Parameter example:
 
     <TargetFrameworkVersion enabled="true">4.5</TargetFrameworkVersion>
 
 ### Should reference binaries only in NuGet packages
 
-Description: Looks into all <HintPath> values and fails if path doesn't points to NuGet package
+Description: Fails if project references binaries outside NuGet *packages* folder
 
-Id: ReferencePackagesOnly
+Id: ReferenceNuGetPackagesOnlyRule
 
-### Verify that all warnings are treated as errors
+### Verify that all or specific warnings are treated as errors
 
-Description: Fails if "Treat warnings as errors" is not enabled in all build configurations
+Description: Fails if "Treat warnings as errors" is not enabled in all build configurations or if not all specified warnings are treated as errors
 
 Id: TreatWarningsAsErrors
 
-### Verify that only approved warnings are suppressed
+Parameter example:
+
+    <TreatWarningsAsErrors>All</TreatWarningsAsErrors>
+
+    <TreatWarningsAsErrors>0123,0234</TreatWarningsAsErrors>
+
+### Verify that unapproved warnings are not suppressed
 
 Description: Fails if project suppresses warning that is not in the white list
 
-Id: SuppressOnlySpecificWarnings
+Id: SuppressWarnings
+
+Parameter example:
+
+    <SuppressWarnings>0123,0234</SuppressWarnings>
 
 ### TODO rules:
 * Copy Local

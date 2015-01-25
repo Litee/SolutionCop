@@ -1,1 +1,0 @@
-﻿Unapproved warnings[0] = Warnings 0420, 0465 are suppressed in project: SuppressTwoWarningsInOneConfig.csproj

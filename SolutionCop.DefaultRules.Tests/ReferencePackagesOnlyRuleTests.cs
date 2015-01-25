@@ -7,36 +7,36 @@ using Xunit;
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof(DiffReporter))]
-    public class ReferencePackagesOnlyRuleTests
+    public class ReferenceNuGetPackagesOnlyRuleTests
     {
-        private readonly ReferencePackagesOnlyRule _instance;
+        private readonly ReferenceNuGetPackagesOnlyRule _instance;
 
-        public ReferencePackagesOnlyRuleTests()
+        public ReferenceNuGetPackagesOnlyRuleTests()
         {
-            _instance = new ReferencePackagesOnlyRule();
+            _instance = new ReferenceNuGetPackagesOnlyRule();
         }
 
         [Fact]
         public void Should_accept_project_references_to_packages_only()
         {
-            const string config = "<ReferencePackagesOnly/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\PackageRefsOnly.csproj").FullName, XElement.Parse(config));
+            const string config = "<ReferenceNuGetPackagesOnlyRule/>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\ReferencesPackagesFolderOnly.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
         [Fact]
         public void Should_fail_for_project_with_direct_references_to_binaries()
         {
-            const string config = "<ReferencePackagesOnly/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
+            const string config = "<ReferenceNuGetPackagesOnlyRule/>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
             Approvals.VerifyAll(errors, "Errors");
         }
 
         [Fact]
-        public void Should_pass_for_disabled_verification()
+        public void Should_pass_for_disabled_rule()
         {
-            const string config = "<ReferencePackagesOnly enabled=\"false\"/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
+            const string config = "<ReferenceNuGetPackagesOnlyRule enabled=\"false\"/>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
     }

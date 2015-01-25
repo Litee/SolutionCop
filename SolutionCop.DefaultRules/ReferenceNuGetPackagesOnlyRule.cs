@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class ReferencePackagesOnlyRule : StandardProjectRule
+    public class ReferenceNuGetPackagesOnlyRule : StandardProjectRule
     {
         public override string DisplayName
         {
@@ -14,7 +14,7 @@ namespace SolutionCop.DefaultRules
 
         public override string Id
         {
-            get { return "ReferencePackagesOnly"; }
+            get { return "ReferenceNuGetPackagesOnly"; }
         }
 
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
@@ -22,9 +22,8 @@ namespace SolutionCop.DefaultRules
             var xmlHintPaths = xmlProject.Descendants(Namespace + "HintPath").Where(x => !x.Value.Contains(@"\packages\"));
             foreach (var xmlHintPath in xmlHintPaths)
             {
-                return Enumerable.Repeat(string.Format("Reference '{0}' is not pointing to NuGet package in project: {1}", xmlHintPath.Value, Path.GetFileName(projectFilePath)), 1);
+                yield return string.Format("Reference '{0}' is not pointing to NuGet package in project: {1}", xmlHintPath.Value, Path.GetFileName(projectFilePath));
             }
-            return Enumerable.Empty<string>();
         }
     }
 }
