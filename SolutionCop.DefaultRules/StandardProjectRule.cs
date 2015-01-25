@@ -18,12 +18,12 @@ namespace SolutionCop.DefaultRules
             var xmlEnabled = xmlRuleConfigs.Attribute("enabled");
             if (xmlEnabled == null || xmlEnabled.Value.ToLower() != "false")
             {
-            var xmlProject = XDocument.Load(projectFilePath);
-                return ValidateProjectWithEnabledRule(projectFilePath, xmlRuleConfigs, xmlProject);
+                var xmlProject = XDocument.Load(projectFilePath);
+                return ValidateProjectWithEnabledRule(xmlProject, projectFilePath, xmlRuleConfigs);
             }
             return Enumerable.Empty<string>();
         }
 
-        protected abstract IEnumerable<string> ValidateProjectWithEnabledRule(string projectFilePath, XElement xmlRuleConfigs, XDocument xmlProject);
+        protected abstract IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs);
     }
 }

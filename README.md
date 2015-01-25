@@ -35,6 +35,5 @@ Id: TreatWarningsAsErrors
 * VS solution version
 * NuGet package versions
 * StyleCop enabled for all projects
-* Suppress specific warnings
 * New NuGet initialization approach
 * Same name for Assembly and root namespace
