@@ -9,18 +9,18 @@ namespace SolutionCop
 {
     internal class RulesDirectoryCatalog
     {
-        internal IEnumerable<IRule> LoadRules()
+        internal IEnumerable<IProjectRule> LoadRules()
         {
             Console.Out.WriteLine("INFO: Scanning for rules...");
 
-            var rules = new List<IRule>();
+            var rules = new List<IProjectRule>();
             var assemblies = new DirectoryInfo(".").GetFiles("*.DLL");
             foreach (var assemblyFile in assemblies)
             {
-                var ruleTypes = Assembly.LoadFrom(assemblyFile.FullName).GetExportedTypes().Where(t => t.IsClass && !t.IsAbstract && typeof(IRule).IsAssignableFrom(t));
+                var ruleTypes = Assembly.LoadFrom(assemblyFile.FullName).GetExportedTypes().Where(t => t.IsClass && !t.IsAbstract && typeof(IProjectRule).IsAssignableFrom(t));
                 foreach (var ruleType in ruleTypes)
                 {
-                    var rule = (IRule)Activator.CreateInstance(ruleType);
+                    var rule = (IProjectRule)Activator.CreateInstance(ruleType);
                     Console.Out.WriteLine("INFO: Rule found: '{0}'", rule.DisplayName);
                     rules.Add(rule);
                 }

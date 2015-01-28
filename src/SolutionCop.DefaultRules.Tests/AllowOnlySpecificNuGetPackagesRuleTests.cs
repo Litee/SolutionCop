@@ -24,7 +24,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package>ApprovalTests</Package>
     <Package>xunit</Package>
 </AllowOnlySpecificNuGetPackages>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\AllowOnlySpecificNuGetPackages\AllowOnlySpecificNuGetPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.Validate(new FileInfo(@"..\..\Data\AllowOnlySpecificNuGetPackages\AllowOnlySpecificNuGetPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
@@ -36,7 +36,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package>ApprovalTests</Package>
     <Package>xunit</Package>
 </AllowOnlySpecificNuGetPackages>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\AllowOnlySpecificNuGetPackages_2\AllowOnlySpecificNuGetPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.Validate(new FileInfo(@"..\..\Data\AllowOnlySpecificNuGetPackages_2\AllowOnlySpecificNuGetPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
@@ -47,7 +47,7 @@ namespace SolutionCop.DefaultRules.Tests
 <AllowOnlySpecificNuGetPackages>
     <Package>ApprovalTests</Package>
 </AllowOnlySpecificNuGetPackages>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\AllowOnlySpecificNuGetPackages\AllowOnlySpecificNuGetPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.Validate(new FileInfo(@"..\..\Data\AllowOnlySpecificNuGetPackages\AllowOnlySpecificNuGetPackages.csproj").FullName, XElement.Parse(config));
             Approvals.VerifyAll(errors, "Errors");
         }
     }

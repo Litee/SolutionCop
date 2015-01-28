@@ -6,7 +6,7 @@ using SolutionCop.API;
 
 namespace SolutionCop.DefaultRules
 {
-    public abstract class StandardProjectRule : IRule
+    public abstract class StandardProjectRule : IProjectRule
     {
         protected readonly XNamespace Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
@@ -14,7 +14,17 @@ namespace SolutionCop.DefaultRules
 
         public abstract string DisplayName { get; }
 
-        public IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfigs)
+        public XElement DefaultConfig
+        {
+            get
+            {
+                var element = new XElement(Id);
+                element.SetAttributeValue("enabled", "false");
+                return element;
+            }
+        }
+
+        public IEnumerable<string> Validate(string projectFilePath, XElement xmlRuleConfigs)
         {
             var xmlEnabled = xmlRuleConfigs.Attribute("enabled");
             if (xmlEnabled == null || xmlEnabled.Value.ToLower() != "false")

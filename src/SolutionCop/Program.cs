@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 using CommandLine;
 using SolutionCop.API;
@@ -21,6 +20,14 @@ namespace SolutionCop
             {
                 var solutionInfo = SolutionParser.LoadFromFile(commandLineParameters.PathToSolution);
 
+                var rules = RulesDirectoryCatalog.LoadRules();
+                if (!solutionInfo.IsParsed)
+                {
+                    Console.Out.WriteLine("FATAL: Cannot parse solution file.");
+                    Environment.Exit(-1);
+                }
+
+                XDocument xmlAllRuleConfigs;
                 if (string.IsNullOrEmpty(commandLineParameters.PathToConfigFile))
                 {
                     commandLineParameters.PathToConfigFile = Path.Combine(Path.GetDirectoryName(commandLineParameters.PathToSolution), "SolutionCop.xml");
@@ -29,45 +36,43 @@ namespace SolutionCop
                 if (File.Exists(commandLineParameters.PathToConfigFile))
                 {
                     Console.Out.WriteLine("INFO: Existing config file found: {0}", commandLineParameters.PathToConfigFile);
+                    xmlAllRuleConfigs = XDocument.Load(commandLineParameters.PathToConfigFile);
                 }
                 else
                 {
-                    Console.Out.WriteLine("WARN: Config file does not exist. Saving default one to {0}", commandLineParameters.PathToConfigFile);
-                    using (var stream = Assembly.GetCallingAssembly().GetManifestResourceStream("SolutionCop.DefaultSolutionCop.xml"))
+                    Console.Out.WriteLine("WARN: Config file does not exist. Creating a new one {0}", commandLineParameters.PathToConfigFile);
+                    xmlAllRuleConfigs = new XDocument();
+                    xmlAllRuleConfigs.Add(new XElement("Rules"));
+                }
+                Console.Out.WriteLine("INFO: Checking rule sections {0}", commandLineParameters.PathToConfigFile);
+                bool saveRequired = false;
+                foreach (var rule in rules)
+                {
+                    var xmlRuleConfig = xmlAllRuleConfigs.Elements().First().Element(rule.Id);
+                    if (xmlRuleConfig == null)
                     {
-                        using (var reader = new StreamReader(stream))
-                        {
-                            File.WriteAllText(commandLineParameters.PathToConfigFile, reader.ReadToEnd());
-                        }
+                        xmlAllRuleConfigs.Elements().First().Add(rule.DefaultConfig);
+                        Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);
+                        saveRequired = true;
                     }
                 }
-                Console.Out.WriteLine("INFO: Loading config file {0}", commandLineParameters.PathToConfigFile);
-                var xmlAllRuleConfigs = XDocument.Load(commandLineParameters.PathToConfigFile);
-
-                var rules = RulesDirectoryCatalog.LoadRules();
-                if (!solutionInfo.IsParsed)
+                if (saveRequired)
                 {
-                    Console.Out.WriteLine("FATAL: Cannot parse solution file.");
-                    Environment.Exit(-1);
+                    xmlAllRuleConfigs.Save(commandLineParameters.PathToConfigFile);
                 }
+
+
+                Console.Out.WriteLine("INFO: Loading config file {0}", commandLineParameters.PathToConfigFile);
 
                 Console.Out.WriteLine("INFO: Starting analyzing...");
                 var errors = new List<string>();
                 foreach (var projectPath in solutionInfo.ProjectFilePaths)
                 {
                     Console.Out.WriteLine("INFO: Analyzing project {0}", projectPath);
-                    foreach (var rule in rules.OfType<IProjectRule>())
+                    foreach (var rule in rules)
                     {
                         var xmlRuleConfig = xmlAllRuleConfigs.Elements().First().Element(rule.Id);
-                        if (xmlRuleConfig == null)
-                        {
-                            // TODO Insert XML element into config
-                            Console.Out.WriteLine("WARNING: No config specified for rule {0} - skipping", rule.Id);
-                        }
-                        else
-                        {
-                            errors.AddRange(rule.Validate(projectPath, xmlRuleConfig));
-                        }
+                        errors.AddRange(rule.Validate(projectPath, xmlRuleConfig));
                     }
                 }
                 if (errors.Any())
