@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using CommandLine;
+using SolutionCop.API;
 
 namespace SolutionCop
 {
@@ -55,7 +56,7 @@ namespace SolutionCop
                 foreach (var projectPath in solutionInfo.ProjectFilePaths)
                 {
                     Console.Out.WriteLine("INFO: Analyzing project {0}", projectPath);
-                    foreach (var rule in rules)
+                    foreach (var rule in rules.OfType<IProjectRule>())
                     {
                         var xmlRuleConfig = xmlAllRuleConfigs.Elements().First().Element(rule.Id);
                         if (xmlRuleConfig == null)
@@ -65,7 +66,7 @@ namespace SolutionCop
                         }
                         else
                         {
-                            errors.AddRange(rule.ValidateProject(projectPath, xmlRuleConfig));
+                            errors.AddRange(rule.Validate(projectPath, xmlRuleConfig));
                         }
                     }
                 }

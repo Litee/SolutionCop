@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllowOnlySpecificNuGetPackagesRule.cs" />
     <Compile Include="StandardProjectRule.cs" />
     <Compile Include="SuppressWarningsRule.cs" />
     <Compile Include="TargetFrameworkVersionRule.cs" />
