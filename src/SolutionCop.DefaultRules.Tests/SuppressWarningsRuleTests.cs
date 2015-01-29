@@ -17,9 +17,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_pass_with_no_warnings_suppressed()
+        public void Should_pass_with_neither_warning_suppressed()
         {
             const string config = "<SuppressOnlySpecificWarnings>0420,0465</SuppressOnlySpecificWarnings>";
+            var errors = _instance.Validate(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName, XElement.Parse(config));
+            Assert.Empty(errors);
+        }
+
+        [Fact]
+        public void Should_pass_with_no_warnings_suppressed()
+        {
+            const string config = "<SuppressOnlySpecificWarnings></SuppressOnlySpecificWarnings>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
@@ -61,6 +69,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<SuppressOnlySpecificWarnings></SuppressOnlySpecificWarnings>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -69,6 +78,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<SuppressOnlySpecificWarnings></SuppressOnlySpecificWarnings>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarningsInOneConfig.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -77,6 +87,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<SuppressOnlySpecificWarnings>0465</SuppressOnlySpecificWarnings>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
     }

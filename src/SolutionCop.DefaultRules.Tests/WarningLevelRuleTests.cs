@@ -37,6 +37,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<WarningLevel>4</WarningLevel>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -45,6 +46,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<WarningLevel>3</WarningLevel>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInOneConfigurationAndThreeInAnother.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -53,6 +55,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<WarningLevel>2</WarningLevel>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInOneConfiguration.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -69,6 +72,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<WarningLevel>4.2</WarningLevel>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
     }

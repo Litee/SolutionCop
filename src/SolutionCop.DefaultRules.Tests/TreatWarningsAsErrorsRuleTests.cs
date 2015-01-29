@@ -29,6 +29,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TreatWarningsAsErrors>All</TreatWarningsAsErrors>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInAllConfigurations.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -37,6 +38,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TreatWarningsAsErrors>All</TreatWarningsAsErrors>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -45,6 +47,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TreatWarningsAsErrors>All</TreatWarningsAsErrors>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -85,6 +88,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TreatWarningsAsErrors>0420,0465</TreatWarningsAsErrors>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -93,6 +97,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TreatWarningsAsErrors>0466,0421</TreatWarningsAsErrors>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInAllConfigurations.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -101,6 +106,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TreatWarningsAsErrors>0465, 0420</TreatWarningsAsErrors>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -109,6 +115,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TreatWarningsAsErrors>0465</TreatWarningsAsErrors>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 

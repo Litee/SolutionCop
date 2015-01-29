@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -28,7 +29,9 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_fail_for_invalid_target_version()
         {
             const string config = "<TargetFrameworkVersion>4.5</TargetFrameworkVersion>";
-            Approvals.VerifyAll(_instance.Validate(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, XElement.Parse(config)), "Errors");
+            var errors = _instance.Validate(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
+            Approvals.VerifyAll(errors, "Errors");
         }
 
         [Fact]

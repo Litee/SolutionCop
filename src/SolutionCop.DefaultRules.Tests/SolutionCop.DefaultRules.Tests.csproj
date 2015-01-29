@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="VerifyNuGetPackageVersionsRuleTests.cs" />
-    <Compile Include="ReferencePackagesOnlyRuleTests.cs" />
+    <Compile Include="ReferenceNuGetPackagesOnlyRuleTests.cs" />
     <Compile Include="SuppressWarningsRuleTests.cs" />
     <Compile Include="TargetFrameworkVersionRuleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

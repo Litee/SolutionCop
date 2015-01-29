@@ -17,6 +17,7 @@ namespace SolutionCop.Tests
             _instance = new SolutionParser();
             var solutionInfo = _instance.LoadFromFile(new FileInfo(@"..\..\Data\ValidSolutionVS2013.sln").FullName);
             Assert.True(solutionInfo.IsParsed);
+            Assert.NotEmpty(solutionInfo.ProjectFilePaths);
             Approvals.VerifyAll(solutionInfo.ProjectFilePaths.Select(x => Path.GetFileName(x)), "PathsToProjects");
             Assert.Equal(5, solutionInfo.ProjectFilePaths.Count());
         }

@@ -29,6 +29,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<ReferenceNuGetPackagesOnlyRule/>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
+            Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
 
