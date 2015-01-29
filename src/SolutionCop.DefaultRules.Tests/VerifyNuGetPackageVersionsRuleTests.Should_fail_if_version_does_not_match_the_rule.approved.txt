@@ -1,0 +1,1 @@
+﻿Errors[0] = Version 2.2 for package ApprovalTests does not match rule [2.0] in project UsesTwoPackages.csproj

@@ -1,0 +1,1 @@
+﻿Errors[0] = Unknown package ApprovalTests with version 2.2 in project UsesTwoPackages.csproj

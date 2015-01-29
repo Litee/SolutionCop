@@ -49,7 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllowOnlySpecificNuGetPackagesRuleTests.cs" />
+    <Compile Include="VerifyNuGetPackageVersionsRuleTests.cs" />
     <Compile Include="ReferencePackagesOnlyRuleTests.cs" />
     <Compile Include="SuppressWarningsRuleTests.cs" />
     <Compile Include="TargetFrameworkVersionRuleTests.cs" />

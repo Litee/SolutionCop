@@ -37,6 +37,17 @@ Description: Fails if any project has warning level lower than one specified
 
 Id: WarningLevel
 
+### Verify that NuGet package versions match rules
+
+Description: Fails if some package in packages.config file has version that doesn't match rule or there is no rule for the package
+
+Sample config section:
+    <VerifyNuGetPackageVersions>
+	<Package id="packageOne" version="*"/> <!-- Any version -->
+	<Package id="packageTwo" version="1.2.3"/> <!-- 1.2.3 <= version -->
+	<Package id="packageThree" version="(1.2-alpha, 1.99.99]"/> <!-- 1.2-alpha < version <= 1.99.99 -->
+    </VerifyNuGetPackageVersions>
+
 ## Sample config file:
     <Rules>
       <TargetFrameworkVersion enabled="true">4.5</TargetFrameworkVersion>
@@ -53,7 +64,6 @@ Id: WarningLevel
 * Binary within NuGet package is referenced without proper reference in projects.config
 * Same package versions are used for in project (support exceptions)
 * VS solution version
-* NuGet package versions should match specific ranges
 * StyleCop must be enabled for all projects
 * New NuGet initialization approach should be used
 * Name must be same for Assembly and its root namespace
