@@ -1,7 +1,8 @@
 # SolutionCop
+
 Tool for static analysis of Visual Studio solutions and projects. 
 
-Usage: SolutionCop.exe -s <path-to-vs-solution> [-c <path-to-solutioncop-config>]
+Usage: SolutionCop.exe -s *path-to-vs-solution* [-c *path-to-solutioncop-config*]
 
 If <path-to-solutioncop-config> is not provided then tool looks for SolutionCop.xml file next to target *.sln. If config file cannot be found then default one is created.
 
@@ -70,9 +71,9 @@ Description: Fails if some package in packages.config file has version that does
 Sample config section:
 
     <VerifyNuGetPackageVersions>
-	<Package id="packageOne" version="*"/> <!-- Any version -->
-	<Package id="packageTwo" version="1.2.3"/> <!-- 1.2.3 <= version -->
-	<Package id="packageThree" version="(1.2-alpha, 1.99.99]"/> <!-- 1.2-alpha < version <= 1.99.99 -->
+      <Package id="packageOne" version="*"/> <!-- Any version -->
+      <Package id="packageTwo" version="1.2.3"/> <!-- 1.2.3 <= version -->
+      <Package id="packageThree" version="(1.2-alpha, 1.99.99]"/> <!-- 1.2-alpha < version <= 1.99.99 -->
     </VerifyNuGetPackageVersions>
 
 ### TODO rules:
