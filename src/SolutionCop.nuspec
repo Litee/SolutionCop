@@ -4,7 +4,7 @@
     <id>SolutionCop</id>
     <version>$version$</version>
     <title>SolutionCop</title>
-    <authors>Andrey "Litee" Lipatkin</authors>
+    <authors>Andrey Lipatkin</authors>
     <owners>litee</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/Litee/SolutionCop</projectUrl>
