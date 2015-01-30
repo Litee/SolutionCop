@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +20,17 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
         {
-            var xmlPackageRules = xmlRuleConfigs.Elements("Package");
+            IEnumerable<XElement> xmlPackageRules;
+            var xmlExternalRules = xmlRuleConfigs.Attribute("externalRules");
+            if (xmlExternalRules == null)
+            {
+                xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName.ToLower() == "package");
+            }
+            else
+            {
+                // TODO Re-write how external rules are found
+                xmlPackageRules = XDocument.Load(Path.Combine(Path.GetDirectoryName(projectFilePath), "..", xmlExternalRules.Value)).Elements().First().Elements().Where(x => x.Name.LocalName.ToLower() == "package");
+            }
             var pathToPackagesConfigFile = Path.Combine(Path.GetDirectoryName(projectFilePath), "packages.config");
             if (File.Exists(pathToPackagesConfigFile))
             {
@@ -38,20 +47,17 @@ namespace SolutionCop.DefaultRules
                     else
                     {
                         var packageVersionInRule = xmlPackageRule.Attribute("version").Value.Trim();
-                        if (packageVersionInRule != "*")
+                        IVersionSpec versionSpec;
+                        if (VersionUtility.TryParseVersionSpec(packageVersionInRule, out versionSpec))
                         {
-                            IVersionSpec versionSpec;
-                            if (VersionUtility.TryParseVersionSpec(packageVersionInRule, out versionSpec))
+                            if (!versionSpec.Satisfies(SemanticVersion.Parse(packageVersion)))
                             {
-                                if (!versionSpec.Satisfies(SemanticVersion.Parse(packageVersion)))
-                                {
-                                    yield return string.Format("Version {0} for package {1} does not match rule {2} in project {3}", packageVersion, packageId, packageVersionInRule, Path.GetFileName(projectFilePath));
-                                }
+                                yield return string.Format("Version {0} for package {1} does not match rule {2} in project {3}", packageVersion, packageId, packageVersionInRule, Path.GetFileName(projectFilePath));
                             }
-                            else
-                            {
-                                yield return string.Format("Cannot parse package version rule {0} is used in project {1}", packageVersionInRule, Path.GetFileName(projectFilePath));
-                            }
+                        }
+                        else
+                        {
+                            yield return string.Format("Cannot parse package version rule {0} is used in project {1}", packageVersionInRule, Path.GetFileName(projectFilePath));
                         }
                     }
                 }

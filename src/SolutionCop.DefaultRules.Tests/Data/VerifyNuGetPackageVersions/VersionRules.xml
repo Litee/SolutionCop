@@ -1,0 +1,4 @@
+<VerifyNuGetPackageVersions>
+    <Package id='ApprovalTests' version='0.0.0' />
+    <Package id='xunit' version='0.0.0' />
+</VerifyNuGetPackageVersions>

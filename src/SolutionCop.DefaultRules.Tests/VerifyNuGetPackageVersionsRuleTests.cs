@@ -21,9 +21,29 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = @"
 <VerifyNuGetPackageVersions>
-    <Package id='ApprovalTests' version='*'></Package>
-    <Package id='xunit' version='*'></Package>
+    <Package id='ApprovalTests' version='0.0.0'></Package>
+    <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
+            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            Assert.Empty(errors);
+        }
+
+        [Fact]
+        public void Should_pass_if_all_used_packages_match_rules_lower_case()
+        {
+            const string config = @"
+<VerifyNuGetPackageVersions>
+    <package id='ApprovalTests' version='0.0.0'></package>
+    <package id='xunit' version='0.0.0'></package>
+</VerifyNuGetPackageVersions>";
+            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            Assert.Empty(errors);
+        }
+
+        [Fact]
+        public void Should_pass_if_all_used_packages_match_rules_with_external_rules()
+        {
+            const string config = @"<VerifyNuGetPackageVersions externalRules='.\VerifyNuGetPackageVersions\VersionRules.xml' />";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
@@ -33,8 +53,8 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = @"
 <VerifyNuGetPackageVersions>
-    <Package id='ApprovalTests' version='*'></Package>
-    <Package id='xunit' version='*'></Package>
+    <Package id='ApprovalTests' version='0.0.0'></Package>
+    <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesNoPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
@@ -70,7 +90,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = @"
 <VerifyNuGetPackageVersions>
-    <Package id='ApprovalTests' version='*'></Package>
+    <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='test'></Package>
 </VerifyNuGetPackageVersions>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
@@ -83,8 +103,8 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = @"
 <VerifyNuGetPackageVersions enabled='false'>
-    <Package id='ApprovalTests' version='*'></Package>
-    <Package id='xunit' version='*'></Package>
+    <Package id='ApprovalTests' version='0.0.0'></Package>
+    <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
             var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
