@@ -87,10 +87,12 @@ Sample config section:
 
 ### TODO rules:
 * Copy Local
-* Binary within NuGet package is referenced without proper reference in projects.config
+* Binary within NuGet package is referenced without proper reference in packages.config
+* There is a reference in packages.config, but no link to binaries within it. Support exceptions.
 * Same package versions are used for in project (support exceptions)
 * VS solution version
 * New NuGet initialization approach should be used
 * Assembly and root namespace should have same name
 * Unapproved build configurations
 * No duplicate NuGet packages. Looks like low priority - haven't seen this problem in practice for a long time
+* Classify project by type (e.g. production, testing) and disallow references between some groups
