@@ -4,14 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using CommandLine;
-using SolutionCop.API;
 
-namespace SolutionCop
+namespace SolutionCop.CommandLine
 {
     internal class Program
     {
         private static readonly RulesDirectoryCatalog RulesDirectoryCatalog = new RulesDirectoryCatalog();
-        private static readonly SolutionParser SolutionParser = new SolutionParser();
 
         private static void Main(string[] args)
         {
@@ -65,6 +63,7 @@ namespace SolutionCop
                 Console.Out.WriteLine("INFO: Loading config file {0}", commandLineParameters.PathToConfigFile);
 
                 Console.Out.WriteLine("INFO: Starting analyzing...");
+
                 var errors = new List<string>();
                 foreach (var projectPath in solutionInfo.ProjectFilePaths)
                 {

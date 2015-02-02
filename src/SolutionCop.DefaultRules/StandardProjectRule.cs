@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using SolutionCop.API;
 
 namespace SolutionCop.DefaultRules
 {

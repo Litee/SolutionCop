@@ -20,17 +20,7 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
         {
-            IEnumerable<XElement> xmlPackageRules;
-            var xmlExternalRules = xmlRuleConfigs.Attribute("externalRules");
-            if (xmlExternalRules == null)
-            {
-                xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName.ToLower() == "package");
-            }
-            else
-            {
-                // TODO Re-write how external rules are found
-                xmlPackageRules = XDocument.Load(Path.Combine(Path.GetDirectoryName(projectFilePath), "..", xmlExternalRules.Value)).Elements().First().Elements().Where(x => x.Name.LocalName.ToLower() == "package");
-            }
+            var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName.ToLower() == "package");
             var pathToPackagesConfigFile = Path.Combine(Path.GetDirectoryName(projectFilePath), "packages.config");
             if (File.Exists(pathToPackagesConfigFile))
             {

@@ -61,13 +61,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SolutionCop.API\SolutionCop.API.csproj">
-      <Project>{CF178CFF-A688-4A47-9289-CCA35B702113}</Project>
-      <Name>SolutionCop.API</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SolutionCop.DefaultRules\SolutionCop.DefaultRules.csproj">
       <Project>{C6F12FF1-BA7C-414F-A957-4483AC05895D}</Project>
       <Name>SolutionCop.DefaultRules</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionCop\SolutionCop.csproj">
+      <Project>{4616C916-E1E3-44A4-93E7-D8DA725D215F}</Project>
+      <Name>SolutionCop</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

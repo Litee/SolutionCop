@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SolutionCop
 {
-    internal class SolutionParser
+    internal static class SolutionParser
     {
-        public SolutionInfo LoadFromFile(string pathToSolutionFile)
+        public static SolutionInfo LoadFromFile(string pathToSolutionFile)
         {
             if (!new FileInfo(pathToSolutionFile).Exists)
             {
@@ -22,36 +20,6 @@ namespace SolutionCop
             var projectRelativePaths = solutionFileLines.Select(line => projectReferenceRegEx.Match(line)).Where(x => x.Success).Select(x => x.Groups[3].ToString());
             var projectPaths = projectRelativePaths.Select(x => Path.Combine(Path.GetDirectoryName(pathToSolutionFile), x));
             return new SolutionInfo(projectPaths.ToArray());
-        }
-    }
-
-    internal class SolutionInfo
-    {
-        private readonly string[] _projectFilePaths;
-        private readonly bool _isParsed;
-
-        public SolutionInfo()
-        {
-            _projectFilePaths = new string[0];
-        }
-
-        public SolutionInfo(string[] projectFilePaths)
-        {
-            _isParsed = true;
-            _projectFilePaths = projectFilePaths;
-        }
-
-        internal IEnumerable<string> ProjectFilePaths
-        {
-            get
-            {
-                return _projectFilePaths.AsEnumerable();
-            }
-        }
-
-        internal bool IsParsed
-        {
-            get { return _isParsed; }
         }
     }
 }

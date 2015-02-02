@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 
-namespace SolutionCop
+namespace SolutionCop.CommandLine
 {
     class CommandLineParameters
     {

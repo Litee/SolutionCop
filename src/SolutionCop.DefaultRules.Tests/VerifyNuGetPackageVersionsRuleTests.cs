@@ -41,14 +41,6 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_pass_if_all_used_packages_match_rules_with_external_rules()
-        {
-            const string config = @"<VerifyNuGetPackageVersions externalRules='.\VerifyNuGetPackageVersions\VersionRules.xml' />";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
-        }
-
-        [Fact]
         public void Should_pass_if_no_packages_used()
         {
             const string config = @"

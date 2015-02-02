@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SolutionCop.API")]
+[assembly: AssemblyTitle("SolutionCop.CommandLine")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SolutionCop.API")]
+[assembly: AssemblyProduct("SolutionCop.CommandLine")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a47679a5-70e0-45be-8bd3-437e1da7d2aa")]
+[assembly: Guid("4a3d6acd-6b8a-41e3-a48b-efe600e8ad84")]
 
 // Version information for an assembly consists of the following four values:
 //
