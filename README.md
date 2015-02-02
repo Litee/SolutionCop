@@ -76,12 +76,20 @@ Sample config section:
       <Package id="packageThree" version="(1.2-alpha, 1.99.99]"/> <!-- 1.2-alpha < version <= 1.99.99 -->
     </VerifyNuGetPackageVersions>
 
+### Verify that StyleCop is enabled for all projects
+
+Description: Fails if some VS project does not import StyleCop.MSBuild.Targets
+
+Sample config section:                                    
+
+    <StyleCopEnabled enabled="true"/>
+
+
 ### TODO rules:
 * Copy Local
 * Binary within NuGet package is referenced without proper reference in projects.config
 * Same package versions are used for in project (support exceptions)
 * VS solution version
-* StyleCop must be enabled for all projects
 * New NuGet initialization approach should be used
 * Assembly and root namespace should have same name
 * Unapproved build configurations
