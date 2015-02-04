@@ -18,6 +18,17 @@ namespace SolutionCop.DefaultRules
             get { return "WarningLevel"; }
         }
 
+        public override XElement DefaultConfig
+        {
+            get
+            {
+                var element = new XElement(Id);
+                element.SetAttributeValue("enabled", "false");
+                element.SetValue(4);
+                return element;
+            }
+        }
+
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
         {
             int requiredWarningLevel;

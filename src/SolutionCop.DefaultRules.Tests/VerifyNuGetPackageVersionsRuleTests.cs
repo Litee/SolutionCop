@@ -24,7 +24,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
@@ -36,7 +36,7 @@ namespace SolutionCop.DefaultRules.Tests
     <package id='ApprovalTests' version='0.0.0'></package>
     <package id='xunit' version='0.0.0'></package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
@@ -48,7 +48,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesNoPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesNoPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
@@ -60,7 +60,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='[2.0]'></Package>
     <Package id='xunit' version='[1.9.2]'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
             Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -72,7 +72,7 @@ namespace SolutionCop.DefaultRules.Tests
 <VerifyNuGetPackageVersions>
     <Package id='xunit' version='[1.9.2]'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
             Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -85,7 +85,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='test'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
             Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -98,7 +98,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
     }

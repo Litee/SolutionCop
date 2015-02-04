@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NuGetPackageReferencedInProjectTests.cs" />
     <Compile Include="StyleCopEnabledRuleTests.cs" />
     <Compile Include="VerifyNuGetPackageVersionsRuleTests.cs" />
     <Compile Include="ReferenceNuGetPackagesOnlyRuleTests.cs" />

@@ -6,8 +6,13 @@ namespace SolutionCop
     public interface IProjectRule
     {
         string Id { get; }
+
         string DisplayName { get; }
+
         XElement DefaultConfig { get; }
-        IEnumerable<string> Validate(string projectFilePath, XElement xmlRuleConfigs);
+
+        IEnumerable<string> ValidateConfig(XElement xmlRuleConfigs);
+
+        IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfigs);
     }
 }

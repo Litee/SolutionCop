@@ -20,7 +20,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_accept_project_references_to_packages_only()
         {
             const string config = "<ReferenceNuGetPackagesOnlyRule/>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\ReferencesPackagesFolderOnly.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\ReferencesPackagesFolderOnly.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
@@ -28,7 +28,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_fail_for_project_with_direct_references_to_binaries()
         {
             const string config = "<ReferenceNuGetPackagesOnlyRule/>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
             Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -37,7 +37,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_for_disabled_rule()
         {
             const string config = "<ReferenceNuGetPackagesOnlyRule enabled=\"false\"/>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
     }

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NuGetPackageReferencedInProject.cs" />
     <Compile Include="StyleCopEnabledRule.cs" />
     <Compile Include="VerifyNuGetPackageVersionsRule.cs" />
     <Compile Include="StandardProjectRule.cs" />

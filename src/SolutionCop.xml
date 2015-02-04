@@ -6,4 +6,11 @@
   <SuppressWarnings enabled="false"></SuppressWarnings>
   <WarningLevel enabled="true">4</WarningLevel>
   <AllowOnlySpecificNuGetPackages enabled="false" />
+  <NuGetPackageReferencedInProject enabled="false">
+    <Exceptions>
+      <Exception>Rx-Main</Exception>
+    </Exceptions>
+  </NuGetPackageReferencedInProject>
+  <StyleCopEnabled enabled="false" />
+  <VerifyNuGetPackageVersionsRule enabled="false" />
 </Rules>

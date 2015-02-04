@@ -20,7 +20,7 @@ namespace SolutionCop
                 foreach (var ruleType in ruleTypes)
                 {
                     var rule = (IProjectRule)Activator.CreateInstance(ruleType);
-                    Console.Out.WriteLine("INFO: Rule found: '{0}'", rule.DisplayName);
+                    Console.Out.WriteLine("INFO: Rule {0} found. Description: '{1}'", rule.Id, rule.DisplayName);
                     rules.Add(rule);
                 }
             }

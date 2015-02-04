@@ -53,6 +53,16 @@ namespace SolutionCop.CommandLine
                         Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);
                         saveRequired = true;
                     }
+                    else
+                    {
+                        Console.Out.WriteLine("DEBUG: Validating config for rule {0}", rule.Id);
+                        foreach (var error in rule.ValidateConfig(xmlRuleConfig))
+                        {
+                            Console.Out.WriteLine("ERROR: {0}", error);
+                            xmlRuleConfig.SetAttributeValue("enabled", false);
+                            saveRequired = true;
+                        }
+                    }
                 }
                 if (saveRequired)
                 {
@@ -71,11 +81,12 @@ namespace SolutionCop.CommandLine
                     foreach (var rule in rules)
                     {
                         var xmlRuleConfig = xmlAllRuleConfigs.Elements().First().Element(rule.Id);
-                        errors.AddRange(rule.Validate(projectPath, xmlRuleConfig));
+                        errors.AddRange(rule.ValidateProject(projectPath, xmlRuleConfig));
                     }
                 }
                 if (errors.Any())
                 {
+                    Console.WriteLine("ERROR: ***** Full list of errors: *****");
                     errors.ForEach(x => Console.WriteLine("ERROR: {0}", x));
                 }
                 else

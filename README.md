@@ -88,12 +88,19 @@ Sample config section:
       </Exceptions>
     </StyleCopEnabled>
 
+### Verify that all packages specified in packages.config are used in *.csproj (exceptions supported)
 
+Sample config section:
+
+    <NuGetPackageReferencedInProject>
+      <Exceptions>
+        <Exception>myPackageId</Exception>
+      </Exceptions>
+    </NuGetPackageReferencedInProject>
 
 ### TODO rules:
 * Copy Local
 * Binary within NuGet package is referenced without proper reference in packages.config
-* There is a reference in packages.config, but no link to binaries within it. Support exceptions.
 * Same package versions are used for in project (support exceptions)
 * VS solution version
 * New NuGet initialization approach should be used

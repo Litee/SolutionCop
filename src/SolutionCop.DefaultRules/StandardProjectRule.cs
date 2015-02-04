@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -13,7 +13,7 @@ namespace SolutionCop.DefaultRules
 
         public abstract string DisplayName { get; }
 
-        public XElement DefaultConfig
+        public virtual XElement DefaultConfig
         {
             get
             {
@@ -23,15 +23,29 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        public IEnumerable<string> Validate(string projectFilePath, XElement xmlRuleConfigs)
+        public virtual IEnumerable<string> ValidateConfig(XElement xmlRuleConfigs)
+        {
+            yield break;
+        }
+
+        public IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfigs)
         {
             var xmlEnabled = xmlRuleConfigs.Attribute("enabled");
             if (xmlEnabled == null || xmlEnabled.Value.ToLower() != "false")
             {
-                var xmlProject = XDocument.Load(projectFilePath);
-                return ValidateProjectWithEnabledRule(xmlProject, projectFilePath, xmlRuleConfigs);
+                if (File.Exists(projectFilePath))
+                {
+                    var xmlProject = XDocument.Load(projectFilePath);
+                    foreach (var error in ValidateProjectWithEnabledRule(xmlProject, projectFilePath, xmlRuleConfigs))
+                    {
+                        yield return error;
+                    }
+                }
+                else
+                {
+                    yield return string.Format("Project file not found: {0}", projectFilePath);
+                }
             }
-            return Enumerable.Empty<string>();
         }
 
         protected abstract IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs);
