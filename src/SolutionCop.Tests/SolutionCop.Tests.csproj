@@ -57,9 +57,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SolutionCop\SolutionCop.csproj">
+    <ProjectReference Include="..\SolutionCop.Core\SolutionCop.Core.csproj">
       <Project>{4616C916-E1E3-44A4-93E7-D8DA725D215F}</Project>
-      <Name>SolutionCop</Name>
+      <Name>SolutionCop.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SolutionCop
 {
-    internal class SolutionInfo
+    public class SolutionInfo
     {
         private readonly string[] _projectFilePaths;
         private readonly bool _isParsed;
@@ -19,7 +19,7 @@ namespace SolutionCop
             _projectFilePaths = projectFilePaths;
         }
 
-        internal IEnumerable<string> ProjectFilePaths
+        public IEnumerable<string> ProjectFilePaths
         {
             get
             {
@@ -27,7 +27,7 @@ namespace SolutionCop
             }
         }
 
-        internal bool IsParsed
+        public bool IsParsed
         {
             get { return _isParsed; }
         }

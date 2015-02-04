@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SolutionCop
 {
-    internal static class SolutionParser
+    public static class SolutionParser
     {
         public static SolutionInfo LoadFromFile(string pathToSolutionFile)
         {

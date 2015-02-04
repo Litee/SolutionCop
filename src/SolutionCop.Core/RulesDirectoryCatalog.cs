@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace SolutionCop
 {
-    internal class RulesDirectoryCatalog
+    public class RulesDirectoryCatalog
     {
-        internal IEnumerable<IProjectRule> LoadRules()
+        public IEnumerable<IProjectRule> LoadRules()
         {
             Console.Out.WriteLine("INFO: Scanning for rules...");
 

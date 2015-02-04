@@ -7,7 +7,7 @@ using CommandLine;
 
 namespace SolutionCop.CommandLine
 {
-    internal class Program
+    internal static class Program
     {
         private static readonly RulesDirectoryCatalog RulesDirectoryCatalog = new RulesDirectoryCatalog();
 
