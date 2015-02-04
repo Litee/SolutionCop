@@ -76,13 +76,18 @@ Sample config section:
       <Package id="packageThree" version="(1.2-alpha, 1.99.99]"/> <!-- 1.2-alpha < version <= 1.99.99 -->
     </VerifyNuGetPackageVersions>
 
-### Verify that StyleCop is enabled for all projects
+### Verify that StyleCop is enabled for all projects (exceptions supported)
 
-Description: Fails if some VS project does not import StyleCop.MSBuild.Targets
+Description: Fails if some VS project does not import StyleCop.MSBuild.Targets or Microsoft.SourceAnalysis.targets
 
-Sample config section:                                    
+Sample config section:
 
-    <StyleCopEnabled enabled="true"/>
+    <StyleCopEnabled>
+      <Exceptions>
+        <Exception>My.Project.csproj</Exception>
+      </Exceptions>
+    </StyleCopEnabled>
+
 
 
 ### TODO rules:

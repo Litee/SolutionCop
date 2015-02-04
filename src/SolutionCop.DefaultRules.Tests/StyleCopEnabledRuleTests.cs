@@ -20,7 +20,23 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_StyleCop_is_enabled()
         {
             const string config = "<StyleCopEnabled/>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabled.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabled.csproj").FullName, XElement.Parse(config));
+            Assert.Empty(errors);
+        }
+
+        [Fact]
+        public void Should_pass_if_StyleCop_is_enabled_with_old_format()
+        {
+            const string config = "<StyleCopEnabled/>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabledOldFormat.csproj").FullName, XElement.Parse(config));
+            Assert.Empty(errors);
+        }
+
+        [Fact]
+        public void Should_pass_if_exception()
+        {
+            const string config = @"<StyleCopEnabled><Exceptions><Exception>StyleCopDisabled.csproj</Exception></Exceptions></StyleCopEnabled>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
 
@@ -28,15 +44,16 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_fail_if_StyleCop_is_disabled()
         {
             const string config = "<StyleCopEnabled/>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, XElement.Parse(config));
             Assert.NotEmpty(errors);
             Approvals.VerifyAll(errors, "Errors");
         }
+
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             const string config = "<StyleCopEnabled enabled=\"false\"/>";
-            var errors = _instance.Validate(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, XElement.Parse(config));
             Assert.Empty(errors);
         }
     }

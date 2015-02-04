@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -19,9 +20,18 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
         {
-            if (!xmlProject.Descendants(Namespace + "Import").Any(x => x.Attribute("Project") != null && x.Attribute("Project").Value.Contains("StyleCop.MSBuild.Targets")))
+            var importedProjectPaths = xmlProject.Descendants(Namespace + "Import").Select(x => (string)x.Attribute("Project"));
+            if (!importedProjectPaths.Any(x => x.Contains("StyleCop.MSBuild.Targets") || x.Contains("Microsoft.SourceAnalysis.targets")))
             {
-                yield return string.Format("StyleCop is missing in project {0}",Path.GetFileName(projectFilePath));
+                var exceptionIds = xmlRuleConfigs.Descendants("Exceptions").Select(x => x.Value.Trim());
+                if (exceptionIds.Contains(Path.GetFileName(projectFilePath)))
+                {
+                    Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));
+                }
+                else
+                {
+                    yield return string.Format("StyleCop is missing in project {0}", Path.GetFileName(projectFilePath));
+                }
             }
         }
     }
