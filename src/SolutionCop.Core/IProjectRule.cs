@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace SolutionCop
+namespace SolutionCop.Core
 {
     public interface IProjectRule
     {

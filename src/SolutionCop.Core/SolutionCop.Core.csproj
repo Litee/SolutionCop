@@ -7,8 +7,8 @@
     <ProjectGuid>{4616C916-E1E3-44A4-93E7-D8DA725D215F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SolutionCop</RootNamespace>
-    <AssemblyName>SolutionCop</AssemblyName>
+    <RootNamespace>SolutionCop.Core</RootNamespace>
+    <AssemblyName>SolutionCop.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

@@ -2,6 +2,7 @@
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using SolutionCop.Core;
 using Xunit;
 
 namespace SolutionCop.Tests

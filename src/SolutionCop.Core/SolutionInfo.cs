@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SolutionCop
+namespace SolutionCop.Core
 {
     public class SolutionInfo
     {

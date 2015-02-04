@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using CommandLine;
+using SolutionCop.Core;
 
 namespace SolutionCop.CommandLine
 {
