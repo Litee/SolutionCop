@@ -43,7 +43,6 @@ namespace SolutionCop.CommandLine
                     xmlAllRuleConfigs.Add(new XElement("Rules"));
                 }
 
-                Console.Out.WriteLine("INFO: Checking rule sections {0}", commandLineParameters.PathToConfigFile);
                 var rules = RulesDirectoryCatalog.LoadRules();
                 bool saveRequired = false;
                 foreach (var rule in rules)
@@ -57,6 +56,7 @@ namespace SolutionCop.CommandLine
                     }
                     else
                     {
+                        Console.Out.WriteLine("DEBUG: Checking config for rule {0}", rule.Id);
                         var ruleConfigErrors = rule.ValidateConfig(xmlRuleConfig);
                         if (ruleConfigErrors.Any())
                         {
@@ -67,13 +67,11 @@ namespace SolutionCop.CommandLine
                                 saveRequired = true;
                             }
                         }
-                        else
-                        {
-                        }
                     }
                 }
                 if (saveRequired)
                 {
+                    Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
                     xmlAllRuleConfigs.Save(commandLineParameters.PathToConfigFile);
                 }
 
@@ -107,7 +105,7 @@ namespace SolutionCop.CommandLine
                     if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
                     {
                         // TODO
-                        Console.WriteLine("##teamcity[buildStatus status='SUCCESS' text='{0}']", "");
+                        Console.WriteLine("##teamcity[buildStatus status='SUCCESS' text='{0}']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)));
                     }
                 }
                 Console.Out.WriteLine("INFO: Analysis finished!");

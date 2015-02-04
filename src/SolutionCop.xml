@@ -8,9 +8,7 @@
     <AllWarnings />
   </TreatWarningsAsErrors>
   <SuppressWarnings enabled="false"></SuppressWarnings>
-  <WarningLevel enabled="true">
-    <MinimalValue>4</MinimalValue>
-  </WarningLevel>
+  <WarningLevel minimalValue="4" />
   <AllowOnlySpecificNuGetPackages enabled="false" />
   <NuGetPackageReferencedInProject enabled="false">
     <Exceptions>
