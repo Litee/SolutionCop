@@ -92,7 +92,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_fail_if_parameter_is_float()
         {
             const string config = "<WarningLevel minimalValue='4.2'></WarningLevel>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateConfig(XElement.Parse(config));
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }

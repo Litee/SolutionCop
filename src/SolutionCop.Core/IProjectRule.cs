@@ -13,6 +13,6 @@ namespace SolutionCop.Core
 
         IEnumerable<string> ValidateConfig(XElement xmlRuleConfigs);
 
-        IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfigs);
+        IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfig);
     }
 }

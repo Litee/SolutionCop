@@ -92,7 +92,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='test'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var errors = _instance.ValidateConfig(XElement.Parse(config));
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }

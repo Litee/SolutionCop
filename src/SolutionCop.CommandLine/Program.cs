@@ -19,7 +19,6 @@ namespace SolutionCop.CommandLine
             {
                 var solutionInfo = SolutionParser.LoadFromFile(commandLineParameters.PathToSolution);
 
-                var rules = RulesDirectoryCatalog.LoadRules();
                 if (!solutionInfo.IsParsed)
                 {
                     Console.Out.WriteLine("FATAL: Cannot parse solution file.");
@@ -43,7 +42,9 @@ namespace SolutionCop.CommandLine
                     xmlAllRuleConfigs = new XDocument();
                     xmlAllRuleConfigs.Add(new XElement("Rules"));
                 }
+
                 Console.Out.WriteLine("INFO: Checking rule sections {0}", commandLineParameters.PathToConfigFile);
+                var rules = RulesDirectoryCatalog.LoadRules();
                 bool saveRequired = false;
                 foreach (var rule in rules)
                 {
@@ -68,7 +69,6 @@ namespace SolutionCop.CommandLine
                         }
                         else
                         {
-                            Console.Out.WriteLine("DEBUG: Configs are verified for rule {0}", rule.Id);
                         }
                     }
                 }
@@ -96,10 +96,19 @@ namespace SolutionCop.CommandLine
                 {
                     Console.WriteLine("ERROR: ***** Full list of errors: *****");
                     errors.ForEach(x => Console.WriteLine("ERROR: {0}", x));
+                    if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
+                    {
+                        Console.WriteLine("##teamcity[buildStatus status='ERROR' text='{0}']", string.Join("|r|n", errors.Select(EscapeForTeamCity)));
+                    }
                 }
                 else
                 {
                     Console.Out.WriteLine("INFO: No errors found!");
+                    if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
+                    {
+                        // TODO
+                        Console.WriteLine("##teamcity[buildStatus status='SUCCESS' text='{0}']", "");
+                    }
                 }
                 Console.Out.WriteLine("INFO: Analysis finished!");
                 Environment.Exit(errors.Any() ? -1 : 0);
@@ -108,6 +117,11 @@ namespace SolutionCop.CommandLine
             {
                 Environment.Exit(-1);
             }
+        }
+
+        private static object EscapeForTeamCity(string originalString)
+        {
+            return originalString.Replace("|", "||").Replace("'", "|'").Replace("\r", "|r").Replace("\n", "|n").Replace("]", "|]");
         }
     }
 }

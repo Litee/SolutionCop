@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using SolutionCop.Core;
 
@@ -28,22 +30,25 @@ namespace SolutionCop.DefaultRules
             yield break;
         }
 
-        public IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfigs)
+        public IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfig)
         {
-            var xmlEnabled = xmlRuleConfigs.Attribute("enabled");
-            if (xmlEnabled == null || xmlEnabled.Value.ToLower() != "false")
+            if (!ValidateConfig(xmlRuleConfig).Any())
             {
-                if (File.Exists(projectFilePath))
+                var xmlEnabled = xmlRuleConfig.Attribute("enabled");
+                if (xmlEnabled == null || xmlEnabled.Value.ToLower() != "false")
                 {
-                    var xmlProject = XDocument.Load(projectFilePath);
-                    foreach (var error in ValidateProjectWithEnabledRule(xmlProject, projectFilePath, xmlRuleConfigs))
+                    if (File.Exists(projectFilePath))
                     {
-                        yield return error;
+                        var xmlProject = XDocument.Load(projectFilePath);
+                        foreach (var error in ValidateProjectWithEnabledRule(xmlProject, projectFilePath, xmlRuleConfig))
+                        {
+                            yield return error;
+                        }
                     }
-                }
-                else
-                {
-                    yield return string.Format("Project file not found: {0}", projectFilePath);
+                    else
+                    {
+                        yield return string.Format("Project file not found: {0}", projectFilePath);
+                    }
                 }
             }
         }

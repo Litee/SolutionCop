@@ -30,6 +30,15 @@ namespace SolutionCop.DefaultRules
             }
         }
 
+        public override IEnumerable<string> ValidateConfig(XElement xmlRuleConfigs)
+        {
+            int requiredWarningLevel;
+            if (!Int32.TryParse((string)xmlRuleConfigs.Attribute("minimalValue"), out requiredWarningLevel))
+            {
+                yield return string.Format("Bad parameter format in config for rule {0}. Must be an integer.", Id);
+            }
+        }
+
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
         {
             var exceptionProjectNames = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
@@ -40,12 +49,7 @@ namespace SolutionCop.DefaultRules
             }
             else
             {
-                int requiredWarningLevel;
-                if (!Int32.TryParse((string)xmlRuleConfigs.Attribute("minimalValue"), out requiredWarningLevel))
-                {
-                    yield return string.Format("Bad parameter format in config for rule {0}. Must be an integer.", Id);
-                    yield break;
-                }
+                int requiredWarningLevel = Int32.Parse((string) xmlRuleConfigs.Attribute("minimalValue"));
                 var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
                 foreach (var xmlPropertyGroupsWithCondition in xmlPropertyGroupsWithConditions)
                 {
