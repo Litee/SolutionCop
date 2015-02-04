@@ -1,0 +1,3 @@
+﻿<NuGetPackageReferencedInProject enabled="false">
+  <Exception>Rx-Main</Exception>
+</NuGetPackageReferencedInProject>

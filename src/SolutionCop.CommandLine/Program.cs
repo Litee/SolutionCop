@@ -56,12 +56,19 @@ namespace SolutionCop.CommandLine
                     }
                     else
                     {
-                        Console.Out.WriteLine("DEBUG: Validating config for rule {0}", rule.Id);
-                        foreach (var error in rule.ValidateConfig(xmlRuleConfig))
+                        var ruleConfigErrors = rule.ValidateConfig(xmlRuleConfig);
+                        if (ruleConfigErrors.Any())
                         {
-                            Console.Out.WriteLine("ERROR: {0}", error);
-                            xmlRuleConfig.SetAttributeValue("enabled", false);
-                            saveRequired = true;
+                            foreach (var error in ruleConfigErrors)
+                            {
+                                Console.Out.WriteLine("ERROR: {0}", error);
+                                xmlRuleConfig.SetAttributeValue("enabled", false);
+                                saveRequired = true;
+                            }
+                        }
+                        else
+                        {
+                            Console.Out.WriteLine("DEBUG: Configs are verified for rule {0}", rule.Id);
                         }
                     }
                 }

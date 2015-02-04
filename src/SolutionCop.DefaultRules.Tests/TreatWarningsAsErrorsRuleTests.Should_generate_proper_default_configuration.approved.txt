@@ -1,0 +1,4 @@
+﻿<TreatWarningsAsErrors enabled="false">
+  <AllWarnings />
+  <Exception>FakeProject.csproj</Exception>
+</TreatWarningsAsErrors>

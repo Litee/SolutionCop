@@ -1,8 +1,8 @@
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Shouldly;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
@@ -18,11 +18,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_generate_proper_default_configuration()
+        {
+            Approvals.Verify(_instance.DefaultConfig);
+        }
+
+        [Fact]
         public void Should_pass_if_same_package_version_used_in_project()
         {
             const string config = "<NuGetPackageReferencedInProject/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -30,7 +36,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<NuGetPackageReferencedInProject/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName, XElement.Parse(config));
-            Assert.NotEmpty(errors);
+            errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -44,7 +50,7 @@ namespace SolutionCop.DefaultRules.Tests
 </Exceptions>
 </NuGetPackageReferencedInProject>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -52,7 +58,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<NuGetPackageReferencedInProject enabled=\"false\"/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
     }
 }

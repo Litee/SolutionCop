@@ -1,0 +1,3 @@
+﻿<SuppressWarnings enabled="false">
+  <Exception>FakeProject.csproj</Exception>
+</SuppressWarnings>

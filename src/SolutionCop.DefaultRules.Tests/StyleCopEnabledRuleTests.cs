@@ -2,6 +2,7 @@ using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Shouldly;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
@@ -17,11 +18,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_generate_proper_default_configuration()
+        {
+            Approvals.Verify(_instance.DefaultConfig);
+        }
+
+        [Fact]
         public void Should_pass_if_StyleCop_is_enabled()
         {
             const string config = "<StyleCopEnabled/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabled.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -29,15 +36,20 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<StyleCopEnabled/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabledOldFormat.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
         public void Should_pass_if_exception()
         {
-            const string config = @"<StyleCopEnabled><Exceptions><Exception>StyleCopDisabled.csproj</Exception></Exceptions></StyleCopEnabled>";
+            const string config = @"<StyleCopEnabled>
+<Exceptions>
+<Exception>StyleCopDisabled.csproj</Exception>
+<Exception>SomeNonExistingProject.csproj</Exception>
+</Exceptions>
+</StyleCopEnabled>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -45,7 +57,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<StyleCopEnabled/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, XElement.Parse(config));
-            Assert.NotEmpty(errors);
+            errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -54,7 +66,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<StyleCopEnabled enabled=\"false\"/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using NuGet;
 
 namespace SolutionCop.DefaultRules
 {
@@ -25,9 +24,7 @@ namespace SolutionCop.DefaultRules
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                var xmlExceptions = new XElement("Exceptions");
-                element.Add(xmlExceptions);
-                xmlExceptions.Add(new XElement("Exception", "Rx-Main"));
+                element.Add(new XElement("Exception", "Rx-Main"));
                 return element;
             }
         }

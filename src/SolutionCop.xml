@@ -1,10 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Rules>
-  <TargetFrameworkVersion enabled="true">4.0</TargetFrameworkVersion>
+  <TargetFrameworkVersion enabled="true">
+    <AllowedValue>4.0</AllowedValue>
+  </TargetFrameworkVersion>
   <ReferenceNuGetPackagesOnly enabled="true" />
-  <TreatWarningsAsErrors enabled="true">All</TreatWarningsAsErrors>
+  <TreatWarningsAsErrors enabled="true">
+    <AllWarnings />
+  </TreatWarningsAsErrors>
   <SuppressWarnings enabled="false"></SuppressWarnings>
-  <WarningLevel enabled="true">4</WarningLevel>
+  <WarningLevel enabled="true">
+    <MinimalValue>4</MinimalValue>
+  </WarningLevel>
   <AllowOnlySpecificNuGetPackages enabled="false" />
   <NuGetPackageReferencedInProject enabled="false">
     <Exceptions>

@@ -17,9 +17,20 @@ namespace SolutionCop.DefaultRules
             get { return "SuppressWarnings"; }
         }
 
+        public override XElement DefaultConfig
+        {
+            get
+            {
+                var element = new XElement(Id);
+                element.SetAttributeValue("enabled", "false");
+                element.Add(new XElement("Exception", "FakeProject.csproj"));
+                return element;
+            }
+        }
+
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
         {
-            var warningsAllowedToSuppress = xmlRuleConfigs.Value.Split(',').Select(x => x.Trim());
+            var warningsAllowedToSuppress = xmlRuleConfigs.Descendants("Warning").Select(x => x.Value.Trim());
             var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
             foreach (var xmlPropertyGroupsWithCondition in xmlPropertyGroupsWithConditions)
             {

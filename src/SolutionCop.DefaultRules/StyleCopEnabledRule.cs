@@ -18,12 +18,23 @@ namespace SolutionCop.DefaultRules
             get { return "StyleCopEnabled"; }
         }
 
+        public override XElement DefaultConfig
+        {
+            get
+            {
+                var element = new XElement(Id);
+                element.SetAttributeValue("enabled", "false");
+                element.Add(new XElement("Exception", "FakeProject.csproj"));
+                return element;
+            }
+        }
+
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
         {
             var importedProjectPaths = xmlProject.Descendants(Namespace + "Import").Select(x => (string)x.Attribute("Project"));
             if (!importedProjectPaths.Any(x => x.Contains("StyleCop.MSBuild.Targets") || x.Contains("Microsoft.SourceAnalysis.targets")))
             {
-                var exceptionIds = xmlRuleConfigs.Descendants("Exceptions").Select(x => x.Value.Trim());
+                var exceptionIds = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
                 if (exceptionIds.Contains(Path.GetFileName(projectFilePath)))
                 {
                     Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));

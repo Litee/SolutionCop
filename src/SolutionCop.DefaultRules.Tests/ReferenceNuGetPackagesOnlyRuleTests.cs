@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Shouldly;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
@@ -17,11 +18,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_generate_proper_default_configuration()
+        {
+            Approvals.Verify(_instance.DefaultConfig);
+        }
+
+        [Fact]
         public void Should_accept_project_references_to_packages_only()
         {
             const string config = "<ReferenceNuGetPackagesOnlyRule/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\ReferencesPackagesFolderOnly.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -29,7 +36,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<ReferenceNuGetPackagesOnlyRule/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
-            Assert.NotEmpty(errors);
+            errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -38,7 +45,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<ReferenceNuGetPackagesOnlyRule enabled=\"false\"/>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
     }
 }

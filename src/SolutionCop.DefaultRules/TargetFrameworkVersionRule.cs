@@ -17,6 +17,17 @@ namespace SolutionCop.DefaultRules
             get { return "TargetFrameworkVersion"; }
         }
 
+        public override XElement DefaultConfig
+        {
+            get
+            {
+                var element = new XElement(Id);
+                element.SetAttributeValue("enabled", "false");
+                element.Add(new XElement("AllowedValue", "4.0"));
+                return element;
+            }
+        }
+
         protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
         {
             var targetFrameworkVersion = xmlRuleConfigs.Value;

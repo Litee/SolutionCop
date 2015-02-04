@@ -1,0 +1,3 @@
+﻿<WarningLevel enabled="false" minimalValue="4">
+  <Exception>FakeProject.csproj</Exception>
+</WarningLevel>

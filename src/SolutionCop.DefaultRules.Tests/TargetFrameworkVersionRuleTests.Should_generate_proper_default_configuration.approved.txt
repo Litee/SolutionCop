@@ -1,0 +1,3 @@
+﻿<TargetFrameworkVersion enabled="false">
+  <AllowedValue>4.0</AllowedValue>
+</TargetFrameworkVersion>

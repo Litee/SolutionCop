@@ -2,6 +2,7 @@ using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Shouldly;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
@@ -17,11 +18,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_generate_proper_default_configuration()
+        {
+            Approvals.Verify(_instance.DefaultConfig);
+        }
+
+        [Fact]
         public void Should_pass_with_neither_warning_suppressed()
         {
-            const string config = "<SuppressOnlySpecificWarnings>0420,0465</SuppressOnlySpecificWarnings>";
+            const string config = "<SuppressOnlySpecificWarnings><Warning>0420</Warning><Warning>0465</Warning></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -29,39 +36,39 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<SuppressOnlySpecificWarnings></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
         public void Should_pass_with_same_warnings_suppressed()
         {
-            const string config = "<SuppressOnlySpecificWarnings>0420,0465</SuppressOnlySpecificWarnings>";
+            const string config = "<SuppressOnlySpecificWarnings><Warning>0420</Warning><Warning>0465</Warning></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
         public void Should_pass_with_warnings_in_different_order()
         {
-            const string config = "<SuppressOnlySpecificWarnings>0465,0420</SuppressOnlySpecificWarnings>";
+            const string config = "<SuppressOnlySpecificWarnings><Warning>0465</Warning><Warning>0420</Warning></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
         public void Should_pass_with_subset_of_warnings_suppressed()
         {
-            const string config = "<SuppressOnlySpecificWarnings>0465,0420</SuppressOnlySpecificWarnings>";
+            const string config = "<SuppressOnlySpecificWarnings><Warning>0465</Warning><Warning>0420</Warning></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressOneWarning.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<SuppressOnlySpecificWarnings enabled=\"false\">0465</SuppressOnlySpecificWarnings>";
+            const string config = "<SuppressOnlySpecificWarnings enabled=\"false\"><Warning>0465</Warning></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -69,7 +76,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<SuppressOnlySpecificWarnings></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, XElement.Parse(config));
-            Assert.NotEmpty(errors);
+            errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -78,16 +85,16 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<SuppressOnlySpecificWarnings></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarningsInOneConfig.csproj").FullName, XElement.Parse(config));
-            Assert.NotEmpty(errors);
+            errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
         [Fact]
         public void Should_fail_if_one_unapproved_warning_suppressed()
         {
-            const string config = "<SuppressOnlySpecificWarnings>0465</SuppressOnlySpecificWarnings>";
+            const string config = "<SuppressOnlySpecificWarnings><Warning>0465</Warning></SuppressOnlySpecificWarnings>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, XElement.Parse(config));
-            Assert.NotEmpty(errors);
+            errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
     }

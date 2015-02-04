@@ -11,11 +11,40 @@ If <path-to-solutioncop-config> is not provided then tool looks for SolutionCop.
 Below is an example config file. Any rule can be disabled by setting *enabled* attribute to *false*. Note that tool adds default entries for rules if they are missing.
 
     <Rules>
-      <TargetFrameworkVersion>4.5</TargetFrameworkVersion>
+      <TargetFrameworkVersion>
+        <AllowedValue>4.5</AllowedValue>
+      </TargetFrameworkVersion>
+
       <ReferenceNuGetPackagesOnly enabled="true"/>
-      <TreatWarningsAsErrors>All</TreatWarningsAsErrors>
-      <SuppressWarnings>0123,0234</SuppressWarnings>
-      <WarningLevel>4</WarningLevel>
+
+      <TreatWarningsAsErrors>
+        <Warning>0123</Warning>
+        <Warning>1234</Warning>
+        <Exception>Project.csproj</Exception>
+        <Exception>Another.Project.csproj</Exception>
+      </TreatWarningsAsErrors>
+
+      <SuppressWarnings>
+        <Warning>0123</Warning>
+        <Warning>1234</Warning>
+        <Exception>Project.csproj</Exception>
+        <Exception>Another.Project.csproj</Exception>
+      </SuppressWarnings>
+
+      <WarningLevel minimalValue="4">
+        <Exception>Project.csproj</Exception>
+        <Exception>Another.Project.csproj</Exception>
+      </WarningLevel>
+
+      <VerifyNuGetPackageVersions>
+        <Package id="packageOne" version="1.2.3"/> <!-- 1.2.3 <= version -->
+        <Package id="packageTwo" version="(1.2-alpha, 1.99.99]"/> <!-- 1.2-alpha < version <= 1.99.99 -->
+      </VerifyNuGetPackageVersions>
+
+      <NuGetPackageReferencedInProject>
+        <Exception>package-id</Exception>
+        <Exception>another-package-id</Exception>
+      </NuGetPackageReferencedInProject>
     </Rules>
 
 ## Rules
@@ -26,13 +55,15 @@ Description: Fails if one of projects has target version different from one spec
 
 Sample config section:
 
-    <TargetFrameworkVersion>4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>
+      <AllowedValue>4.5</AllowedValue>
+    </TargetFrameworkVersion>
 
 ### Verify that all referenced binaries come from NuGet packages
 
 Description: Fails if project references binaries outside NuGet *packages* folder
 
-Sample config section:                                    
+Sample config section:
 
     <ReferenceNuGetPackagesOnly enabled="true"/>
 
@@ -42,11 +73,18 @@ Description: Fails if "Treat warnings as errors" is not enabled in all build con
 
 Sample config sections:
 
-    <TreatWarningsAsErrors>All</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>
+      <AllWarnings />
+    </TreatWarningsAsErrors>
 
 or
 
-    <TreatWarningsAsErrors>0123,0234</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>
+      <Warning>0123</Warning>
+      <Warning>1234</Warning>
+      <Exception>Project.csproj</Exception>
+      <Exception>Another.Project.csproj</Exception>
+    </TreatWarningsAsErrors>
 
 ### Verify suppressed warnings
 
@@ -54,7 +92,12 @@ Description: Fails if project suppresses any warning that is not in the specifie
 
 Sample config section:
 
-    <SuppressWarnings>0123,0234</SuppressWarnings>
+    <SuppressWarnings>
+      <Warning>0123</Warning>
+      <Warning>1234</Warning>
+      <Exception>Project.csproj</Exception>
+      <Exception>Another.Project.csproj</Exception>
+    </SuppressWarnings>
 
 ### Verify warning level
 
@@ -62,7 +105,10 @@ Description: Fails if any project has warning level lower than one specified
 
 Sample config section:
 
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel minimalValue="4">
+      <Exception>Project.csproj</Exception>
+      <Exception>Another.Project.csproj</Exception>
+    </WarningLevel>
 
 ### Verify that NuGet package versions match rules
 
@@ -71,9 +117,8 @@ Description: Fails if some package in packages.config file has version that does
 Sample config section:
 
     <VerifyNuGetPackageVersions>
-      <Package id="packageOne" version="*"/> <!-- Any version -->
-      <Package id="packageTwo" version="1.2.3"/> <!-- 1.2.3 <= version -->
-      <Package id="packageThree" version="(1.2-alpha, 1.99.99]"/> <!-- 1.2-alpha < version <= 1.99.99 -->
+      <Package id="packageOne" version="1.2.3"/> <!-- 1.2.3 <= version -->
+      <Package id="packageTwo" version="(1.2-alpha, 1.99.99]"/> <!-- 1.2-alpha < version <= 1.99.99 -->
     </VerifyNuGetPackageVersions>
 
 ### Verify that StyleCop is enabled for all projects (exceptions supported)
@@ -83,9 +128,8 @@ Description: Fails if some VS project does not import StyleCop.MSBuild.Targets o
 Sample config section:
 
     <StyleCopEnabled>
-      <Exceptions>
-        <Exception>My.Project.csproj</Exception>
-      </Exceptions>
+      <Exception>Project.csproj</Exception>
+      <Exception>Another.Project.csproj</Exception>
     </StyleCopEnabled>
 
 ### Verify that all packages specified in packages.config are used in *.csproj (exceptions supported)
@@ -93,9 +137,8 @@ Sample config section:
 Sample config section:
 
     <NuGetPackageReferencedInProject>
-      <Exceptions>
-        <Exception>myPackageId</Exception>
-      </Exceptions>
+      <Exception>package-id</Exception>
+      <Exception>another-package-id</Exception>
     </NuGetPackageReferencedInProject>
 
 ### TODO rules:

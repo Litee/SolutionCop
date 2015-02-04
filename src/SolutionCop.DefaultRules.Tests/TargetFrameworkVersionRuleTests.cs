@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Shouldly;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
@@ -18,11 +19,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_generate_proper_default_configuration()
+        {
+            Approvals.Verify(_instance.DefaultConfig);
+        }
+
+        [Fact]
         public void Should_accept_correct_target_version()
         {
             const string config = "<TargetFrameworkVersion>3.5</TargetFrameworkVersion>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -30,7 +37,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TargetFrameworkVersion>4.5</TargetFrameworkVersion>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, XElement.Parse(config));
-            Assert.NotEmpty(errors);
+            errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
@@ -39,7 +46,7 @@ namespace SolutionCop.DefaultRules.Tests
         {
             const string config = "<TargetFrameworkVersion enabled=\"false\"></TargetFrameworkVersion>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, XElement.Parse(config));
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
     }
 }
