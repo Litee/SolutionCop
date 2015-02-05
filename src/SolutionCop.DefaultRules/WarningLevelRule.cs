@@ -35,7 +35,7 @@ namespace SolutionCop.DefaultRules
             int requiredWarningLevel;
             if (!Int32.TryParse((string)xmlRuleConfigs.Attribute("minimalValue"), out requiredWarningLevel))
             {
-                yield return string.Format("Bad parameter format in config for rule {0}. Must be an integer.", Id);
+                yield return string.Format("Bad config for rule {0}. 'minimalValue' attribute must be an integer.", Id);
             }
         }
 

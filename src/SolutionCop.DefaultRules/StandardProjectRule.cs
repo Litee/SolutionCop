@@ -32,7 +32,8 @@ namespace SolutionCop.DefaultRules
 
         public IEnumerable<string> ValidateProject(string projectFilePath, XElement xmlRuleConfig)
         {
-            if (!ValidateConfig(xmlRuleConfig).Any())
+            var configErrors = ValidateConfig(xmlRuleConfig);
+            if (!configErrors.Any())
             {
                 var xmlEnabled = xmlRuleConfig.Attribute("enabled");
                 if (xmlEnabled == null || xmlEnabled.Value.ToLower() != "false")

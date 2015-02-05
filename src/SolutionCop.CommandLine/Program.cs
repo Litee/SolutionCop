@@ -45,7 +45,7 @@ namespace SolutionCop.CommandLine
                 }
 
                 var rules = RulesDirectoryCatalog.LoadRules();
-                bool saveRequired = false;
+                bool saveConfigFileOnExit = false;
                 foreach (var rule in rules)
                 {
                     var xmlRuleConfig = xmlAllRuleConfigs.Elements().First().Element(rule.Id);
@@ -53,7 +53,7 @@ namespace SolutionCop.CommandLine
                     {
                         xmlAllRuleConfigs.Elements().First().Add(rule.DefaultConfig);
                         Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);
-                        saveRequired = true;
+                        saveConfigFileOnExit = true;
                     }
                     else
                     {
@@ -67,12 +67,12 @@ namespace SolutionCop.CommandLine
                                 Console.Out.WriteLine("ERROR: {0}", error);
                                 Console.Out.WriteLine("ERROR: Rule {0} disabled", rule.Id);
                                 xmlRuleConfig.SetAttributeValue("enabled", false);
-                                saveRequired = true;
+                                saveConfigFileOnExit = true;
                             }
                         }
                     }
                 }
-                if (saveRequired)
+                if (saveConfigFileOnExit)
                 {
                     Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
                     xmlAllRuleConfigs.Save(commandLineParameters.PathToConfigFile);

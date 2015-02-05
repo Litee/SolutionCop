@@ -98,6 +98,23 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_pass_wihouth_minimal_value_specified_if_rule_isabled()
+        {
+            const string config = "<WarningLevel enabled=\"false\"/>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, XElement.Parse(config));
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Should_fail_if_no_minimal_value_specified()
+        {
+            const string config = "<WarningLevel enabled=\"true\"/>";
+            var errors = _instance.ValidateConfig(XElement.Parse(config));
+            errors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(errors, "Errors");
+        }
+
+        [Fact]
         public void Should_fail_if_parameter_is_float()
         {
             const string config = "<WarningLevel minimalValue='4.2'></WarningLevel>";
