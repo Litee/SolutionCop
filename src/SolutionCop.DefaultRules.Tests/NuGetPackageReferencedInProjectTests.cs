@@ -27,7 +27,9 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_same_package_version_used_in_project()
         {
             const string config = "<NuGetPackageReferencedInProject/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject\UsesTwoPackages.csproj").FullName);
             errors.ShouldBeEmpty();
         }
 
@@ -35,7 +37,9 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_fail_if_there_is_an_unreferenced_package()
         {
             const string config = "<NuGetPackageReferencedInProject/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -49,7 +53,9 @@ namespace SolutionCop.DefaultRules.Tests
 <Exception>someUnusedDummyPackage</Exception>
 </Exceptions>
 </NuGetPackageReferencedInProject>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName);
             errors.ShouldBeEmpty();
         }
 
@@ -57,7 +63,9 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_rule_is_disabled()
         {
             const string config = "<NuGetPackageReferencedInProject enabled=\"false\"/>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName);
             errors.ShouldBeEmpty();
         }
     }

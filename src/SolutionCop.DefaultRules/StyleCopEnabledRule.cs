@@ -8,6 +8,8 @@ namespace SolutionCop.DefaultRules
 {
     public class StyleCopEnabledRule : StandardProjectRule
     {
+        private IEnumerable<string> _exceptionProjectNames;
+
         public override string DisplayName
         {
             get { return "Verify that StyleCop is enabled in every project"; }
@@ -29,13 +31,18 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
+        protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
+        {
+            _exceptionProjectNames = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
+            yield break;
+        }
+
+        protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
             var importedProjectPaths = xmlProject.Descendants(Namespace + "Import").Select(x => (string)x.Attribute("Project"));
             if (!importedProjectPaths.Any(x => x.Contains("StyleCop.MSBuild.Targets") || x.Contains("Microsoft.SourceAnalysis.targets")))
             {
-                var exceptionIds = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
-                if (exceptionIds.Contains(Path.GetFileName(projectFilePath)))
+                if (_exceptionProjectNames.Contains(Path.GetFileName(projectFilePath)))
                 {
                     Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));
                 }

@@ -8,6 +8,9 @@ namespace SolutionCop.DefaultRules
 {
     public class WarningLevelRule : StandardProjectRule
     {
+        private IEnumerable<string> _exceptionProjectNames;
+        private int _requiredWarningLevel = 4;
+
         public override string DisplayName
         {
             get { return "Verify warning level"; }
@@ -30,34 +33,35 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        public override IEnumerable<string> ValidateConfig(XElement xmlRuleConfigs)
+        protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            int requiredWarningLevel;
-            if (!Int32.TryParse((string)xmlRuleConfigs.Attribute("minimalValue"), out requiredWarningLevel))
+            if (IsEnabled)
             {
-                yield return string.Format("Bad config for rule {0}. 'minimalValue' attribute must be an integer.", Id);
+                if (!Int32.TryParse((string) xmlRuleConfigs.Attribute("minimalValue"), out _requiredWarningLevel))
+                {
+                    yield return string.Format("Bad config for rule {0}. 'minimalValue' attribute must be an integer.", Id);
+                }
             }
+            _exceptionProjectNames = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
         }
 
-        protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
+        protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
-            var exceptionProjectNames = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
             var projectFileName = Path.GetFileName(projectFilePath);
-            if (exceptionProjectNames.Contains(projectFileName))
+            if (_exceptionProjectNames.Contains(projectFileName))
             {
                 Console.Out.WriteLine("DEBUG: Skipping warning level check as an exception for project {0}", projectFileName);
             }
             else
             {
-                int requiredWarningLevel = Int32.Parse((string) xmlRuleConfigs.Attribute("minimalValue"));
                 var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
                 foreach (var xmlPropertyGroupsWithCondition in xmlPropertyGroupsWithConditions)
                 {
                     var xmlWarningLevel = xmlPropertyGroupsWithCondition.Descendants(Namespace + "WarningLevel").FirstOrDefault();
                     var warningLevelInProject = xmlWarningLevel == null ? 0 : Int32.Parse(xmlWarningLevel.Value);
-                    if (warningLevelInProject < requiredWarningLevel)
+                    if (warningLevelInProject < _requiredWarningLevel)
                     {
-                        yield return string.Format("Warning level {0} is lower than required {1} in project {2}", warningLevelInProject, requiredWarningLevel, projectFileName);
+                        yield return string.Format("Warning level {0} is lower than required {1} in project {2}", warningLevelInProject, _requiredWarningLevel, projectFileName);
                         yield break;
                     }
                 }

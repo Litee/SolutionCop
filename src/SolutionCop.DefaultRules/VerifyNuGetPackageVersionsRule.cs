@@ -8,6 +8,8 @@ namespace SolutionCop.DefaultRules
 {
     public class VerifyNuGetPackageVersionsRule : StandardProjectRule
     {
+        private List<XElement> _xmlPackageRules = new List<XElement>();
+
         public override string DisplayName
         {
             get { return "Verify that NuGet package versions match rules"; }
@@ -18,7 +20,7 @@ namespace SolutionCop.DefaultRules
             get { return "VerifyNuGetPackageVersionsRule"; }
         }
 
-        public override IEnumerable<string> ValidateConfig(XElement xmlRuleConfigs)
+        protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
             var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName.ToLower() == "package");
             foreach (var xmlPackageRule in xmlPackageRules)
@@ -30,12 +32,15 @@ namespace SolutionCop.DefaultRules
                 {
                     yield return string.Format("Cannot parse package version rule {0} for package {1} in config {2}", packageRuleVersion, packageRuleId, Id);
                 }
+                else
+                {
+                    _xmlPackageRules.Add(xmlPackageRule);
+                }
             }
         }
 
-        protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
+        protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
-            var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName.ToLower() == "package");
             var pathToPackagesConfigFile = Path.Combine(Path.GetDirectoryName(projectFilePath), "packages.config");
             if (File.Exists(pathToPackagesConfigFile))
             {
@@ -44,7 +49,7 @@ namespace SolutionCop.DefaultRules
                 {
                     var packageId = xmlUsedPackage.Attribute("id").Value;
                     var packageVersion = xmlUsedPackage.Attribute("version").Value;
-                    var xmlPackageRule = xmlPackageRules.FirstOrDefault(x => x.Attribute("id").Value == packageId);
+                    var xmlPackageRule = _xmlPackageRules.FirstOrDefault(x => x.Attribute("id").Value == packageId);
                     var projectFileName = Path.GetFileName(projectFilePath);
                     if (xmlPackageRule == null)
                     {

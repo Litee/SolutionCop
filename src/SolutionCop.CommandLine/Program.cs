@@ -57,8 +57,8 @@ namespace SolutionCop.CommandLine
                     }
                     else
                     {
-                        Console.Out.WriteLine("DEBUG: Checking config for rule {0}", rule.Id);
-                        var ruleConfigErrors = rule.ValidateConfig(xmlRuleConfig);
+                        Console.Out.WriteLine("DEBUG: Parsing config for rule {0}...", rule.Id);
+                        var ruleConfigErrors = rule.ParseConfig(xmlRuleConfig);
                         if (ruleConfigErrors.Any())
                         {
                             errors.AddRange(ruleConfigErrors);
@@ -66,7 +66,6 @@ namespace SolutionCop.CommandLine
                             {
                                 Console.Out.WriteLine("ERROR: {0}", error);
                                 Console.Out.WriteLine("ERROR: Rule {0} disabled", rule.Id);
-                                xmlRuleConfig.SetAttributeValue("enabled", false);
                                 saveConfigFileOnExit = true;
                             }
                         }
@@ -88,8 +87,7 @@ namespace SolutionCop.CommandLine
                     Console.Out.WriteLine("INFO: Analyzing project {0}", projectPath);
                     foreach (var rule in rules)
                     {
-                        var xmlRuleConfig = xmlAllRuleConfigs.Elements().First().Element(rule.Id);
-                        errors.AddRange(rule.ValidateProject(projectPath, xmlRuleConfig));
+                        errors.AddRange(rule.ValidateProject(projectPath));
                     }
                 }
                 if (errors.Any())
@@ -98,7 +96,10 @@ namespace SolutionCop.CommandLine
                     errors.ForEach(x => Console.WriteLine("ERROR: {0}", x));
                     if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
                     {
-                        Console.WriteLine("##teamcity[buildStatus status='ERROR' text='{0}']", string.Join("|r|n", errors.Select(EscapeForTeamCity)));
+                        var extendedErrorsInfo = Enumerable.Repeat(EscapeForTeamCity("Config file used: " + Path.GetFileName(commandLineParameters.PathToConfigFile)), 1)
+                            .Concat(rules.Select(x => string.Format("Rule: {0} is {1}", x.Id, x.IsEnabled ? "enabled" : "disabled")))
+                            .Concat(errors);
+                        Console.WriteLine("##teamcity[buildStatus status='ERROR' text='{0}']", string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
                     }
                 }
                 else
@@ -119,7 +120,7 @@ namespace SolutionCop.CommandLine
             }
         }
 
-        private static object EscapeForTeamCity(string originalString)
+        private static string EscapeForTeamCity(string originalString)
         {
             return originalString.Replace("|", "||").Replace("'", "|'").Replace("\r", "|r").Replace("\n", "|n").Replace("]", "|]");
         }

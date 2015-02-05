@@ -31,7 +31,9 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName);
             errors.ShouldBeEmpty();
         }
 
@@ -43,7 +45,9 @@ namespace SolutionCop.DefaultRules.Tests
     <package id='ApprovalTests' version='0.0.0'></package>
     <package id='xunit' version='0.0.0'></package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName);
             errors.ShouldBeEmpty();
         }
 
@@ -55,7 +59,9 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesNoPackages.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesNoPackages.csproj").FullName);
             errors.ShouldBeEmpty();
         }
 
@@ -67,7 +73,9 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='[2.0]'></Package>
     <Package id='xunit' version='[1.9.2]'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -79,7 +87,9 @@ namespace SolutionCop.DefaultRules.Tests
 <VerifyNuGetPackageVersions>
     <Package id='xunit' version='[1.9.2]'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -92,9 +102,11 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='test'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.ValidateConfig(XElement.Parse(config));
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(configErrors, "Errors");
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+            errors.ShouldBeEmpty();
         }
 
         [Fact]
@@ -105,7 +117,9 @@ namespace SolutionCop.DefaultRules.Tests
     <Package id='ApprovalTests' version='0.0.0'></Package>
     <Package id='xunit' version='0.0.0'></Package>
 </VerifyNuGetPackageVersions>";
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesTwoPackages.csproj").FullName, XElement.Parse(config));
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\VerifyNuGetPackageVersions_2\UsesTwoPackages.csproj").FullName);
             errors.ShouldBeEmpty();
         }
     }

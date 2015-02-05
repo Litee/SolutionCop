@@ -7,6 +7,8 @@ namespace SolutionCop.DefaultRules
 {
     public class SuppressWarningsRule : StandardProjectRule
     {
+        private IEnumerable<string> _warningsAllowedToSuppress;
+
         public override string DisplayName
         {
             get { return "Verify suppressed warnings"; }
@@ -28,9 +30,14 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ValidateProjectWithEnabledRule(XDocument xmlProject, string projectFilePath, XElement xmlRuleConfigs)
+        protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            var warningsAllowedToSuppress = xmlRuleConfigs.Descendants("Warning").Select(x => x.Value.Trim());
+            _warningsAllowedToSuppress = xmlRuleConfigs.Descendants("Warning").Select(x => x.Value.Trim());
+            yield break;
+        }
+
+        protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
+        {
             var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
             foreach (var xmlPropertyGroupsWithCondition in xmlPropertyGroupsWithConditions)
             {
@@ -38,7 +45,7 @@ namespace SolutionCop.DefaultRules
                 if (xmlNoWarn != null)
                 {
                     var suppressedWarnings = xmlNoWarn.Value.Split(',').Select(x => x.Trim());
-                    var warningsNotAllowedToSuppress = suppressedWarnings.Except(warningsAllowedToSuppress);
+                    var warningsNotAllowedToSuppress = suppressedWarnings.Except(_warningsAllowedToSuppress);
                     if (warningsNotAllowedToSuppress.Count() == 1)
                     {
                         yield return string.Format("Unapproved warning {0} is suppressed in project {1}", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath));

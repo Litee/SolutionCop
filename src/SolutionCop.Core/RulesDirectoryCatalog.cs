@@ -19,9 +19,16 @@ namespace SolutionCop.Core
                 var ruleTypes = Assembly.LoadFrom(assemblyFile.FullName).GetExportedTypes().Where(t => t.IsClass && !t.IsAbstract && typeof(IProjectRule).IsAssignableFrom(t));
                 foreach (var ruleType in ruleTypes)
                 {
-                    var rule = (IProjectRule)Activator.CreateInstance(ruleType);
-                    Console.Out.WriteLine("INFO: Rule {0} found. Description: '{1}'", rule.Id, rule.DisplayName);
-                    rules.Add(rule);
+                    try
+                    {
+                        var rule = (IProjectRule)Activator.CreateInstance(ruleType);
+                        Console.Out.WriteLine("INFO: Rule {0} found. Description: '{1}'", rule.Id, rule.DisplayName);
+                        rules.Add(rule);
+                    }
+                    catch (Exception)
+                    {
+                        Console.Out.WriteLine("ERROR: Could not initialize rule from type {0}. Skipping it.", ruleType.FullName);
+                    }
                 }
             }
 
