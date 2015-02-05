@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -32,6 +33,16 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_fail_if_project_file_not_found()
+        {
+            const string config = "<WarningLevel minimalValue='2'></WarningLevel>";
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations-DoesNotExist.csproj").FullName, XElement.Parse(config));
+            errors.ShouldNotBeEmpty();
+            errors.First().ShouldStartWith("Project file not found:");
+            errors.First().ShouldContain("WarningLevelTwoInAllConfigurations-DoesNotExist.csproj");
+        }
+
+        [Fact]
         public void Should_pass_if_warning_level_in_project_is_higher_than_expected()
         {
             const string config = "<WarningLevel minimalValue='0'></WarningLevel>";
@@ -51,12 +62,10 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_pass_if_warning_level_in_project_is_lower_than_expected_but_project_is_in_exceptions_list()
         {
-            const string config = @"<WarningLevel>
-<MinimalValue>4</MinimalValue>
-<Exceptions>
-<Exception>WarningLevelTwoInAllConfigurations.csproj</Exception>
-<Exception>SomeNonExistingProjectName.csproj</Exception>
-</Exceptions>
+            const string config = @"
+<WarningLevel minimalValue='4'>
+  <Exception>WarningLevelTwoInAllConfigurations.csproj</Exception>
+  <Exception>SomeNonExistingProjectName.csproj</Exception>
 </WarningLevel>";
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, XElement.Parse(config));
             errors.ShouldBeEmpty();
