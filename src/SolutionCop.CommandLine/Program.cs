@@ -17,6 +17,7 @@ namespace SolutionCop.CommandLine
             var commandLineParameters = new CommandLineParameters();
             if (Parser.Default.ParseArguments(args, commandLineParameters))
             {
+                var errors = new List<string>();
                 var solutionInfo = SolutionParser.LoadFromFile(commandLineParameters.PathToSolution);
 
                 if (!solutionInfo.IsParsed)
@@ -60,9 +61,11 @@ namespace SolutionCop.CommandLine
                         var ruleConfigErrors = rule.ValidateConfig(xmlRuleConfig);
                         if (ruleConfigErrors.Any())
                         {
+                            errors.AddRange(ruleConfigErrors);
                             foreach (var error in ruleConfigErrors)
                             {
                                 Console.Out.WriteLine("ERROR: {0}", error);
+                                Console.Out.WriteLine("ERROR: Rule {0} disabled", rule.Id);
                                 xmlRuleConfig.SetAttributeValue("enabled", false);
                                 saveRequired = true;
                             }
@@ -80,7 +83,6 @@ namespace SolutionCop.CommandLine
 
                 Console.Out.WriteLine("INFO: Starting analyzing...");
 
-                var errors = new List<string>();
                 foreach (var projectPath in solutionInfo.ProjectFilePaths)
                 {
                     Console.Out.WriteLine("INFO: Analyzing project {0}", projectPath);
