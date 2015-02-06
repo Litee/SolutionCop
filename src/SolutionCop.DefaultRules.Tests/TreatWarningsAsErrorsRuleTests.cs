@@ -1,16 +1,18 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Shouldly;
 using Xunit;
+using Xunit.Extensions;
 
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
-    public class TreatWarningsAsErrorsRuleTests
+    public class TreatWarningsAsErrorsRuleTests : IDisposable
     {
         private readonly TreatWarningsAsErrorsRule _instance;
 
@@ -25,43 +27,51 @@ namespace SolutionCop.DefaultRules.Tests
             Approvals.Verify(_instance.DefaultConfig);
         }
 
-        [Fact]
-        public void Should_pass_if_all_warnings_must_be_treated_as_errors_and_project_treats_all_as_errors()
+        [Theory]
+        [InlineData("TreatAllWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatAllWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_pass_if_all_must_and_all_are(string csproj)
         {
             const string config = "<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldBeEmpty();
         }
 
-        [Fact]
-        public void Should_fail_if_all_warnings_must_be_treated_as_errors_and_project_treats_only_two_as_errors()
+        [Theory]
+        [InlineData("TreatTwoWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_fail_if_all_must_and_only_two_are(string csproj)
         {
+            NamerFactory.AdditionalInformation = csproj;
             const string config = "<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
-        [Fact]
-        public void Should_pass_if_all_warnings_must_be_treated_as_errors_and_project_treats_only_two_as_errors_but_project_is_in_exceptions_list()
+        [Theory]
+        [InlineData("TreatTwoWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_pass_if_all_must_and_only_two_are_but_project_is_in_exceptions_list(string csproj)
         {
             const string config = @"<TreatWarningsAsErrors>
 <AllWarnings/>
-<Exception>TreatTwoWarningsAsErrorsInAllConfigurations.csproj</Exception>
-<Exception>SomeNonExistingProjectName.csproj</Exception>
+  <Exception><Project>TreatTwoWarningsAsErrorsInAllConfigurations.csproj</Project></Exception>
+  <Exception><Project>TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj</Project></Exception>
+  <Exception><Project>SomeNonExistingProjectName.csproj</Project></Exception>
 </TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldBeEmpty();
         }
 
         [Fact]
-        public void Should_fail_if_all_warnings_must_be_treated_as_errors_and_project_treats_them_in_one_configuration()
+        public void Should_fail_if_all_must_and_all_in_one_config_are()
         {
             const string config = "<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
@@ -72,7 +82,7 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_fail_if_all_warnings_must_be_treated_as_errors_and_project_treats_none_as_an_error()
+        public void Should_fail_if_all_must_and_none_are()
         {
             const string config = "<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
@@ -82,48 +92,56 @@ namespace SolutionCop.DefaultRules.Tests
             Approvals.VerifyAll(errors, "Errors");
         }
 
-        [Fact]
-        public void Should_pass_if_two_warnings_must_be_treated_as_errors_and_project_treats_all_warnings_as_errors()
+        [Theory]
+        [InlineData("TreatAllWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatAllWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_pass_if_two_must_and_all_warnings_as_errors(string csproj)
         {
             const string config = "<TreatWarningsAsErrors><Warning>0420,0465</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldBeEmpty();
         }
 
-        [Fact]
-        public void Should_pass_if_two_warnings_must_be_treated_as_errors_and_project_treats_those_specific_two_as_errors()
+        [Theory]
+        [InlineData("TreatTwoWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_pass_if_two_must_and_those_two_are(string csproj)
         {
             const string config = "<TreatWarningsAsErrors><Warning>0420</Warning><Warning>0465</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldBeEmpty();
         }
 
-        [Fact]
-        public void Should_pass_if_two_warnings_must_be_treated_as_errors_and_project_treats_those_specific_two_as_errors_in_different_order()
+        [Theory]
+        [InlineData("TreatTwoWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_pass_if_two_must_and_those_two_are_in_different_order(string csproj)
         {
             const string config = "<TreatWarningsAsErrors><Warning>0465</Warning><Warning>0420</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldBeEmpty();
         }
 
-        [Fact]
-        public void Should_pass_if_one_warning_must_be_treated_as_an_error_and_project_treats_this_specific_one_and_one_more_as_errors()
+        [Theory]
+        [InlineData("TreatAllWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatAllWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_pass_if_one_must_and_this_specific_one_and_one_more_are(string csproj)
         {
             const string config = "<TreatWarningsAsErrors><Warning>0465</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldBeEmpty();
         }
 
         [Fact]
-        public void Should_fail_if_two_warnings_must_be_treated_as_errors_and_project_treats_those_but_only_in_one_configuration()
+        public void Should_fail_if_two_must_and_both_are_but_only_in_one_configuration()
         {
             const string config = "<TreatWarningsAsErrors><Warning>0420</Warning><Warning>0465</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
@@ -133,19 +151,22 @@ namespace SolutionCop.DefaultRules.Tests
             Approvals.VerifyAll(errors, "Errors");
         }
 
-        [Fact]
-        public void Should_fail_if_two_warnings_must_be_treated_as_errors_and_project_treats_different_ones_as_an_error()
+        [Theory]
+        [InlineData("TreatTwoWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_fail_if_two_must_and_different_ones_are(string csproj)
         {
+            NamerFactory.AdditionalInformation = csproj;
             const string config = "<TreatWarningsAsErrors><Warning>0466</Warning><Warning>0421</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
         [Fact]
-        public void Should_fail_if_two_warnings_must_be_treated_as_errors_and_project_treats_none_as_an_error()
+        public void Should_fail_if_two_must_and_none_are()
         {
             const string config = "<TreatWarningsAsErrors><Warning>0465 </Warning><Warning> 0420</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
@@ -156,7 +177,7 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_fail_if_one_warning_must_be_treated_as_an_error_and_project_treats_none_as_an_error()
+        public void Should_fail_if_one_must_and_none_are()
         {
             const string config = "<TreatWarningsAsErrors><Warning>0465</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
@@ -166,28 +187,32 @@ namespace SolutionCop.DefaultRules.Tests
             Approvals.VerifyAll(errors, "Errors");
         }
 
-        [Fact]
-        public void Should_pass_if_no_warnings_must_be_treated_as_errors_and_project_treats_all_warnings_as_errors()
+        [Theory]
+        [InlineData("TreatAllWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatAllWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_pass_if_none_must_and_all_are(string csproj)
         {
             const string config = "<TreatWarningsAsErrors/>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             Assert.Empty(errors);
         }
 
-        [Fact]
-        public void Should_pass_if_no_warnings_must_be_treated_as_errors_and_project_treats_two_warnings_as_errors()
+        [Theory]
+        [InlineData("TreatTwoWarningsAsErrorsInAllConfigurations.csproj")]
+        [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
+        public void Should_pass_if_none_must_and_two_are(string csproj)
         {
             const string config = "<TreatWarningsAsErrors/>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInAllConfigurations.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldBeEmpty();
         }
 
         [Fact]
-        public void Should_pass_if_no_warnings_must_be_treated_as_errors_and_project_treats_no_warnings_as_errors()
+        public void Should_pass_if_none_must_and_none_are()
         {
             const string config = "<TreatWarningsAsErrors/>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
@@ -204,6 +229,11 @@ namespace SolutionCop.DefaultRules.Tests
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName);
             errors.ShouldBeEmpty();
+        }
+
+        public void Dispose()
+        {
+            NamerFactory.AdditionalInformation = null;
         }
     }
 }

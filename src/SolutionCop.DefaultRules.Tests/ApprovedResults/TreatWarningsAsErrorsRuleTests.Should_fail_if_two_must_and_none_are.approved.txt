@@ -1,0 +1,1 @@
+﻿Errors[0] = At least one of warnings 0465, 0420 is not treated as an error in project TreatNoWarningsAsErrors.csproj

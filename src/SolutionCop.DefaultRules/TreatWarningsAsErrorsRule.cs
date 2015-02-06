@@ -9,8 +9,8 @@ namespace SolutionCop.DefaultRules
     public class TreatWarningsAsErrorsRule : StandardProjectRule
     {
         private IEnumerable<string> _warningsThatMustBeTreatedAsErrors;
-        private IEnumerable<string> _exceptionProjectNames;
         private bool _allWarningsMustBeTreatedAsErrors;
+        private readonly IDictionary<string, string[]> _exceptions = new Dictionary<string, string[]>();
 
         public override string DisplayName
         {
@@ -29,7 +29,9 @@ namespace SolutionCop.DefaultRules
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
                 element.Add(new XElement("AllWarnings"));
-                element.Add(new XElement("Exception", "FakeProject.csproj"));
+                var xmlException = new XElement("Exception");
+                xmlException.Add(new XElement("Project", "FakeProject.csproj"));
+                element.Add(xmlException);
                 return element;
             }
         }
@@ -38,47 +40,88 @@ namespace SolutionCop.DefaultRules
         {
             _warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x));
             _allWarningsMustBeTreatedAsErrors = !_warningsThatMustBeTreatedAsErrors.Any() && xmlRuleConfigs.Element("AllWarnings") != null;
-            _exceptionProjectNames = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
-            yield break;
+            // Clear is required for cases when errors are enumerated twice
+            _exceptions.Clear();
+            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            {
+                var xmlProject = xmlException.Element("Project");
+                if (xmlProject == null)
+                {
+                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                }
+                else
+                {
+                    var warnings = xmlException.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x));
+                    _exceptions.Add(xmlProject.Value, warnings.ToArray());
+                }
+            }
         }
 
         protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
             var projectFileName = Path.GetFileName(projectFilePath);
-            if (_exceptionProjectNames.Contains(projectFileName))
+            IEnumerable<string> warningsThatMustBeTreatedAsErrors;
+            bool allWarningsMustBeTreatedAsErrors;
+            if (_exceptions.ContainsKey(projectFileName))
             {
-                Console.Out.WriteLine("DEBUG: Skipping warning level check as an exception for project {0}", projectFileName);
+                allWarningsMustBeTreatedAsErrors = !_exceptions.Any();
+                warningsThatMustBeTreatedAsErrors = _exceptions[projectFileName];
+                Console.Out.WriteLine("DEBUG: Project has exceptional warnings {0}: {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
             }
             else
             {
-                var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
-                foreach (var xmlPropertyGroupsWithCondition in xmlPropertyGroupsWithConditions)
+                allWarningsMustBeTreatedAsErrors = _allWarningsMustBeTreatedAsErrors;
+                warningsThatMustBeTreatedAsErrors = _warningsThatMustBeTreatedAsErrors;
+                Console.Out.WriteLine("DEBUG: Project has standard warnings {0}: {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
+            }
+            var xmlPropertyGlobalGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null);
+            var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
+            // Global configuration treats all warnings as errors
+            if (!xmlPropertyGlobalGroups.Any(TreatsAllWarningsAsErrors))
+            {
+                // All non-global configurations treat all warnings as errors
+                if (!xmlPropertyGroupsWithConditions.All(TreatsAllWarningsAsErrors))
                 {
-                    var xmlTreatWarningsAsErrors = xmlPropertyGroupsWithCondition.Descendants(Namespace + "TreatWarningsAsErrors").FirstOrDefault();
-                    var xmlWarningsAsErrors = xmlPropertyGroupsWithCondition.Descendants(Namespace + "WarningsAsErrors").FirstOrDefault();
-                    // Not all warnings are treated as errors within the project
-                    if (xmlTreatWarningsAsErrors == null || xmlTreatWarningsAsErrors.Value != "true")
+                    if (allWarningsMustBeTreatedAsErrors)
                     {
-                        if (_allWarningsMustBeTreatedAsErrors)
+                        yield return string.Format("Not all warnings are treated as an error in project {0}", projectFileName);
+                    }
+                    else
+                    {
+                        // Global configurations do not treat some warnings as errors
+                        if (!xmlPropertyGlobalGroups.Any(x => TreatsSpecificWarningAsAnError(x, warningsThatMustBeTreatedAsErrors)))
                         {
-                            yield return string.Format("Not all warnings are treated as an error in project {0}", Path.GetFileName(projectFilePath));
-                            yield break;
-                        }
-                        var warningsTreatedAsErrorsInProject = xmlWarningsAsErrors == null ? new string[0] : xmlWarningsAsErrors.Value.Split(',').Select(x => x.Trim());
-                        var warningsThatHasNotBeenTreatedAsErrorsInProject = _warningsThatMustBeTreatedAsErrors.Except(warningsTreatedAsErrorsInProject);
-                        if (warningsThatHasNotBeenTreatedAsErrorsInProject.Count() == 1)
-                        {
-                            yield return string.Format("Warning {0} is not treated as an error in project {1}", warningsThatHasNotBeenTreatedAsErrorsInProject.First(), Path.GetFileName(projectFilePath));
-                            yield break;
-                        }
-                        if (warningsThatHasNotBeenTreatedAsErrorsInProject.Count() > 1)
-                        {
-                            yield return string.Format("Warnings {0} are not treated as errors in project {1}", string.Join(", ", warningsThatHasNotBeenTreatedAsErrorsInProject), Path.GetFileName(projectFilePath));
-                            yield break;
+                            // Non-global configurations do not treat some warnings as errors
+                            if (!xmlPropertyGroupsWithConditions.All(x => TreatsSpecificWarningAsAnError(x, warningsThatMustBeTreatedAsErrors)))
+                            {
+                                yield return string.Format("At least one of warnings {0} is not treated as an error in project {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
+                            }
                         }
                     }
                 }
             }
+        }
+
+        private bool TreatsSpecificWarningAsAnError(XElement xmlPropertyGroup, IEnumerable<string> warningsThatMustBeTreatedAsErrors)
+        {
+            var xmlWarningsAsErrors = xmlPropertyGroup.Descendants(Namespace + "WarningsAsErrors").FirstOrDefault();
+            var warningsTreatedAsErrorsInProject = xmlWarningsAsErrors == null ? new string[0] : xmlWarningsAsErrors.Value.Split(',').Select(x => x.Trim());
+            Console.Out.WriteLine("{0} vs {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), string.Join(", ", warningsTreatedAsErrorsInProject));
+            return !warningsThatMustBeTreatedAsErrors.Except(warningsTreatedAsErrorsInProject).Any();
+        }
+
+        private bool TreatsAllWarningsAsErrors(XElement xmlPropertyGroup)
+        {
+            var xmlTreatWarningsAsErrors = xmlPropertyGroup.Descendants(Namespace + "TreatWarningsAsErrors").FirstOrDefault();
+            // Not all warnings are treated as errors within the project
+            if (xmlTreatWarningsAsErrors != null)
+            {
+                if (xmlTreatWarningsAsErrors.Value == "true")
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
