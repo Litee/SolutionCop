@@ -31,6 +31,7 @@ namespace SolutionCop.DefaultRules
             get { return _isEnabled; }
         }
 
+        // TODO Return a monade
         public IEnumerable<string> ParseConfig(XElement xmlRuleConfigs)
         {
             if (xmlRuleConfigs.Name.LocalName != Id)

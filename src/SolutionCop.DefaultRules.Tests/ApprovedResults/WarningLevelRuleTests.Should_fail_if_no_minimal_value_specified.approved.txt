@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad config for rule WarningLevel. 'minimalValue' attribute must be an integer.
+﻿Errors[0] = Bad configuration for rule WarningLevel: <MinimalValue> element is missing.

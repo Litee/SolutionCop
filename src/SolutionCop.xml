@@ -8,7 +8,9 @@
     <AllWarnings />
   </TreatWarningsAsErrors>
   <SuppressWarnings enabled="false"></SuppressWarnings>
-  <WarningLevel minimalValue="4" />
+  <WarningLevel>
+    <MinimalValue>4</MinimalValue>
+  </WarningLevel>
   <AllowOnlySpecificNuGetPackages enabled="false" />
   <NuGetPackageReferencedInProject enabled="false">
     <Exceptions>
@@ -17,4 +19,11 @@
   </NuGetPackageReferencedInProject>
   <StyleCopEnabled enabled="false" />
   <VerifyNuGetPackageVersionsRule enabled="false" />
+  <NuGetAutomaticPackagesRestore enabled="false">
+    <Exception>FakeProject.csproj</Exception>
+  </NuGetAutomaticPackagesRestore>
+  <NuGetPackagesUsage enabled="false">
+    <Exception>Rx-Main</Exception>
+  </NuGetPackagesUsage>
+  <NuGetPackageVersions enabled="false" />
 </Rules>

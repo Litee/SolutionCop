@@ -1,3 +1,7 @@
-﻿<WarningLevel enabled="false" minimalValue="4">
-  <Exception>FakeProject.csproj</Exception>
+﻿<WarningLevel enabled="false">
+  <Exception>
+    <MinimalValue>4</MinimalValue>
+    <Project>FakeProject.csproj</Project>
+    <MinimalValue>0</MinimalValue>
+  </Exception>
 </WarningLevel>

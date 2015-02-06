@@ -102,8 +102,8 @@ namespace SolutionCop.CommandLine
                             .Concat(errors.Select((x, idx) => string.Format("ERROR: ({0}/{1}): {2}", idx, errors.Count, x)))
                             .Concat(Enumerable.Repeat("", 1))
                             .Concat(rules.Select(x => string.Format("Rule: {0} is {1}", x.Id, x.IsEnabled ? "enabled" : "disabled")));
-                        Console.WriteLine("##teamcity[testFailed message='FAILED ({0})' details='{1}']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)), string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
-                        Console.WriteLine("##teamcity[buildStatus text='FAILED ({0})']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)));
+                        Console.WriteLine("##teamcity[testFailed message='FAILED - {0}' details='{1}']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)), string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
+                        Console.WriteLine("##teamcity[buildStatus text='FAILED - {0}']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)));
                     }
                 }
                 else
@@ -112,7 +112,7 @@ namespace SolutionCop.CommandLine
                     if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
                     {
                         // TODO
-                        Console.WriteLine("##teamcity[buildStatus status='SUCCESS' text='{0}']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)));
+                        Console.WriteLine("##teamcity[buildStatus status='SUCCESS' text='PASSED - {0}']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)));
                     }
                 }
                 Environment.Exit(errors.Any() ? -1 : 0);

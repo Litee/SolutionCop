@@ -29,7 +29,7 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_pass_if_warning_level_in_project_is_as_expected()
         {
-            const string config = "<WarningLevel minimalValue='2'></WarningLevel>";
+            const string config = "<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
@@ -37,9 +37,19 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_pass_if_warning_level_in_project_is_as_expected_in_global_section()
+        {
+            const string config = "<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInGlobalConfiguration.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
         public void Should_fail_if_project_file_not_found()
         {
-            const string config = "<WarningLevel minimalValue='2'></WarningLevel>";
+            const string config = "<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations-DoesNotExist.csproj").FullName);
@@ -51,7 +61,7 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_pass_if_warning_level_in_project_is_higher_than_expected()
         {
-            const string config = "<WarningLevel minimalValue='0'></WarningLevel>";
+            const string config = "<WarningLevel><MinimalValue>0</MinimalValue></WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
@@ -61,7 +71,7 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_fail_if_warning_level_in_project_is_lower_than_expected()
         {
-            const string config = "<WarningLevel minimalValue='4'></WarningLevel>";
+            const string config = "<WarningLevel><MinimalValue>4</MinimalValue></WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
@@ -73,9 +83,14 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_warning_level_in_project_is_lower_than_expected_but_project_is_in_exceptions_list()
         {
             const string config = @"
-<WarningLevel minimalValue='4'>
-  <Exception>WarningLevelTwoInAllConfigurations.csproj</Exception>
-  <Exception>SomeNonExistingProjectName.csproj</Exception>
+<WarningLevel>
+  <MinimalValue>4</MinimalValue>
+  <Exception>
+    <Project>WarningLevelTwoInAllConfigurations.csproj</Project>
+  </Exception>
+  <Exception>
+    <Project>SomeNonExistingProjectName.csproj</Project>
+  </Exception>
 </WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
@@ -84,9 +99,52 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_pass_if_warning_level_in_project_is_lower_than_expected_but_project_have_exceptional_lower_value()
+        {
+            const string config = @"
+<WarningLevel>
+  <MinimalValue>4</MinimalValue>
+  <Exception>
+    <Project>WarningLevelTwoInAllConfigurations.csproj</Project>
+    <MinimalValue>1</MinimalValue>
+  </Exception>
+  <Exception>
+    <Project>SomeNonExistingProjectName.csproj</Project>
+    <MinimalValue>2</MinimalValue>
+  </Exception>
+</WarningLevel>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Should_fail_if_warning_level_in_project_is_higher_than_one_specified_in_exception()
+        {
+            const string config = @"
+<WarningLevel>
+  <MinimalValue>4</MinimalValue>
+  <Exception>
+    <Project>WarningLevelTwoInAllConfigurations.csproj</Project>
+    <MinimalValue>3</MinimalValue>
+  </Exception>
+  <Exception>
+    <Project>SomeNonExistingProjectName.csproj</Project>
+    <MinimalValue>0</MinimalValue>
+  </Exception>
+</WarningLevel>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
+            errors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(errors, "Errors");
+        }
+
+        [Fact]
         public void Should_fail_if_warning_level_in_project_is_lower_than_expected_in_one_configuration()
         {
-            const string config = "<WarningLevel minimalValue='3'></WarningLevel>";
+            const string config = "<WarningLevel><MinimalValue>3</MinimalValue></WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInOneConfigurationAndThreeInAnother.csproj").FullName);
@@ -97,7 +155,7 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_fail_if_warning_level_in_project_is_specified_in_one_configuration_only()
         {
-            const string config = "<WarningLevel minimalValue='2'></WarningLevel>";
+            const string config = "<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInOneConfiguration.csproj").FullName);
@@ -108,7 +166,7 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<WarningLevel enabled=\"false\" minimalValue='4'></WarningLevel>";
+            const string config = "<WarningLevel enabled=\"false\"><MinimalValue>4</MinimalValue></WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
@@ -125,6 +183,8 @@ namespace SolutionCop.DefaultRules.Tests
             errors.ShouldBeEmpty();
         }
 
+        // Check bad configurations
+
         [Fact]
         public void Should_fail_if_no_minimal_value_specified()
         {
@@ -139,7 +199,28 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_fail_if_parameter_is_float()
         {
-            const string config = "<WarningLevel minimalValue='4.2'></WarningLevel>";
+            const string config = "<WarningLevel><MinimalValue>4.2</MinimalValue></WarningLevel>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(configErrors, "Errors");
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Should_fail_if_no_project_specified_in_exceptions()
+        {
+            const string config = @"
+<WarningLevel>
+  <MinimalValue>4</MinimalValue>
+  <Exception>
+    <Project>WarningLevelTwoInAllConfigurations.csproj</Project>
+    <MinimalValue>1</MinimalValue>
+  </Exception>
+  <Exception>
+    <MinimalValue>1</MinimalValue>
+  </Exception>
+</WarningLevel>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldNotBeEmpty();
             Approvals.VerifyAll(configErrors, "Errors");
