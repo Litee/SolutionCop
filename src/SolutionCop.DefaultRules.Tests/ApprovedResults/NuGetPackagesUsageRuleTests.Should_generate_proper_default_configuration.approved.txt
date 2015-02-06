@@ -1,0 +1,3 @@
+﻿<NuGetPackagesUsage enabled="false">
+  <Exception>Rx-Main</Exception>
+</NuGetPackagesUsage>

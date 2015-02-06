@@ -6,9 +6,9 @@ using NuGet;
 
 namespace SolutionCop.DefaultRules
 {
-    public class VerifyNuGetPackageVersionsRule : StandardProjectRule
+    public class NuGetPackageVersionsRule : StandardProjectRule
     {
-        private List<XElement> _xmlPackageRules = new List<XElement>();
+        private readonly List<XElement> _xmlPackageRules = new List<XElement>();
 
         public override string DisplayName
         {
@@ -17,7 +17,7 @@ namespace SolutionCop.DefaultRules
 
         public override string Id
         {
-            get { return "VerifyNuGetPackageVersionsRule"; }
+            get { return "NuGetPackageVersions"; }
         }
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)

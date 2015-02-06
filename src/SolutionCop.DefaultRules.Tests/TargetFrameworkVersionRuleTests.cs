@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
+using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Shouldly;
 using Xunit;
@@ -9,6 +10,7 @@ using Xunit;
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof(DiffReporter))]
+    [UseApprovalSubdirectory("ApprovedResults")]
     public class TargetFrameworkVersionRuleTests
     {
         private readonly TargetFrameworkVersionRule _instance;

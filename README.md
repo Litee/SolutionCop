@@ -144,7 +144,7 @@ Sample config section:
 ### TODO rules:
 * Copy Local
 * Binary within NuGet package is referenced without proper reference in packages.config
-* Same package versions are used for in project (support exceptions)
+* Same package versions are used in project (support exceptions)
 * VS solution version
 * New NuGet initialization approach should be used
 * Assembly and root namespace should have same name

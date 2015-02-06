@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class NuGetPackageReferencedInProject : StandardProjectRule
+    public class NuGetPackagesUsageRule : StandardProjectRule
     {
         private IEnumerable<string> _exceptionPackageIds;
 
@@ -17,7 +17,7 @@ namespace SolutionCop.DefaultRules
 
         public override string Id
         {
-            get { return "NuGetPackageReferencedInProject"; }
+            get { return "NuGetPackagesUsage"; }
         }
 
         public override XElement DefaultConfig

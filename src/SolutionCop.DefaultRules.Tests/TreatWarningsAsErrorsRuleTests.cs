@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
+using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Shouldly;
 using Xunit;
@@ -8,6 +9,7 @@ using Xunit;
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof(DiffReporter))]
+    [UseApprovalSubdirectory("ApprovedResults")]
     public class TreatWarningsAsErrorsRuleTests
     {
         private readonly TreatWarningsAsErrorsRule _instance;
@@ -59,7 +61,7 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_fail_if_all_warnings_must_be_treated_as_errors_and_project_treats_all_as_errors_but_only_in_one_configuration()
+        public void Should_fail_if_all_warnings_must_be_treated_as_errors_and_project_treats_them_in_one_configuration()
         {
             const string config = "<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));

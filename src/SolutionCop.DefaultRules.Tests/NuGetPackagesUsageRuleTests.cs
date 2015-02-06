@@ -1,6 +1,7 @@
 using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
+using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Shouldly;
 using Xunit;
@@ -8,13 +9,14 @@ using Xunit;
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof (DiffReporter))]
-    public class NuGetPackageReferencedInProjectTests
+    [UseApprovalSubdirectory("ApprovedResults")]
+    public class NuGetPackagesUsageRuleTests
     {
-        private readonly NuGetPackageReferencedInProject _instance;
+        private readonly NuGetPackagesUsageRule _instance;
 
-        public NuGetPackageReferencedInProjectTests()
+        public NuGetPackagesUsageRuleTests()
         {
-            _instance = new NuGetPackageReferencedInProject();
+            _instance = new NuGetPackagesUsageRule();
         }
 
         [Fact]
@@ -26,20 +28,20 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_pass_if_same_package_version_used_in_project()
         {
-            const string config = "<NuGetPackageReferencedInProject/>";
+            const string config = "<NuGetPackagesUsage/>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject\UsesTwoPackages.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage\UsesTwoPackages.csproj").FullName);
             errors.ShouldBeEmpty();
         }
 
         [Fact]
         public void Should_fail_if_there_is_an_unreferenced_package()
         {
-            const string config = "<NuGetPackageReferencedInProject/>";
+            const string config = "<NuGetPackagesUsage/>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -47,25 +49,25 @@ namespace SolutionCop.DefaultRules.Tests
         [Fact]
         public void Should_pass_if_unreferenced_package_is_an_exception()
         {
-            const string config = @"<NuGetPackageReferencedInProject>
+            const string config = @"<NuGetPackagesUsage>
 <Exceptions>
 <Exception>xunit</Exception>
 <Exception>someUnusedDummyPackage</Exception>
 </Exceptions>
-</NuGetPackageReferencedInProject>";
+</NuGetPackagesUsage>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
             errors.ShouldBeEmpty();
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<NuGetPackageReferencedInProject enabled=\"false\"/>";
+            const string config = "<NuGetPackagesUsage enabled=\"false\"/>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageReferencedInProject_2\UsesOnePackage.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
             errors.ShouldBeEmpty();
         }
     }
