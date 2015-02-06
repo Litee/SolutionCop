@@ -10,10 +10,12 @@ namespace SolutionCop.Core
     {
         public IEnumerable<IProjectRule> LoadRules()
         {
-            Console.Out.WriteLine("INFO: Scanning for rules...");
-
             var rules = new List<IProjectRule>();
-            var assemblies = new DirectoryInfo(".").GetFiles("*.DLL");
+            var assembliesFolder = Path.GetDirectoryName(new Uri(Assembly.GetCallingAssembly().Location).AbsolutePath);
+
+            Console.Out.WriteLine("INFO: Scanning for rules in folder {0}", assembliesFolder);
+
+            var assemblies = new DirectoryInfo(assembliesFolder).GetFiles("*.DLL");
             foreach (var assemblyFile in assemblies)
             {
                 var ruleTypes = Assembly.LoadFrom(assemblyFile.FullName).GetExportedTypes().Where(t => t.IsClass && !t.IsAbstract && typeof(IProjectRule).IsAssignableFrom(t));
