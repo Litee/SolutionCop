@@ -2,10 +2,9 @@
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
-using SolutionCop.Core;
 using Xunit;
 
-namespace SolutionCop.Tests
+namespace SolutionCop.Core.Tests
 {
     [UseReporter(typeof(DiffReporter))]
     public class SolutionParserTests

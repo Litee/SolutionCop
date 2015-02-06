@@ -7,8 +7,8 @@
     <ProjectGuid>{4AB08F23-04F0-45F6-B9C7-4F0099AA8BB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SolutionCop.Tests</RootNamespace>
-    <AssemblyName>SolutionCop.Tests</AssemblyName>
+    <RootNamespace>SolutionCop.Core.Tests</RootNamespace>
+    <AssemblyName>SolutionCop.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

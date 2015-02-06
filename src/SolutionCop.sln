@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCop.DefaultRules", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCop.DefaultRules.Tests", "SolutionCop.DefaultRules.Tests\SolutionCop.DefaultRules.Tests.csproj", "{9FF47EB2-3FCC-47C2-A1CD-E82F7790B79B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCop.Tests", "SolutionCop.Tests\SolutionCop.Tests.csproj", "{4AB08F23-04F0-45F6-B9C7-4F0099AA8BB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCop.Core.Tests", "SolutionCop.Core.Tests\SolutionCop.Core.Tests.csproj", "{4AB08F23-04F0-45F6-B9C7-4F0099AA8BB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCop.CommandLine", "SolutionCop.CommandLine\SolutionCop.CommandLine.csproj", "{757840C4-6FBA-4BD1-9F52-7335AE90FFAE}"
 EndProject
