@@ -33,6 +33,10 @@ namespace SolutionCop.DefaultRules
 
         public IEnumerable<string> ParseConfig(XElement xmlRuleConfigs)
         {
+            if (xmlRuleConfigs.Name.LocalName != Id)
+            {
+                throw new InvalidOperationException("Configuration section has invalid name");
+            }
             var isEnabledString = (string)xmlRuleConfigs.Attribute("enabled");
             if (isEnabledString == null || isEnabledString.ToLower() == "true")
             {

@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NuGetAutomaticPackagesRestoreRuleTests.cs" />
     <Compile Include="NuGetPackagesUsageRuleTests.cs" />
     <Compile Include="StyleCopEnabledRuleTests.cs" />
     <Compile Include="NuGetPackageVersionsRuleTests.cs" />

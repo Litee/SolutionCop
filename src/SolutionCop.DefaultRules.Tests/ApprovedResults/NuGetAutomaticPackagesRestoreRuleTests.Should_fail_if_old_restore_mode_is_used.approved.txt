@@ -1,0 +1,1 @@
+﻿Errors[0] = Obsolete NuGet restore mode is used in project OldNuGetRestoreMode.csproj

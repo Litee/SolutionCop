@@ -141,12 +141,18 @@ Sample config section:
       <Exception>another-package-id</Exception>
     </NuGetPackageReferencedInProject>
 
+### Verify that correct automatic packages restore mode is used (see https://docs.nuget.org/Consume/Package-Restore/Migrating-to-Automatic-Package-Restore). Exceptions are supported.
+
+    <NuGetAutomaticPackagesRestore>
+      <Exception>Project.csproj</Exception>
+      <Exception>Another.Project.csproj</Exception>
+    </NuGetAutomaticPackagesRestore>
+
 ### TODO rules:
 * Copy Local
 * Binary within NuGet package is referenced without proper reference in packages.config
 * Same package versions are used in project (support exceptions)
 * VS solution version
-* New NuGet initialization approach should be used
 * Assembly and root namespace should have same name
 * Unapproved build configurations
 * No duplicate NuGet packages. Looks like low priority - haven't seen this problem in practice for a long time
