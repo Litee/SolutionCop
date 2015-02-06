@@ -157,3 +157,17 @@ Sample config section:
 * Unapproved build configurations
 * No duplicate NuGet packages. Looks like low priority - haven't seen this problem in practice for a long time
 * Classify project by type (e.g. production, testing) and disallow references between some groups
+* TreatStyleCopWarningsAsErrors
+* All *.cs files are referenced in project
+* Proper owner in AssemblyInfo
+* Proper copyright date in AssemblyInfo
+
+### Other Todos:
+* Group errors by project or by rule
+* NuGet commands in log for fixing versions
+* More flexible exceptions
+* Check for unknown config sections
+* Option fail on missing sections
+* Links to broken rule details in wiki
+* Treat rules as separate tests for TeamCity (not sure whether it will work better than plain list)
+* Custom folders for searching rules
