@@ -81,7 +81,6 @@ namespace SolutionCop.CommandLine
                 Console.Out.WriteLine("INFO: Loading config file {0}", commandLineParameters.PathToConfigFile);
 
                 Console.Out.WriteLine("INFO: Starting analyzing...");
-
                 foreach (var projectPath in solutionInfo.ProjectFilePaths)
                 {
                     Console.Out.WriteLine("INFO: Analyzing project {0}", projectPath);
@@ -90,16 +89,21 @@ namespace SolutionCop.CommandLine
                         errors.AddRange(rule.ValidateProject(projectPath));
                     }
                 }
+                Console.Out.WriteLine("INFO: Analysis finished!");
+
                 if (errors.Any())
                 {
                     Console.WriteLine("ERROR: ***** Full list of errors: *****");
                     errors.ForEach(x => Console.WriteLine("ERROR: {0}", x));
                     if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
                     {
-                        var extendedErrorsInfo = Enumerable.Repeat(EscapeForTeamCity("Config file used: " + Path.GetFileName(commandLineParameters.PathToConfigFile)), 1)
-                            .Concat(rules.Select(x => string.Format("Rule: {0} is {1}", x.Id, x.IsEnabled ? "enabled" : "disabled")))
-                            .Concat(errors);
-                        Console.WriteLine("##teamcity[buildStatus status='ERROR' text='{0}']", string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
+                        // adding empty line for a better formatting in TC output
+                        var extendedErrorsInfo = Enumerable.Repeat("", 1)
+                            .Concat(errors.Select((x, idx) => string.Format("ERROR: ({0}/{1}): {2}", idx, errors.Count, x)))
+                            .Concat(Enumerable.Repeat("", 1))
+                            .Concat(rules.Select(x => string.Format("Rule: {0} is {1}", x.Id, x.IsEnabled ? "enabled" : "disabled")));
+                        Console.WriteLine("##teamcity[testFailed message='FAILED ({0})' details='{1}']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)), string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
+                        Console.WriteLine("##teamcity[buildStatus text='FAILED ({0})']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)));
                     }
                 }
                 else
@@ -111,7 +115,6 @@ namespace SolutionCop.CommandLine
                         Console.WriteLine("##teamcity[buildStatus status='SUCCESS' text='{0}']", EscapeForTeamCity(Path.GetFileName(commandLineParameters.PathToConfigFile)));
                     }
                 }
-                Console.Out.WriteLine("INFO: Analysis finished!");
                 Environment.Exit(errors.Any() ? -1 : 0);
             }
             else
