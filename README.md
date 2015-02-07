@@ -10,19 +10,19 @@ Any rule can be disabled by setting *enabled* attribute to *false*. Note that to
 
 ## Supported rules
 * Basic
-** TargetFrameworkVersion
-** FilesIncludedIntoProject
-** TreatWarningsAsErrors
-** SuppressWarnings
-** WarningLevel
+  * TargetFrameworkVersion
+  * FilesIncludedIntoProject
+  * TreatWarningsAsErrors
+  * SuppressWarnings
+  * WarningLevel
 * NuGet
-** [NuGetAutomaticPackagesRestore](https://github.com/Litee/SolutionCop/wiki/NuGetAutomaticPackagesRestore)
-** [NuGetPackagesUsage](https://github.com/Litee/SolutionCop/wiki/NuGetPackagesUsage)
-** ReferenceNuGetPackagesOnly
-** NuGetPackageVersions
+  * [NuGetAutomaticPackagesRestore](https://github.com/Litee/SolutionCop/wiki/NuGetAutomaticPackagesRestore)
+  * [NuGetPackagesUsage](https://github.com/Litee/SolutionCop/wiki/NuGetPackagesUsage)
+  * ReferenceNuGetPackagesOnly
+  * NuGetPackageVersions
 * StyleCop
-** StyleCopEnabled
-** TreatStyleCopWarningsAsErrors
+  * StyleCopEnabled
+  * TreatStyleCopWarningsAsErrors
 
 TODO - add rule details to wiki
 
