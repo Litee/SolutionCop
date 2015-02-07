@@ -51,16 +51,17 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
-            if (_exceptions.Contains(Path.GetFileName(projectFilePath)))
+            var projectFileName = Path.GetFileName(projectFilePath);
+            if (_exceptions.Contains(projectFileName))
             {
-                Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));
+                Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", projectFileName);
             }
             else
             {
                 var importedProjectPaths = xmlProject.Descendants(Namespace + "Import").Select(x => (string)x.Attribute("Project"));
                 if (!importedProjectPaths.Any(x => x.Contains("StyleCop.MSBuild.Targets") || x.Contains("Microsoft.SourceAnalysis.targets")))
                 {
-                    yield return string.Format("StyleCop is missing in project {0}", Path.GetFileName(projectFilePath));
+                    yield return string.Format("StyleCop is missing in project {0}", projectFileName);
                 }
             }
         }

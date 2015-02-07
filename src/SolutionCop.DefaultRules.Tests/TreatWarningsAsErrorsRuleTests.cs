@@ -213,7 +213,7 @@ namespace SolutionCop.DefaultRules.Tests
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
-            Assert.Empty(errors);
+            errors.ShouldBeEmpty();
         }
 
         [Theory]

@@ -51,6 +51,7 @@
     <Compile Include="TargetFrameworkVersionRule.cs" />
     <Compile Include="ReferenceNuGetPackagesOnlyRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreatStyleCopWarningsAsErrorsRule.cs" />
     <Compile Include="TreatWarningsAsErrorsRule.cs" />
     <Compile Include="WarningLevelRule.cs" />
   </ItemGroup>

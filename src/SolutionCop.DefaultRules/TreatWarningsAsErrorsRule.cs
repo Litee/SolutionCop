@@ -106,32 +106,6 @@ namespace SolutionCop.DefaultRules
                     }
                 }
             }
-/*
-            // Global configuration treats all warnings as errors
-            if (!xmlPropertyGlobalGroups.Any(TreatsAllWarningsAsErrors))
-            {
-                // All non-global configurations treat all warnings as errors
-                if (!xmlPropertyGroupsWithConditions.All(TreatsAllWarningsAsErrors))
-                {
-                    if (allWarningsMustBeTreatedAsErrors)
-                    {
-                        yield return string.Format("Not all warnings are treated as an error in project {0}", projectFileName);
-                    }
-                    else
-                    {
-                        // Global configurations do not treat some warnings as errors
-                        if (!xmlPropertyGlobalGroups.Any(x => TreatsSpecificWarningAsAnError(x, warningsThatMustBeTreatedAsErrors)))
-                        {
-                            // Non-global configurations do not treat some warnings as errors
-                            if (!xmlPropertyGroupsWithConditions.All(x => TreatsSpecificWarningAsAnError(x, warningsThatMustBeTreatedAsErrors)))
-                            {
-                                yield return string.Format("At least one of warnings {0} is not treated as an error in project {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
-                            }
-                        }
-                    }
-                }
-            }
-*/
         }
 
         private bool TreatsSpecificWarningAsAnError(XElement xmlPropertyGroup, IEnumerable<string> warningsThatMustBeTreatedAsErrors)
