@@ -8,7 +8,7 @@ namespace SolutionCop.DefaultRules
 {
     public class TreatStyleCopWarningsAsErrorsRule : StandardProjectRule
     {
-        private readonly List<string> _exceptions = new List<string>();
+        private List<string> _exceptions = new List<string>();
 
         public override string DisplayName
         {
@@ -36,7 +36,18 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            yield break;
+            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            {
+                var xmlProject = xmlException.Element("Project");
+                if (xmlProject == null)
+                {
+                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                }
+                else
+                {
+                    _exceptions = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim()).ToList();
+                }
+            }
         }
 
         protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)

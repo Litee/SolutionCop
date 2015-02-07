@@ -67,15 +67,16 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Theory]
-        [InlineData("TreatStyleCopWarningsAsErrors_All.csproj")]
-        [InlineData("TreatStyleCopWarningsAsErrors_Global.csproj")]
+        [InlineData("NoStyleCopWarningsAsErrors_Default.csproj")]
+        [InlineData("NoStyleCopWarningsAsErrors_All.csproj")]
+        [InlineData("NoStyleCopWarningsAsErrors_Global.csproj")]
         public void Should_pass_if_no_warnings_treated_as_errors_but_project_is_in_exceptions_list(string csproj)
         {
             const string config = @"
 <TreatStyleCopWarningsAsErrors>
-  <Exception><Project>TreatStyleCopWarningsAsErrors_All.csproj</Project></Exception>
-  <Exception><Project>TreatStyleCopWarningsAsErrors_Global.csproj</Project></Exception>
-  <Exception><Project>SomeNonExistingProjectName.csproj</Project></Exception>
+  <Exception><Project>NoStyleCopWarningsAsErrors_Default.csproj</Project></Exception>
+  <Exception><Project>NoStyleCopWarningsAsErrors_All.csproj</Project></Exception>
+  <Exception><Project>NoStyleCopWarningsAsErrors_Global.csproj</Project></Exception>
 </TreatStyleCopWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
