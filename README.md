@@ -35,8 +35,6 @@ TODO - add rule details to wiki
 * Unapproved build configurations
 * No duplicate NuGet packages. Looks like low priority - haven't seen this problem in practice for a long time
 * Classify project by type (e.g. production, testing) and disallow references between some groups
-* TreatStyleCopWarningsAsErrors
-* All *.cs files are referenced in project
 * Proper owner in AssemblyInfo
 * Proper copyright date in AssemblyInfo
 
