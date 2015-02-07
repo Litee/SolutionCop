@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace SolutionCop.Core
 {
-    public class ConfigurationFileParser
+    public static class ConfigurationFileParser
     {
         public static IEnumerable<string> Parse(string pathToSolutionFile, ref string pathToConfigFile, IEnumerable<IProjectRule> rules)
         {
