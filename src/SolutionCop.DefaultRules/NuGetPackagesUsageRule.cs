@@ -8,7 +8,7 @@ namespace SolutionCop.DefaultRules
 {
     public class NuGetPackagesUsageRule : StandardProjectRule
     {
-        private IEnumerable<string> _exceptionPackageIds;
+        private readonly List<Tuple<string, string>> _exceptions = new List<Tuple<string, string>>();
 
         public override string DisplayName
         {
@@ -26,15 +26,30 @@ namespace SolutionCop.DefaultRules
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                element.Add(new XElement("Exception", "Rx-Main"));
+                var xmlException = new XElement("Exception");
+                xmlException.Add(new XComment("As exception you can specify project name or package name or both (AND logic)"));
+                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
+                xmlException.Add(new XElement("Package", "PUT PACKAGE ID TO IGNORE HERE (e.g. Rx-Main)"));
+                element.Add(xmlException);
                 return element;
             }
         }
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            _exceptionPackageIds = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
-            yield break;
+            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            {
+                var xmlProject = xmlException.Element("Project");
+                var xmlPackage = xmlException.Element("Package");
+                if (xmlProject == null && xmlPackage == null)
+                {
+                    yield return string.Format("Bad configuration for rule {0}: <Project> or <Package> elements are missing in exceptions list.", Id);
+                }
+                else
+                {
+                    _exceptions.Add(new Tuple<string, string>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlPackage == null ? null : xmlPackage.Value.Trim()));
+                }
+            }
         }
 
         protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
@@ -48,7 +63,8 @@ namespace SolutionCop.DefaultRules
                 {
                     var packageId = xmlUsedPackage.Attribute("id").Value;
                     var packageVersion = xmlUsedPackage.Attribute("version").Value;
-                    if (_exceptionPackageIds.Contains(packageId))
+                    // TODO Simplify
+                    if (_exceptions.Contains(new Tuple<string, string>(projectFileName, null)) || _exceptions.Contains(new Tuple<string, string>(null, packageId)) || _exceptions.Contains(new Tuple<string, string>(projectFileName, packageId)))
                     {
                         Console.Out.WriteLine("DEBUG: Skipping package {0} as an exception in project {1}", packageId, projectFileName);
                     }

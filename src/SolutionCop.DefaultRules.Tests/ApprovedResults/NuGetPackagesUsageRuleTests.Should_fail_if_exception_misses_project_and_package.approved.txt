@@ -1,0 +1,1 @@
+﻿Errors[0] = Bad configuration for rule NuGetPackagesUsage: <Project> or <Package> elements are missing in exceptions list.

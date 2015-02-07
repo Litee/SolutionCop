@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace SolutionCop.DefaultRules
     public class NuGetPackageVersionsRule : StandardProjectRule
     {
         private readonly List<XElement> _xmlPackageRules = new List<XElement>();
+        private IEnumerable<string> _exceptions = new List<string>();
 
         public override string DisplayName
         {
@@ -22,6 +24,18 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
+            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            {
+                var xmlProject = xmlException.Element("Project");
+                if (xmlProject == null)
+                {
+                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                }
+                else
+                {
+                    _exceptions = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
+                }
+            }
             var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName.ToLower() == "package");
             foreach (var xmlPackageRule in xmlPackageRules)
             {
@@ -41,27 +55,34 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
-            var pathToPackagesConfigFile = Path.Combine(Path.GetDirectoryName(projectFilePath), "packages.config");
-            if (File.Exists(pathToPackagesConfigFile))
+            var projectFileName = Path.GetFileName(projectFilePath);
+            if (_exceptions.Contains(projectFileName))
             {
-                var xmlUsedPackages = XDocument.Load(pathToPackagesConfigFile).Element("packages").Elements("package");
-                foreach (var xmlUsedPackage in xmlUsedPackages)
+                Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));
+            }
+            else
+            {
+                var pathToPackagesConfigFile = Path.Combine(Path.GetDirectoryName(projectFilePath), "packages.config");
+                if (File.Exists(pathToPackagesConfigFile))
                 {
-                    var packageId = xmlUsedPackage.Attribute("id").Value;
-                    var packageVersion = xmlUsedPackage.Attribute("version").Value;
-                    var xmlPackageRule = _xmlPackageRules.FirstOrDefault(x => x.Attribute("id").Value == packageId);
-                    var projectFileName = Path.GetFileName(projectFilePath);
-                    if (xmlPackageRule == null)
+                    var xmlUsedPackages = XDocument.Load(pathToPackagesConfigFile).Element("packages").Elements("package");
+                    foreach (var xmlUsedPackage in xmlUsedPackages)
                     {
-                        yield return string.Format("Unknown package {0} with version {1} in project {2}", packageId, packageVersion, projectFileName);
-                    }
-                    else
-                    {
-                        var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
-                        IVersionSpec versionSpec = VersionUtility.ParseVersionSpec(packageRuleVersion);
-                        if (!versionSpec.Satisfies(SemanticVersion.Parse(packageVersion)))
+                        var packageId = xmlUsedPackage.Attribute("id").Value;
+                        var packageVersion = xmlUsedPackage.Attribute("version").Value;
+                        var xmlPackageRule = _xmlPackageRules.FirstOrDefault(x => x.Attribute("id").Value == packageId);
+                        if (xmlPackageRule == null)
                         {
-                            yield return string.Format("Version {0} for package {1} does not match rule {2} in project {3}", packageVersion, packageId, packageRuleVersion, projectFileName);
+                            yield return string.Format("Unknown package {0} with version {1} in project {2}", packageId, packageVersion, projectFileName);
+                        }
+                        else
+                        {
+                            var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
+                            IVersionSpec versionSpec = VersionUtility.ParseVersionSpec(packageRuleVersion);
+                            if (!versionSpec.Satisfies(SemanticVersion.Parse(packageVersion)))
+                            {
+                                yield return string.Format("Version {0} for package {1} does not match rule {2} in project {3}", packageVersion, packageId, packageRuleVersion, projectFileName);
+                            }
                         }
                     }
                 }

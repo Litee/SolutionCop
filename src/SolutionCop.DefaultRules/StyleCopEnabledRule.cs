@@ -8,7 +8,7 @@ namespace SolutionCop.DefaultRules
 {
     public class StyleCopEnabledRule : StandardProjectRule
     {
-        private IEnumerable<string> _exceptionProjectNames;
+        private IEnumerable<string> _exceptions = new List<string>();
 
         public override string DisplayName
         {
@@ -26,20 +26,32 @@ namespace SolutionCop.DefaultRules
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                element.Add(new XElement("Exception", "FakeProject.csproj"));
+                var xmlException = new XElement("Exception");
+                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
+                element.Add(xmlException);
                 return element;
             }
         }
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            _exceptionProjectNames = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
-            yield break;
+            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            {
+                var xmlProject = xmlException.Element("Project");
+                if (xmlProject == null)
+                {
+                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                }
+                else
+                {
+                    _exceptions = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
+                }
+            }
         }
 
         protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
-            if (_exceptionProjectNames.Contains(Path.GetFileName(projectFilePath)))
+            if (_exceptions.Contains(Path.GetFileName(projectFilePath)))
             {
                 Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));
             }

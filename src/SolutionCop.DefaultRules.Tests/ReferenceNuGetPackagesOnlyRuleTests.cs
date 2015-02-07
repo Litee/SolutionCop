@@ -47,6 +47,35 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_pass_for_project_with_direct_references_to_binaries_if_project_is_an_exception()
+        {
+            const string config = @"
+<ReferenceNuGetPackagesOnly>
+  <Exception>
+    <Project>HasReferencesToLocalBinaries.csproj</Project>
+  </Exception>
+</ReferenceNuGetPackagesOnly>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Should_fail_if_exception_misses_project()
+        {
+            const string config = @"
+<ReferenceNuGetPackagesOnly>
+  <Exception>Some text</Exception>
+</ReferenceNuGetPackagesOnly>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(configErrors, "Errors");
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
         public void Should_pass_for_disabled_rule()
         {
             const string config = "<ReferenceNuGetPackagesOnly enabled=\"false\"/>";

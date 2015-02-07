@@ -1,0 +1,2 @@
+﻿Errors[0] = Not all warnings are treated as an error in project TreatNoWarningsAsErrorsExplicitlyInAllConfigurations.csproj
+Errors[1] = Not all warnings are treated as an error in project TreatNoWarningsAsErrorsExplicitlyInAllConfigurations.csproj

@@ -97,6 +97,71 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_pass_if_two_unapproved_warnings_suppressed_but_project_is_an_exception()
+        {
+            const string config = @"
+<SuppressWarnings>
+  <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
+  <Exception><Project>SuppressTwoWarnings.csproj</Project></Exception>
+</SuppressWarnings>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Should_pass_if_two_unapproved_warnings_suppressed_but_they_are_in_exception()
+        {
+            const string config = @"
+<SuppressWarnings>
+  <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
+  <Exception>
+    <Project>SuppressTwoWarnings.csproj</Project>
+    <Warning>0420</Warning>
+    <Warning>0465</Warning>
+  </Exception>
+</SuppressWarnings>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Should_pass_if_two_unapproved_warnings_suppressed_but_only_one_is_in_exception()
+        {
+            const string config = @"
+<SuppressWarnings>
+  <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
+  <Exception>
+    <Project>SuppressTwoWarnings.csproj</Project>
+    <Warning>0465</Warning>
+  </Exception>
+</SuppressWarnings>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
+            errors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(errors, "Errors");
+        }
+
+        [Fact]
+        public void Should_fail_if_exception_misses_project()
+        {
+            const string config = @"
+<SuppressWarnings>
+  <Exception>Some text</Exception>
+  <Exception><Project>SuppressTwoWarnings.csproj</Project></Exception>
+</SuppressWarnings>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(configErrors, "Errors");
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
         public void Should_fail_if_two_unapproved_warnings_suppressed_in_one_config_only()
         {
             const string config = "<SuppressWarnings></SuppressWarnings>";

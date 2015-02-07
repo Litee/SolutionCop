@@ -47,11 +47,14 @@ namespace SolutionCop.DefaultRules
             {
                 yield return string.Format("Error in config for rule {0} - 'enabled' attribute has wrong value.", Id);
             }
-            var errors = ParseConfigSectionCustomParameters(xmlRuleConfigs);
-            foreach (var error in errors)
+            if (_isEnabled)
             {
-                _isEnabled = false;
-                yield return error;
+                var errors = ParseConfigSectionCustomParameters(xmlRuleConfigs);
+                foreach (var error in errors)
+                {
+                    _isEnabled = false;
+                    yield return error;
+                }
             }
         }
 

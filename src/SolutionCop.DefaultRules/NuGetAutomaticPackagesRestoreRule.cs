@@ -8,7 +8,7 @@ namespace SolutionCop.DefaultRules
 {
     public class NuGetAutomaticPackagesRestoreRule : StandardProjectRule
     {
-        private IEnumerable<string> _exceptionProjectNames;
+        private IEnumerable<string> _exceptions = new List<string>();
 
         public override string DisplayName
         {
@@ -26,24 +26,33 @@ namespace SolutionCop.DefaultRules
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                element.Add(new XElement("Exception", "FakeProject.csproj"));
+                var xmlException = new XElement("Exception");
+                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
+                element.Add(xmlException);
                 return element;
             }
         }
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            if (IsEnabled)
+            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
             {
-                _exceptionProjectNames = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
+                var xmlProject = xmlException.Element("Project");
+                if (xmlProject == null)
+                {
+                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                }
+                else
+                {
+                    _exceptions = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
+                }
             }
-            yield break;
         }
 
         protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
             var projectFileName = Path.GetFileName(projectFilePath);
-            if (_exceptionProjectNames.Contains(projectFileName))
+            if (_exceptions.Contains(projectFileName))
             {
                 Console.Out.WriteLine("DEBUG: Skipping warning level check as an exception for project {0}", projectFileName);
             }

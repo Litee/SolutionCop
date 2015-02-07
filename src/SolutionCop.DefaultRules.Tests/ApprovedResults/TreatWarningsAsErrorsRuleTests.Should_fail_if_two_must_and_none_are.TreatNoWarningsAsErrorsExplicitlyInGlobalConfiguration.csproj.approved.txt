@@ -1,0 +1,4 @@
+﻿Errors[0] = Warning 0465 is not treated as an error in project TreatNoWarningsAsErrorsExplicitlyInGlobalConfiguration.csproj
+Errors[1] = Warning 0420 is not treated as an error in project TreatNoWarningsAsErrorsExplicitlyInGlobalConfiguration.csproj
+Errors[2] = Warning 0465 is not treated as an error in project TreatNoWarningsAsErrorsExplicitlyInGlobalConfiguration.csproj
+Errors[3] = Warning 0420 is not treated as an error in project TreatNoWarningsAsErrorsExplicitlyInGlobalConfiguration.csproj

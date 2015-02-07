@@ -27,43 +27,40 @@ namespace SolutionCop.DefaultRules
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                var sampleException = new XElement("Exception");
-                sampleException.Add(new XElement("MinimalValue", "4"));
-                sampleException.Add(new XElement("Project", "FakeProject.csproj"));
-                sampleException.Add(new XElement("MinimalValue", 0));
-                element.Add(sampleException);
+                element.Add(new XElement("MinimalValue", "4"));
+                var xmlException = new XElement("Exception");
+                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
+                xmlException.Add(new XComment(new XElement("MinimalValue", "(OPTIONAL) PUT MINIMAL WARNING LEVEL FOR THE PROJECT HERE (e.g. 1)").ToString()));
+                element.Add(xmlException);
                 return element;
             }
         }
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            if (IsEnabled)
+            var xmlMinimalValue = xmlRuleConfigs.Element("MinimalValue");
+            if (xmlMinimalValue == null)
             {
-                var xmlMinimalValue = xmlRuleConfigs.Element("MinimalValue");
-                if (xmlMinimalValue == null)
+                yield return string.Format("Bad configuration for rule {0}: <MinimalValue> element is missing.", Id);
+            }
+            else if (!Int32.TryParse((string)xmlMinimalValue, out _requiredWarningLevel))
+            {
+                yield return string.Format("Bad configuration for rule {0}: <MinimalValue> element must contain an integer.", Id);
+            }
+            // Clear is required for cases when errors are enumerated twice
+            _exceptions.Clear();
+            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            {
+                var xmlProject = xmlException.Element("Project");
+                if (xmlProject == null)
                 {
-                    yield return string.Format("Bad configuration for rule {0}: <MinimalValue> element is missing.", Id);
+                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
                 }
-                else if (!Int32.TryParse((string) xmlMinimalValue, out _requiredWarningLevel))
+                else
                 {
-                    yield return string.Format("Bad configuration for rule {0}: <MinimalValue> element must contain an integer.", Id);
-                }
-                // Clear is required for cases when errors are enumerated twice
-                _exceptions.Clear();
-                foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
-                {
-                    var xmlProject = xmlException.Element("Project");
-                    if (xmlProject == null)
-                    {
-                        yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
-                    }
-                    else
-                    {
-                        xmlMinimalValue = xmlException.Element("MinimalValue");
-                        var minimalValue = xmlMinimalValue == null ? 0 : Convert.ToInt32(xmlMinimalValue.Value.Trim());
-                        _exceptions.Add(xmlProject.Value, minimalValue);
-                    }
+                    xmlMinimalValue = xmlException.Element("MinimalValue");
+                    var minimalValue = xmlMinimalValue == null ? 0 : Convert.ToInt32(xmlMinimalValue.Value.Trim());
+                    _exceptions.Add(xmlProject.Value, minimalValue);
                 }
             }
         }

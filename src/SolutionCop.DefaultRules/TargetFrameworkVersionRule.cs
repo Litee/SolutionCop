@@ -26,6 +26,9 @@ namespace SolutionCop.DefaultRules
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
                 element.Add(new XElement("AllowedValue", "4.0"));
+                var xmlException = new XElement("Exception");
+                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
+                element.Add(xmlException);
                 return element;
             }
         }
@@ -33,7 +36,7 @@ namespace SolutionCop.DefaultRules
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
             _targetFrameworkVersions = xmlRuleConfigs.Elements("AllowedValue").Select(x => x.Value.Trim());
-            if (IsEnabled && !_targetFrameworkVersions.Any())
+            if (!_targetFrameworkVersions.Any())
             {
                 yield return string.Format("No allowed values specified for rule {0}", Id);
             }

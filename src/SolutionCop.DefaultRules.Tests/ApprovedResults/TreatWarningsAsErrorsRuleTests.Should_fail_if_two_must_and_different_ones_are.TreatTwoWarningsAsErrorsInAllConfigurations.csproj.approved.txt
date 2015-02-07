@@ -1,1 +1,4 @@
-﻿Errors[0] = At least one of warnings 0466, 0421 is not treated as an error in project TreatTwoWarningsAsErrorsInAllConfigurations.csproj
+﻿Errors[0] = Warning 0466 is not treated as an error in project TreatTwoWarningsAsErrorsInAllConfigurations.csproj
+Errors[1] = Warning 0421 is not treated as an error in project TreatTwoWarningsAsErrorsInAllConfigurations.csproj
+Errors[2] = Warning 0466 is not treated as an error in project TreatTwoWarningsAsErrorsInAllConfigurations.csproj
+Errors[3] = Warning 0421 is not treated as an error in project TreatTwoWarningsAsErrorsInAllConfigurations.csproj

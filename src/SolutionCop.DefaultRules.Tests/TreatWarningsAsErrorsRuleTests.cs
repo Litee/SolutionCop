@@ -44,6 +44,7 @@ namespace SolutionCop.DefaultRules.Tests
         [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
         public void Should_fail_if_all_must_and_only_two_are(string csproj)
         {
+            // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
             const string config = "<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
@@ -81,13 +82,18 @@ namespace SolutionCop.DefaultRules.Tests
             Approvals.VerifyAll(errors, "Errors");
         }
 
-        [Fact]
-        public void Should_fail_if_all_must_and_none_are()
+        [Theory]
+        [InlineData("TreatNoWarningsAsErrors.csproj")]
+        [InlineData("TreatNoWarningsAsErrorsExplicitlyInAllConfigurations.csproj")]
+        [InlineData("TreatNoWarningsAsErrorsExplicitlyInGlobalConfiguration.csproj")]
+        public void Should_fail_if_all_must_and_none_are(string csproj)
         {
+            // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
+            NamerFactory.AdditionalInformation = csproj;
             const string config = "<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -156,6 +162,7 @@ namespace SolutionCop.DefaultRules.Tests
         [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
         public void Should_fail_if_two_must_and_different_ones_are(string csproj)
         {
+            // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
             const string config = "<TreatWarningsAsErrors><Warning>0466</Warning><Warning>0421</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
@@ -165,24 +172,34 @@ namespace SolutionCop.DefaultRules.Tests
             Approvals.VerifyAll(errors, "Errors");
         }
 
-        [Fact]
-        public void Should_fail_if_two_must_and_none_are()
+        [Theory]
+        [InlineData("TreatNoWarningsAsErrors.csproj")]
+        [InlineData("TreatNoWarningsAsErrorsExplicitlyInAllConfigurations.csproj")]
+        [InlineData("TreatNoWarningsAsErrorsExplicitlyInGlobalConfiguration.csproj")]
+        public void Should_fail_if_two_must_and_none_are(string csproj)
         {
+            // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
+            NamerFactory.AdditionalInformation = csproj;
             const string config = "<TreatWarningsAsErrors><Warning>0465 </Warning><Warning> 0420</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
 
-        [Fact]
-        public void Should_fail_if_one_must_and_none_are()
+        [Theory]
+        [InlineData("TreatNoWarningsAsErrors.csproj")]
+        [InlineData("TreatNoWarningsAsErrorsExplicitlyInAllConfigurations.csproj")]
+        [InlineData("TreatNoWarningsAsErrorsExplicitlyInGlobalConfiguration.csproj")]
+        public void Should_fail_if_one_must_and_none_are(string csproj)
         {
+            // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
+            NamerFactory.AdditionalInformation = csproj;
             const string config = "<TreatWarningsAsErrors><Warning>0465</Warning></TreatWarningsAsErrors>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
         }
@@ -211,13 +228,18 @@ namespace SolutionCop.DefaultRules.Tests
             errors.ShouldBeEmpty();
         }
 
-        [Fact]
-        public void Should_pass_if_none_must_and_none_are()
+        [Theory]
+        [InlineData("TreatNoWarningsAsErrors.csproj")]
+        [InlineData("TreatNoWarningsAsErrorsExplicitlyInAllConfigurations.csproj")]
+        [InlineData("TreatNoWarningsAsErrorsExplicitlyInGlobalConfiguration.csproj")]
+        public void Should_pass_if_none_must_and_none_are(string csproj)
         {
+            // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
+            NamerFactory.AdditionalInformation = csproj;
             const string config = "<TreatWarningsAsErrors/>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName);
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
             errors.ShouldBeEmpty();
         }
 
@@ -233,6 +255,7 @@ namespace SolutionCop.DefaultRules.Tests
 
         public void Dispose()
         {
+            // Setting to null to switch back to standard file naming for approvals.
             NamerFactory.AdditionalInformation = null;
         }
     }

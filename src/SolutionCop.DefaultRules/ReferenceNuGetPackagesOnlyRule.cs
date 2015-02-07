@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -7,6 +8,8 @@ namespace SolutionCop.DefaultRules
 {
     public class ReferenceNuGetPackagesOnlyRule : StandardProjectRule
     {
+        private IEnumerable<string> _exceptions = new List<string>();
+
         public override string DisplayName
         {
             get { return "Verify that all referenced binaries come from NuGet packages"; }
@@ -17,17 +20,49 @@ namespace SolutionCop.DefaultRules
             get { return "ReferenceNuGetPackagesOnly"; }
         }
 
+        public override XElement DefaultConfig
+        {
+            get
+            {
+                var element = new XElement(Id);
+                element.SetAttributeValue("enabled", "false");
+                var xmlException = new XElement("Exception");
+                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
+                element.Add(xmlException);
+                return element;
+            }
+        }
+
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            yield break;
+            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            {
+                var xmlProject = xmlException.Element("Project");
+                if (xmlProject == null)
+                {
+                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                }
+                else
+                {
+                    _exceptions = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
+                }
+            }
         }
 
         protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
         {
-            var xmlHintPaths = xmlProject.Descendants(Namespace + "HintPath").Where(x => !x.Value.Contains(@"\packages\"));
-            foreach (var xmlHintPath in xmlHintPaths)
+            var projectFileName = Path.GetFileName(projectFilePath);
+            if (_exceptions.Contains(projectFileName))
             {
-                yield return string.Format("Reference '{0}' is not pointing to NuGet package in project {1}", xmlHintPath.Value, Path.GetFileName(projectFilePath));
+                Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));
+            }
+            else
+            {
+                var xmlHintPaths = xmlProject.Descendants(Namespace + "HintPath").Where(x => !x.Value.Contains(@"\packages\"));
+                foreach (var xmlHintPath in xmlHintPaths)
+                {
+                    yield return string.Format("Reference '{0}' is not pointing to NuGet package in project {1}", xmlHintPath.Value, projectFileName);
+                }
             }
         }
     }

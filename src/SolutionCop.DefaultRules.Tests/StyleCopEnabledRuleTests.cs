@@ -49,13 +49,25 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_exception()
         {
             const string config = @"<StyleCopEnabled>
-<Exceptions>
-<Exception>StyleCopDisabled.csproj</Exception>
-<Exception>SomeNonExistingProject.csproj</Exception>
-</Exceptions>
+<Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
+<Exception><Project>StyleCopDisabled.csproj</Project></Exception>
 </StyleCopEnabled>";
             var configErrors = _instance.ParseConfig(XElement.Parse(config));
             configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Should_fail_if_exception_misses_project()
+        {
+            const string config = @"<StyleCopEnabled>
+<Exception>Some text</Exception>
+<Exception><Project>StyleCopDisabled.csproj</Project></Exception>
+</StyleCopEnabled>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(configErrors, "Errors");
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
             errors.ShouldBeEmpty();
         }

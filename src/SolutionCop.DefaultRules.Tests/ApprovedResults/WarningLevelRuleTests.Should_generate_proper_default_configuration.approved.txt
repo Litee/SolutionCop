@@ -1,7 +1,7 @@
 ﻿<WarningLevel enabled="false">
+  <MinimalValue>4</MinimalValue>
   <Exception>
-    <MinimalValue>4</MinimalValue>
-    <Project>FakeProject.csproj</Project>
-    <MinimalValue>0</MinimalValue>
+    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
+    <!--<MinimalValue>(OPTIONAL) PUT MINIMAL WARNING LEVEL FOR THE PROJECT HERE (e.g. 1)</MinimalValue>-->
   </Exception>
 </WarningLevel>

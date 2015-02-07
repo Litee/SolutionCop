@@ -46,19 +46,6 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_pass_if_old_restore_mode_is_used_in_exception()
-        {
-            const string config = @"
-<NuGetAutomaticPackagesRestore>
-  <Exception>NoNuGet.csproj</Exception>
-</NuGetAutomaticPackagesRestore>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
-            errors.ShouldBeEmpty();
-        }
-
-        [Fact]
         public void Should_fail_if_old_restore_mode_is_used()
         {
             const string config = "<NuGetAutomaticPackagesRestore enabled=\"true\"/>";
@@ -67,6 +54,33 @@ namespace SolutionCop.DefaultRules.Tests
             var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\OldNuGetRestoreMode.csproj").FullName);
             errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(errors, "Errors");
+        }
+
+        [Fact]
+        public void Should_pass_if_old_restore_mode_is_used_in_exception()
+        {
+            const string config = @"
+<NuGetAutomaticPackagesRestore>
+  <Exception><Project>NoNuGet.csproj</Project></Exception>
+</NuGetAutomaticPackagesRestore>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
+            errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Should_fail_if_exception_does_not_have_project_specified()
+        {
+            const string config = @"
+<NuGetAutomaticPackagesRestore>
+  <Exception>Some text</Exception>
+</NuGetAutomaticPackagesRestore>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(configErrors, "Errors");
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
+            errors.ShouldBeEmpty();
         }
     }
 }

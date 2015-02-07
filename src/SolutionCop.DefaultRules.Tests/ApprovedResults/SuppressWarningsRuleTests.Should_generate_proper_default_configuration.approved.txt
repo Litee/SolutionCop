@@ -1,3 +1,5 @@
 ﻿<SuppressWarnings enabled="false">
-  <Exception>FakeProject.csproj</Exception>
+  <Exception>
+    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
+  </Exception>
 </SuppressWarnings>

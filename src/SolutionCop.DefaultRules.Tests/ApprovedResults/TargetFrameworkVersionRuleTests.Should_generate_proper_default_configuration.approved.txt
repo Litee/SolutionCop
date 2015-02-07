@@ -1,3 +1,6 @@
 ﻿<TargetFrameworkVersion enabled="false">
   <AllowedValue>4.0</AllowedValue>
+  <Exception>
+    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
+  </Exception>
 </TargetFrameworkVersion>
