@@ -63,7 +63,7 @@ namespace SolutionCop.DefaultRules
             {
                 // TODO Support other extensions
                 var filePaths = Directory.EnumerateFiles(Path.GetDirectoryName(projectFilePath), "*.cs", SearchOption.AllDirectories);
-                foreach (var filePath in filePaths)
+                foreach (var filePath in filePaths.Where(x => !x.ToLower().Contains(@"\obj\")))
                 {
                     var fileName = Path.GetFileName(filePath);
                     // TODO Make more precise
