@@ -172,3 +172,4 @@ Sample config section:
 * Treat rules as separate tests for TeamCity (not sure whether it will work better than plain list)
 * Custom folders for searching rules
 * Configuration as exception
+* Error messages -> resources
