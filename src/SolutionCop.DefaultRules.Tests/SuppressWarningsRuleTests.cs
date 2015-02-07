@@ -129,13 +129,31 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_pass_if_two_unapproved_warnings_suppressed_but_only_one_is_in_exception()
+        public void Should_fail_if_two_unapproved_warnings_suppressed_but_only_one_is_in_exception()
         {
             const string config = @"
 <SuppressWarnings>
   <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
   <Exception>
     <Project>SuppressTwoWarnings.csproj</Project>
+    <Warning>0465</Warning>
+  </Exception>
+</SuppressWarnings>";
+            var configErrors = _instance.ParseConfig(XElement.Parse(config));
+            configErrors.ShouldBeEmpty();
+            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
+            errors.ShouldNotBeEmpty();
+            Approvals.VerifyAll(errors, "Errors");
+        }
+
+        [Fact]
+        public void Should_fail_if_two_unapproved_warnings_suppressed_and_they_are_exceptions_for_another_project()
+        {
+            const string config = @"
+<SuppressWarnings>
+  <Exception>
+    <Project>SomeNonExistingProject.csproj</Project>
+    <Warning>0420</Warning>
     <Warning>0465</Warning>
   </Exception>
 </SuppressWarnings>";

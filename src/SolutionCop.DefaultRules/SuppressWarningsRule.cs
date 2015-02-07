@@ -36,7 +36,7 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            _warningsAllowedToSuppress = xmlRuleConfigs.Descendants("Warning").Select(x => x.Value.Trim());
+            _warningsAllowedToSuppress = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim());
             // Clear is required for cases when errors are enumerated twice
             _exceptions.Clear();
             foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
