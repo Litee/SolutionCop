@@ -1,29 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Rules>
   <TargetFrameworkVersion enabled="true">
-    <AllowedValue>4.0</AllowedValue>
+    <FrameworkVersion>4.0</FrameworkVersion>
   </TargetFrameworkVersion>
   <ReferenceNuGetPackagesOnly enabled="true" />
   <TreatWarningsAsErrors enabled="true">
     <AllWarnings />
   </TreatWarningsAsErrors>
-  <SuppressWarnings enabled="false"></SuppressWarnings>
+  <SuppressWarnings enabled="true">
+  </SuppressWarnings>
   <WarningLevel>
     <MinimalValue>4</MinimalValue>
   </WarningLevel>
-  <AllowOnlySpecificNuGetPackages enabled="false" />
-  <NuGetPackageReferencedInProject enabled="false">
-    <Exceptions>
-      <Exception>Rx-Main</Exception>
-    </Exceptions>
-  </NuGetPackageReferencedInProject>
   <StyleCopEnabled enabled="false" />
-  <VerifyNuGetPackageVersionsRule enabled="false" />
-  <NuGetAutomaticPackagesRestore enabled="false">
-    <Exception>FakeProject.csproj</Exception>
+  <NuGetAutomaticPackagesRestore enabled="true">
   </NuGetAutomaticPackagesRestore>
-  <NuGetPackagesUsage enabled="false">
-    <Exception>Rx-Main</Exception>
+  <NuGetPackagesUsage enabled="true">
   </NuGetPackagesUsage>
   <NuGetPackageVersions enabled="false" />
+  <TreatStyleCopWarningsAsErrors enabled="false">
+  </TreatStyleCopWarningsAsErrors>
+  <FilesIncludedIntoProject enabled="true">
+  </FilesIncludedIntoProject>
 </Rules>

@@ -1,6 +1,5 @@
 ﻿<FilesIncludedIntoProject enabled="false">
   <Exception>
-    <!--As exception you can specify project name-->
-    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
+    <Project>ProjectToExcludeFromCheck.csproj</Project>
   </Exception>
 </FilesIncludedIntoProject>
