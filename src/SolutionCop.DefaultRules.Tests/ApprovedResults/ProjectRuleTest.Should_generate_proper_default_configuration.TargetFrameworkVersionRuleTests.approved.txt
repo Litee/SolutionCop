@@ -1,0 +1,11 @@
+﻿<TargetFrameworkVersion enabled="false">
+  <FrameworkVersion>4.0</FrameworkVersion>
+  <FrameworkVersion>4.5</FrameworkVersion>
+  <Exception>
+    <Project>ProjectToExcludeFromCheck.csproj</Project>
+  </Exception>
+  <Exception>
+    <Project>ProjectCanHaveTargetVersion3_5.csproj</Project>
+    <FrameworkVersion>3.5</FrameworkVersion>
+  </Exception>
+</TargetFrameworkVersion>

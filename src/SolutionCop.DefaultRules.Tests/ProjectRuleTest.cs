@@ -2,16 +2,27 @@ using System;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Namers;
+using ApprovalTests.Reporters;
 using Shouldly;
 using SolutionCop.Core;
+using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
 {
+    [UseReporter(typeof(DiffReporter))]
+    [UseApprovalSubdirectory("ApprovedResults")]
     public abstract class ProjectRuleTest : IDisposable
     {
         protected ProjectRuleTest(IProjectRule instance)
         {
             Instance = instance;
+        }
+
+        [Fact]
+        public void Should_generate_proper_default_configuration()
+        {
+            NamerFactory.AdditionalInformation = GetType().Name;
+            Approvals.Verify(Instance.DefaultConfig);
         }
 
         protected IProjectRule Instance { get; private set;

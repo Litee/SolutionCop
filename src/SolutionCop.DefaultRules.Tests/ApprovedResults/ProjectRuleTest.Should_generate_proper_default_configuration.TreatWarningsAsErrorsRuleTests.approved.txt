@@ -1,0 +1,13 @@
+﻿<TreatWarningsAsErrors enabled="false">
+  <AllWarnings />
+  <!--You may also define specific warnings-->
+  <!--<Warning>0123</Warning>-->
+  <!--<Warning>0124</Warning>-->
+  <Exception>
+    <Project>ProjectToExcludeFromCheck.csproj</Project>
+  </Exception>
+  <Exception>
+    <Project>ProjectIsAllowedNotToTreatSomeWarningsAsErrors.csproj</Project>
+    <Warning>0125</Warning>
+  </Exception>
+</TreatWarningsAsErrors>

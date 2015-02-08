@@ -18,12 +18,6 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_generate_proper_default_configuration()
-        {
-            Approvals.Verify(Instance.DefaultConfig);
-        }
-
-        [Fact]
         public void Should_pass_with_neither_warning_suppressed()
         {
             var xmlConfig = XElement.Parse("<SuppressWarnings><Warning>0420</Warning><Warning>0465</Warning></SuppressWarnings>");

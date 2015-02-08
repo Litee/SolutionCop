@@ -17,12 +17,6 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_generate_proper_default_configuration()
-        {
-            Approvals.Verify(Instance.DefaultConfig);
-        }
-
-        [Fact]
         public void Should_accept_project_references_to_packages_only()
         {
             var xmlConfig = XElement.Parse("<ReferenceNuGetPackagesOnly/>");

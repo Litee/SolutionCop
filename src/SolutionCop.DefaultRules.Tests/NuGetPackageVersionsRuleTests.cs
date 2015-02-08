@@ -19,12 +19,6 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_generate_proper_default_configuration()
-        {
-            Approvals.Verify(Instance.DefaultConfig);
-        }
-
-        [Fact]
         public void Should_pass_if_all_used_packages_match_rules()
         {
             var xmlConfig = XElement.Parse(@"

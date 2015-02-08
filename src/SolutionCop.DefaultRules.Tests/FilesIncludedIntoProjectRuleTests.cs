@@ -1,6 +1,5 @@
 using System.IO;
 using System.Xml.Linq;
-using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Xunit;
@@ -13,12 +12,6 @@ namespace SolutionCop.DefaultRules.Tests
     {
         public FilesIncludedIntoProjectRuleTests() : base(new FilesIncludedIntoProjectRule())
         {
-        }
-
-        [Fact]
-        public void Should_generate_proper_default_configuration()
-        {
-            Approvals.Verify(Instance.DefaultConfig);
         }
 
         [Fact]

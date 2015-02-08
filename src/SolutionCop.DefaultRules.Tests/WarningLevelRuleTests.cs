@@ -17,12 +17,6 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
-        public void Should_generate_proper_default_configuration()
-        {
-            Approvals.Verify(Instance.DefaultConfig);
-        }
-
-        [Fact]
         public void Should_pass_if_warning_level_in_project_is_as_expected()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>");

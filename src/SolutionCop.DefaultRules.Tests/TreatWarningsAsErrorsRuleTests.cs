@@ -17,12 +17,6 @@ namespace SolutionCop.DefaultRules.Tests
         {
         }
 
-        [Fact]
-        public void Should_generate_proper_default_configuration()
-        {
-            Approvals.Verify(Instance.DefaultConfig);
-        }
-
         [Theory]
         [InlineData("TreatAllWarningsAsErrorsInAllConfigurations.csproj")]
         [InlineData("TreatAllWarningsAsErrorsInGlobalConfiguration.csproj")]
