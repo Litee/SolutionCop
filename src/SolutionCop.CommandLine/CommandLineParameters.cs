@@ -5,13 +5,13 @@ namespace SolutionCop.CommandLine
 {
     class CommandLineParameters
     {
-        [Option('s', "solution", Required = true)]
+        [Option('s', "solution", Required = true, HelpText = "Path to the Visual Studio solution file to analyze.")]
         public string PathToSolution { get; set; }
 
-        [Option('c', "config")]
+        [Option('c', "config", Required = false, HelpText = "Path to the configuration file with rule settings.")]
         public string PathToConfigFile { get; set; }
 
-        [Option('b', "build-server", Required = false, DefaultValue = BuildServer.None)]
+        [Option('b', "build-server", Required = false, HelpText = "Specify this parameter if you want additional information to be sent to CI server via console interaction. Supported value: TeamCity")]
         public BuildServer BuildServerType { get; set; }
 
         [HelpOption]

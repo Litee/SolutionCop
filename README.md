@@ -1,12 +1,10 @@
 # SolutionCop
 
-Tool for static analysis of Visual Studio solutions and projects. 
+SolutionCop is tool for analysing Visual Studio solutions and projects. It covers gap between FxCop (static analysis of binaries) and StyleCop (static analysis of isolated files) and allows to analyse solution/project structure and settings.
 
-Usage: SolutionCop.exe -s *path-to-vs-solution* [-c *path-to-solutioncop-config*]
+Usage: SolutionCop.exe -s MySolution.sln [-c SolutionCop.xml] [-b TeamCity]
 
-If <path-to-solutioncop-config> is not provided then tool looks for SolutionCop.xml file next to target *.sln. If config file cannot be found then default one is created - you can use it for reference.
-
-Any rule can be disabled by setting *enabled* attribute to *false*. Note that tool adds default entries for rules if they are missing.
+If no configuration file is specified then tool will look for SolutionCop.xml file next to *.sln. If config file cannot be found then default one will be created next to VS solution with all rules disabled.
 
 ## Supported rules
 
@@ -25,26 +23,29 @@ Any rule can be disabled by setting *enabled* attribute to *false*. Note that to
   * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
   * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)
 
-### TODO rules:
-* Copy Local
-* Binary within NuGet package is referenced directly without proper reference in packages.config
-* Same package versions are used across projects (support exceptions)
-* VS solution version
-* Assembly and root namespace should have same name
-* Unapproved build configurations
-* No duplicate NuGet packages (looks like low priority - haven't seen this problem in practice for a long time)
-* Classify project by type (e.g. production, testing) and disallow references between some groups
-* Proper owner in AssemblyInfo
-* Proper copyright date in AssemblyInfo
-* Forbid pre-release versions of packages (should be added to NuGetPackageVersions rule)
+## Compatibility
 
-### Other Todos:
-* Group errors by project or by rule
-* NuGet commands in log for fixing versions
-* More flexible exceptions
-* Option to fail on missing sections
-* Links to broken rule details in wiki
-* Treat rules as separate tests for TeamCity (not sure whether it will work better than plain list)
-* Custom folders for searching rules
-* Configuration can be an exception
-* Error messages -> resources
+* Tool is using .NET 4.0
+
+### TODO (rules in priority order)
+* Same package versions should be used across projects (support exceptions)
+* Forbid pre-release versions of packages (should be added to NuGetPackageVersions rule)
+* Unapproved build configurations
+* Binary within NuGet package is referenced directly without proper reference in packages.config
+* Check for "Copy Local" used
+* Assembly and root namespace should have same name
+* Classify project by type (e.g. production, testing) and disallow references between some groups
+* Proper owner in AssemblyInfo (FxCop?)
+* Proper copyright date in AssemblyInfo (FxCop?)
+* Check VS solution version
+* No duplicate id in packages.config (looks like low priority - haven't seen this problem in practice for a long time)
+
+### TODO (other)
+* Group errors in output by project or by rule
+* Provide NuGet commands in log for upgrading to the lowest version
+* Option to fail on missing sections instead of creating them
+* Provide links to rule details in output
+* Treat each rule as a separate test suite for TeamCity (not sure whether it will work better than current plain list)
+* Allow to search custom rules in other folders
+* Support build configurations as exception
+* Move error messages to resources
