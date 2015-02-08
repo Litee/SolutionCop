@@ -10,6 +10,7 @@ namespace SolutionCop.CommandLine
     internal static class Program
     {
         private static readonly RulesDirectoryCatalog RulesDirectoryCatalog = new RulesDirectoryCatalog();
+        private static readonly ConfigurationFileParser ConfigurationFileParser = new ConfigurationFileParser();
 
         private static void Main(string[] args)
         {

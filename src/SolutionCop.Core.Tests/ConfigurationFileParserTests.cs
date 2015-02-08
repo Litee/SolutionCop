@@ -1,21 +1,36 @@
 ﻿using System.Collections.Generic;
+using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using System.Xml.Linq;
+using ApprovalTests;
+using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using Shouldly;
 using Xunit;
 
 namespace SolutionCop.Core.Tests
 {
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof(DiffReporter))]
+    [UseApprovalSubdirectory("ApprovedResults")]
     public class ConfigurationFileParserTests
     {
+        private readonly IFileSystem _fileSystemMock;
+        private readonly ConfigurationFileParser _instance;
+
+        public ConfigurationFileParserTests()
+        {
+            _fileSystemMock = new MockFileSystem();
+            _instance = new ConfigurationFileParser(_fileSystemMock);
+        }
+
         [Fact]
         public void Should_pass_for_empty_config()
         {
-            const string rulesRules = @"<Rules></Rules>";
-            var xmlAllRuleConfigs = XDocument.Parse(rulesRules);
-            var errors = ConfigurationFileParser.Parse("MySolution.sln", xmlAllRuleConfigs, new IProjectRule[] {new DummyRule()});
-            Assert.Empty(errors);
-            Assert.NotNull(xmlAllRuleConfigs.Descendants("Dummy"));
+            const string xmlRules = @"<Rules></Rules>";
+            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            errors.ShouldBeEmpty<string>();
+            var newContent = _fileSystemMock.File.ReadAllText("SolutionCop.xml");
+            Approvals.Verify(newContent);
         }
 
         [Fact]
@@ -24,9 +39,8 @@ namespace SolutionCop.Core.Tests
             const string xmlRules = @"
 <Rules>
   <Dummy />
-</Rules>
-";
-            var errors = ConfigurationFileParser.Parse("MySolution.sln", XDocument.Parse(xmlRules), new IProjectRule[] { new DummyRule() });
+</Rules>";
+            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
             Assert.Empty(errors);
         }
 
@@ -39,7 +53,7 @@ namespace SolutionCop.Core.Tests
   <Dummy />
 </Rules>
 ";
-            var errors = ConfigurationFileParser.Parse("MySolution.sln", XDocument.Parse(xmlRules), new IProjectRule[] { new DummyRule() });
+            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
             Assert.NotEmpty(errors);
         }
 
@@ -51,7 +65,19 @@ namespace SolutionCop.Core.Tests
   <Dummy />
 </SomeRoot>
 ";
-            var errors = ConfigurationFileParser.Parse("MySolution.sln", XDocument.Parse(xmlRules), new IProjectRule[] { new DummyRule() });
+            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            Assert.NotEmpty(errors);
+        }
+
+        [Fact]
+        public void Should_fail_for_misformed_xml()
+        {
+            const string xmlRules = @"
+<Rules>
+  <BadElement>
+</Rules>
+";
+            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
             Assert.NotEmpty(errors);
         }
 

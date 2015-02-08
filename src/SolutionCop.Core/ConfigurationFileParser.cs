@@ -1,78 +1,97 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace SolutionCop.Core
 {
-    public static class ConfigurationFileParser
+    public class ConfigurationFileParser
     {
-        public static IEnumerable<string> Parse(string pathToSolutionFile, ref string pathToConfigFile, IEnumerable<IProjectRule> rules)
+        private readonly IFileSystem _fileSystem;
+
+        public ConfigurationFileParser() : this(new FileSystem())
         {
-            XDocument xmlAllRuleConfigs;
+        }
+
+        // Constructor is used for testing
+        internal ConfigurationFileParser(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
+        }
+
+        public IEnumerable<string> Parse(string pathToSolutionFile, ref string pathToConfigFile, IEnumerable<IProjectRule> rules)
+        {
             if (string.IsNullOrEmpty(pathToConfigFile))
             {
-                pathToConfigFile = Path.Combine(Path.GetDirectoryName(pathToSolutionFile), "SolutionCop.xml");
+                pathToConfigFile = _fileSystem.Path.Combine(_fileSystem.Path.GetDirectoryName(pathToSolutionFile), "SolutionCop.xml");
                 Console.Out.WriteLine("INFO: Custom path to config file is not specified, using default one: {0}", pathToConfigFile);
             }
-            if (File.Exists(pathToConfigFile))
+            if (_fileSystem.File.Exists(pathToConfigFile))
             {
                 Console.Out.WriteLine("INFO: Existing config file found: {0}", pathToConfigFile);
-                xmlAllRuleConfigs = XDocument.Load(pathToConfigFile);
+                return Parse(pathToConfigFile, _fileSystem.File.ReadAllText(pathToConfigFile), rules);
             }
             else
             {
                 Console.Out.WriteLine("WARN: Config file does not exist. Creating a new one {0}", pathToConfigFile);
-                xmlAllRuleConfigs = new XDocument();
-                xmlAllRuleConfigs.Add(new XElement("Rules"));
+                return Parse(pathToConfigFile, "<Rules></Rules>", rules);
             }
-
-            return Parse(pathToConfigFile, xmlAllRuleConfigs, rules);
         }
 
-        public static IEnumerable<string> Parse(string pathToConfigFile, XDocument xmlAllRuleConfigs, IEnumerable<IProjectRule> rules)
+        public IEnumerable<string> Parse(string pathToConfigFile, string rulesConfiguration, IEnumerable<IProjectRule> rules)
         {
             var errors = new List<string>();
-            bool saveConfigFileOnExit = false;
-            var xmlRules = xmlAllRuleConfigs.Element("Rules");
-            if (xmlRules == null)
+            try
             {
-                errors.Add("Root XML element should be <Rules>");
-            }
-            else
-            {
-                foreach (var rule in rules)
+                var xmlAllRuleConfigs = XDocument.Parse(rulesConfiguration);
+                bool saveConfigFileOnExit = false;
+                var xmlRules = xmlAllRuleConfigs.Element("Rules");
+                if (xmlRules == null)
                 {
-                    var xmlRuleConfig = xmlRules.Element(rule.Id);
-                    if (xmlRuleConfig == null)
+                    errors.Add("Root XML element should be <Rules>");
+                }
+                else
+                {
+                    foreach (var rule in rules)
                     {
-                        xmlRules.Add(rule.DefaultConfig);
-                        Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);
-                        saveConfigFileOnExit = true;
-                    }
-                    else
-                    {
-                        Console.Out.WriteLine("DEBUG: Parsing config for rule {0}...", rule.Id);
-                        var ruleConfigErrors = rule.ParseConfig(xmlRuleConfig).ToArray();
-                        if (ruleConfigErrors.Any())
+                        var xmlRuleConfig = xmlRules.Element(rule.Id);
+                        if (xmlRuleConfig == null)
                         {
-                            foreach (var error in ruleConfigErrors)
+                            xmlRules.Add(rule.DefaultConfig);
+                            Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);
+                            saveConfigFileOnExit = true;
+                        }
+                        else
+                        {
+                            Console.Out.WriteLine("DEBUG: Parsing config for rule {0}...", rule.Id);
+                            var ruleConfigErrors = rule.ParseConfig(xmlRuleConfig).ToArray();
+                            if (ruleConfigErrors.Any())
                             {
-                                Console.Out.WriteLine("ERROR: {0}", error);
-                                Console.Out.WriteLine("ERROR: Rule {0} disabled", rule.Id);
-                                saveConfigFileOnExit = true;
-                                errors.Add(error);
+                                foreach (var error in ruleConfigErrors)
+                                {
+                                    Console.Out.WriteLine("ERROR: {0}", error);
+                                    Console.Out.WriteLine("ERROR: Rule {0} disabled", rule.Id);
+                                    saveConfigFileOnExit = true;
+                                    errors.Add(error);
+                                }
                             }
                         }
                     }
+                    errors.AddRange(xmlRules.Elements().Select(x => x.Name.LocalName).Except(rules.Select(x => x.Id)).Select(unknownSectionName => string.Format("Unknown configuration section {0}", unknownSectionName)));
+                    if (saveConfigFileOnExit)
+                    {
+                        Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
+                        var stringWriter = new StringWriter();
+                        xmlAllRuleConfigs.Save(stringWriter);
+                        _fileSystem.File.WriteAllText(pathToConfigFile, stringWriter.ToString());
+                    }
                 }
-                errors.AddRange(xmlRules.Elements().Select(x => x.Name.LocalName).Except(rules.Select(x => x.Id)).Select(unknownSectionName => string.Format("Unknown configuration section {0}", unknownSectionName)));
-                if (saveConfigFileOnExit)
-                {
-                    Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
-                    xmlAllRuleConfigs.Save(pathToConfigFile);
-                }
+            }
+            catch (Exception e)
+            {
+                errors.Add("Cannot parse rules configuration: " + e.Message);
             }
             return errors;
         }
