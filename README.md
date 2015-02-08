@@ -9,17 +9,18 @@ If <path-to-solutioncop-config> is not provided then tool looks for SolutionCop.
 Any rule can be disabled by setting *enabled* attribute to *false*. Note that tool adds default entries for rules if they are missing.
 
 ## Supported rules
+
 * Basic
   * TargetFrameworkVersion
   * FilesIncludedIntoProject
   * TreatWarningsAsErrors
   * SuppressWarnings
-  * WarningLevel
+  * [WarningLevel](https://github.com/Litee/SolutionCop/wiki/WarningLevel)
 * NuGet
   * [NuGetAutomaticPackagesRestore](https://github.com/Litee/SolutionCop/wiki/NuGetAutomaticPackagesRestore)
   * [NuGetPackagesUsage](https://github.com/Litee/SolutionCop/wiki/NuGetPackagesUsage)
   * ReferenceNuGetPackagesOnly
-  * NuGetPackageVersions
+  * [NuGetPackageVersions](https://github.com/Litee/SolutionCop/wiki/NuGetPackageVersions)
 * StyleCop
   * StyleCopEnabled
   * TreatStyleCopWarningsAsErrors
@@ -28,24 +29,24 @@ TODO - add rule details to wiki
 
 ### TODO rules:
 * Copy Local
-* Binary within NuGet package is referenced without proper reference in packages.config
-* Same package versions are used in project (support exceptions)
+* Binary within NuGet package is referenced directly without proper reference in packages.config
+* Same package versions are used across projects (support exceptions)
 * VS solution version
 * Assembly and root namespace should have same name
 * Unapproved build configurations
-* No duplicate NuGet packages. Looks like low priority - haven't seen this problem in practice for a long time
+* No duplicate NuGet packages (looks like low priority - haven't seen this problem in practice for a long time)
 * Classify project by type (e.g. production, testing) and disallow references between some groups
 * Proper owner in AssemblyInfo
 * Proper copyright date in AssemblyInfo
+* Forbid pre-release versions of packages (should be added to NuGetPackageVersions rule)
 
 ### Other Todos:
 * Group errors by project or by rule
 * NuGet commands in log for fixing versions
 * More flexible exceptions
-* Check for unknown config sections
-* Option fail on missing sections
+* Option to fail on missing sections
 * Links to broken rule details in wiki
 * Treat rules as separate tests for TeamCity (not sure whether it will work better than plain list)
 * Custom folders for searching rules
-* Configuration as exception
+* Configuration can be an exception
 * Error messages -> resources
