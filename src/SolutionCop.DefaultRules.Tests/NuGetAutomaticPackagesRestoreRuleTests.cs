@@ -4,83 +4,65 @@ using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Shouldly;
+using SolutionCop.Core;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof (DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
-    public class NuGetAutomaticPackagesRestoreRuleTests
+    public class NuGetAutomaticPackagesRestoreRuleTests :ProjectRuleTest
     {
-        private readonly NuGetAutomaticPackagesRestoreRule _instance;
-
         public NuGetAutomaticPackagesRestoreRuleTests()
+            : base(new NuGetAutomaticPackagesRestoreRule())
         {
-            _instance = new NuGetAutomaticPackagesRestoreRule();
         }
 
         [Fact]
         public void Should_generate_proper_default_configuration()
         {
-            Approvals.Verify(_instance.DefaultConfig);
+            Approvals.Verify(Instance.DefaultConfig);
         }
 
         [Fact]
         public void Should_pass_if_NuGet_targets_file_is_not_referenced()
         {
-            const string config = "<NuGetAutomaticPackagesRestore/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<NuGetAutomaticPackagesRestore/>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<NuGetAutomaticPackagesRestore enabled=\"false\"/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<NuGetAutomaticPackagesRestore enabled=\"false\"/>");
+            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_old_restore_mode_is_used()
         {
-            const string config = "<NuGetAutomaticPackagesRestore enabled=\"true\"/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\OldNuGetRestoreMode.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<NuGetAutomaticPackagesRestore enabled=\"true\"/>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\OldNuGetRestoreMode.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_old_restore_mode_is_used_in_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetAutomaticPackagesRestore>
   <Exception><Project>NoNuGet.csproj</Project></Exception>
-</NuGetAutomaticPackagesRestore>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetAutomaticPackagesRestore>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_exception_does_not_have_project_specified()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetAutomaticPackagesRestore>
   <Exception>Some text</Exception>
-</NuGetAutomaticPackagesRestore>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(configErrors, "Errors");
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetAutomaticPackagesRestore>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
         }
     }
 }

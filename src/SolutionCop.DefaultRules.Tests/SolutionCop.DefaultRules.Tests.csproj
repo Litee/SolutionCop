@@ -56,21 +56,43 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NuGetAutomaticPackagesRestoreRuleTests.cs" />
-    <Compile Include="NuGetPackagesUsageRuleTests.cs" />
     <Compile Include="FilesIncludedIntoProjectRuleTests.cs" />
-    <Compile Include="StyleCopEnabledRuleTests.cs" />
-    <Compile Include="NuGetPackageVersionsRuleTests.cs" />
-    <Compile Include="ReferenceNuGetPackagesOnlyRuleTests.cs" />
-    <Compile Include="SuppressWarningsRuleTests.cs" />
-    <Compile Include="TargetFrameworkVersionRuleTests.cs" />
+    <Compile Include="NuGetAutomaticPackagesRestoreRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NuGetPackagesUsageRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NuGetPackageVersionsRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectRuleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TreatStyleCopWarningsAsErrorsRuleTests.cs" />
-    <Compile Include="TreatWarningsAsErrorsRuleTests.cs" />
-    <Compile Include="WarningLevelRuleTests.cs" />
+    <Compile Include="ReferenceNuGetPackagesOnlyRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StyleCopEnabledRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SuppressWarningsRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TargetFrameworkVersionRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TreatStyleCopWarningsAsErrorsRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TreatWarningsAsErrorsRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WarningLevelRuleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="SolutionCop.DefaultRules.Tests.v2.ncrunchproject" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionCop.DefaultRules\SolutionCop.DefaultRules.csproj">

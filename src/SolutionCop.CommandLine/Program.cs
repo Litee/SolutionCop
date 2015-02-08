@@ -20,6 +20,7 @@ namespace SolutionCop.CommandLine
                 var pathToConfigFile = commandLineParameters.PathToConfigFile;
 
                 var errors = new List<string>();
+                var validationResults = new List<ValidationResult>();
                 var solutionInfo = SolutionParser.LoadFromFile(commandLineParameters.PathToSolution);
 
                 if (!solutionInfo.IsParsed)
@@ -29,7 +30,7 @@ namespace SolutionCop.CommandLine
                 }
 
                 var rules = RulesDirectoryCatalog.LoadRules();
-                errors.AddRange(ConfigurationFileParser.Parse(commandLineParameters.PathToSolution, ref pathToConfigFile, rules));
+                var ruleConfigsMap = ConfigurationFileParser.Parse(commandLineParameters.PathToSolution, ref pathToConfigFile, rules, errors);
 
                 Console.Out.WriteLine("INFO: Starting analysis...");
                 foreach (var projectPath in solutionInfo.ProjectFilePaths)
@@ -37,7 +38,9 @@ namespace SolutionCop.CommandLine
                     Console.Out.WriteLine("INFO: Analyzing project {0}", projectPath);
                     foreach (var rule in rules)
                     {
-                        errors.AddRange(rule.ValidateProject(projectPath));
+                        var validationResult = rule.ValidateProject(projectPath, ruleConfigsMap[rule.Id]);
+                        errors.AddRange(validationResult.Errors);
+                        validationResults.Add(validationResult);
                     }
                 }
                 Console.Out.WriteLine("INFO: Analysis finished!");
@@ -52,7 +55,7 @@ namespace SolutionCop.CommandLine
                         var extendedErrorsInfo = Enumerable.Repeat("", 1)
                             .Concat(errors.Select((x, idx) => string.Format("ERROR ({0}/{1}): {2}", idx + 1, errors.Count, x)))
                             .Concat(Enumerable.Repeat("", 1))
-                            .Concat(rules.Select(x => string.Format("INFO: Rule {0} is {1}", x.Id, x.IsEnabled ? "enabled" : "disabled")));
+                            .Concat(validationResults.Select(x => string.Format("INFO: Rule {0} is {1}", x.RuleId, x.IsEnabled ? "enabled" : "disabled")));
                         Console.Out.WriteLine("##teamcity[testFailed name='SolutionCop' message='FAILED - {0}' details='{1}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)), string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
                         Console.Out.WriteLine("##teamcity[buildStatus text='FAILED - {0}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)));
                     }

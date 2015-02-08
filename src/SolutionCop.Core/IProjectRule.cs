@@ -11,10 +11,6 @@ namespace SolutionCop.Core
 
         XElement DefaultConfig { get; }
 
-        bool IsEnabled { get; }
-
-        IEnumerable<string> ParseConfig(XElement xmlRuleConfigs);
-
-        IEnumerable<string> ValidateProject(string projectFilePath);
+        ValidationResult ValidateProject(string projectFilePath, XElement xmlRuleConfigs);
     }
 }

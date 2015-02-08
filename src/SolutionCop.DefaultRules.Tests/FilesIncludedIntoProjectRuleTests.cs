@@ -3,86 +3,65 @@ using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
-using Shouldly;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof (DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
-    public class FilesIncludedIntoProjectRuleTests
+    public class FilesIncludedIntoProjectRuleTests : ProjectRuleTest
     {
-        private readonly FilesIncludedIntoProjectRule _instance;
-
-        public FilesIncludedIntoProjectRuleTests()
+        public FilesIncludedIntoProjectRuleTests() : base(new FilesIncludedIntoProjectRule())
         {
-            _instance = new FilesIncludedIntoProjectRule();
         }
 
         [Fact]
         public void Should_generate_proper_default_configuration()
         {
-            Approvals.Verify(_instance.DefaultConfig);
+            Approvals.Verify(Instance.DefaultConfig);
         }
 
         [Fact]
         public void Should_pass_if_all_files_are_included()
         {
-            const string config = "<FilesIncludedIntoProject/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\AllFilesIncludedIntoProject.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<FilesIncludedIntoProject/>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\AllFilesIncludedIntoProject.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_file_is_not_included()
         {
-            const string config = "<FilesIncludedIntoProject/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<FilesIncludedIntoProject/>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_file_is_not_included_but_project_is_an_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <FilesIncludedIntoProject>
   <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
   <Exception><Project>FileNotIncludedIntoProject.csproj</Project></Exception>
-</FilesIncludedIntoProject>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
-            errors.ShouldBeEmpty();
+</FilesIncludedIntoProject>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_exception_misses_project()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <FilesIncludedIntoProject>
   <Exception>Some text</Exception>
   <Exception><Project>FileNotIncludedIntoProject.csproj</Project></Exception>
-</FilesIncludedIntoProject>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(configErrors, "Errors");
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
-            errors.ShouldBeEmpty();
+</FilesIncludedIntoProject>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<FilesIncludedIntoProject enabled=\"false\"/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<FilesIncludedIntoProject enabled=\"false\"/>");
+            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
+using NuGet;
 using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
@@ -9,7 +11,6 @@ namespace SolutionCop.DefaultRules
     public abstract class StandardProjectRule : IProjectRule
     {
         protected readonly XNamespace Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
-        private bool _isEnabled;
 
         public abstract string Id { get; }
 
@@ -25,57 +26,49 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        public bool IsEnabled
-        {
-            get { return _isEnabled; }
-        }
+        protected abstract IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs);
 
-        // TODO Return a monade
-        public IEnumerable<string> ParseConfig(XElement xmlRuleConfigs)
+        public ValidationResult ValidateProject(string projectFilePath, XElement xmlRuleConfigs)
         {
+            var isEnabled = false;
+            var hasErrorsInConfiguration = false;
+            var errors = new List<string>();
+            // Check that config section is correct
             if (xmlRuleConfigs.Name.LocalName != Id)
             {
                 throw new InvalidOperationException("Configuration section has invalid name");
             }
+
+            // Is ruled enabled?
             var isEnabledString = (string)xmlRuleConfigs.Attribute("enabled");
             if (isEnabledString == null || isEnabledString.ToLower() == "true")
             {
-                _isEnabled = true;
-            }
-            else if (isEnabledString.ToLower() != "false")
-            {
-                yield return string.Format("Error in config for rule {0} - 'enabled' attribute has wrong value.", Id);
-            }
-            if (_isEnabled)
-            {
-                var errors = ParseConfigSectionCustomParameters(xmlRuleConfigs);
-                foreach (var error in errors)
-                {
-                    _isEnabled = false;
-                    yield return error;
-                }
-            }
-        }
+                isEnabled = true;
 
-        protected abstract IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs);
-
-        public IEnumerable<string> ValidateProject(string projectFilePath)
-        {
-            if (IsEnabled)
-            {
-                if (File.Exists(projectFilePath))
+                var configurationErrors = ParseConfigSectionCustomParameters(xmlRuleConfigs).ToArray();
+                if (configurationErrors.Any())
                 {
-                    var xmlProject = XDocument.Load(projectFilePath);
-                    foreach (var error in ValidateProjectPrimaryChecks(xmlProject, projectFilePath))
-                    {
-                        yield return error;
-                    }
+                    hasErrorsInConfiguration = true;
+                    errors.AddRange(configurationErrors);
                 }
                 else
                 {
-                    yield return string.Format("Project file not found: {0}", projectFilePath);
+                    if (File.Exists(projectFilePath))
+                    {
+                        var xmlProject = XDocument.Load(projectFilePath);
+                        errors.AddRange(ValidateProjectPrimaryChecks(xmlProject, projectFilePath));
+                    }
+                    else
+                    {
+                        errors.Add(string.Format("Project file not found: {0}", Path.GetFileName(projectFilePath)));
+                    }
                 }
             }
+            else if (isEnabledString.ToLower() != "false")
+            {
+                errors.Add(string.Format("Error in config for rule {0} - 'enabled' attribute has wrong value.", Id));
+            }
+            return new ValidationResult(Id, isEnabled, hasErrorsInConfiguration, errors.ToArray());
         }
 
         protected abstract IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath);

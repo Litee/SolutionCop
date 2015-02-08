@@ -8,7 +8,7 @@ namespace SolutionCop.Core
 {
     public class RulesDirectoryCatalog
     {
-        public IEnumerable<IProjectRule> LoadRules()
+        public IProjectRule[] LoadRules()
         {
             var rules = new List<IProjectRule>();
             var assembliesFolder = Path.GetDirectoryName(new Uri(Assembly.GetCallingAssembly().Location).AbsolutePath);
@@ -35,7 +35,7 @@ namespace SolutionCop.Core
             }
 
             Console.Out.WriteLine("INFO: Scanning for rules finished! Rules found: {0}", rules.Count);
-            return rules;
+            return rules.ToArray();
         }
     }
 }

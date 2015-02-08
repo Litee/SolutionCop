@@ -30,7 +30,8 @@ namespace SolutionCop.Core.Tests
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
             };
             var instance = CreateInstance(saveConfigFileAction);
-            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            var errors = new List<string>();
+            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldBeEmpty();
             newConfigFileContent.ShouldNotBeEmpty();
             Approvals.Verify(newConfigFileContent);
@@ -49,7 +50,8 @@ namespace SolutionCop.Core.Tests
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
             };
             var instance = CreateInstance(saveConfigFileAction);
-            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            var errors = new List<string>();
+            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -69,7 +71,8 @@ namespace SolutionCop.Core.Tests
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
             };
             var instance = CreateInstance(saveConfigFileAction);
-            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            var errors = new List<string>();
+            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldNotBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -88,7 +91,8 @@ namespace SolutionCop.Core.Tests
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
             };
             var instance = CreateInstance(saveConfigFileAction);
-            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            var errors = new List<string>();
+            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldNotBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -107,7 +111,8 @@ namespace SolutionCop.Core.Tests
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
             };
             var instance = CreateInstance(saveConfigFileAction);
-            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            var errors = new List<string>();
+            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldNotBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -141,14 +146,9 @@ namespace SolutionCop.Core.Tests
                 get { return _isEnabled; }
             }
 
-            public IEnumerable<string> ValidateProject(string projectFilePath)
+            public ValidationResult ValidateProject(string projectFilePath, XElement xmlRuleConfigs)
             {
                 throw new NotImplementedException();
-            }
-
-            public IEnumerable<string> ParseConfig(XElement xmlRuleConfigs)
-            {
-                yield break;
             }
         }
     }

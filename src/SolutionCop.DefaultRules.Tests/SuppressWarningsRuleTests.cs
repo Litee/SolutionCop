@@ -10,110 +10,83 @@ namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof (DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
-    public class SuppressWarningsRuleTests
+    public class SuppressWarningsRuleTests : ProjectRuleTest
     {
-        private readonly SuppressWarningsRule _instance;
 
-        public SuppressWarningsRuleTests()
+        public SuppressWarningsRuleTests() : base(new SuppressWarningsRule())
         {
-            _instance = new SuppressWarningsRule();
         }
 
         [Fact]
         public void Should_generate_proper_default_configuration()
         {
-            Approvals.Verify(_instance.DefaultConfig);
+            Approvals.Verify(Instance.DefaultConfig);
         }
 
         [Fact]
         public void Should_pass_with_neither_warning_suppressed()
         {
-            const string config = "<SuppressWarnings><Warning>0420</Warning><Warning>0465</Warning></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<SuppressWarnings><Warning>0420</Warning><Warning>0465</Warning></SuppressWarnings>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_with_no_warnings_suppressed()
         {
-            const string config = "<SuppressWarnings></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<SuppressWarnings></SuppressWarnings>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_with_same_warnings_suppressed()
         {
-            const string config = "<SuppressWarnings><Warning>0420</Warning><Warning>0465</Warning></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<SuppressWarnings><Warning>0420</Warning><Warning>0465</Warning></SuppressWarnings>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_with_warnings_in_different_order()
         {
-            const string config = "<SuppressWarnings><Warning>0465</Warning><Warning>0420</Warning></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<SuppressWarnings><Warning>0465</Warning><Warning>0420</Warning></SuppressWarnings>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_with_subset_of_warnings_suppressed()
         {
-            const string config = "<SuppressWarnings><Warning>0465</Warning><Warning>0420</Warning></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressOneWarning.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<SuppressWarnings><Warning>0465</Warning><Warning>0420</Warning></SuppressWarnings>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressOneWarning.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<SuppressWarnings enabled=\"false\"><Warning>0465</Warning></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<SuppressWarnings enabled=\"false\"><Warning>0465</Warning></SuppressWarnings>");
+            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_two_unapproved_warnings_suppressed()
         {
-            const string config = "<SuppressWarnings></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<SuppressWarnings></SuppressWarnings>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_two_unapproved_warnings_suppressed_but_project_is_an_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <SuppressWarnings>
   <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
   <Exception><Project>SuppressTwoWarnings.csproj</Project></Exception>
-</SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldBeEmpty();
+</SuppressWarnings>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_two_unapproved_warnings_suppressed_but_they_are_in_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <SuppressWarnings>
   <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
   <Exception>
@@ -121,84 +94,61 @@ namespace SolutionCop.DefaultRules.Tests
     <Warning>0420</Warning>
     <Warning>0465</Warning>
   </Exception>
-</SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldBeEmpty();
+</SuppressWarnings>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_two_unapproved_warnings_suppressed_but_only_one_is_in_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <SuppressWarnings>
   <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
   <Exception>
     <Project>SuppressTwoWarnings.csproj</Project>
     <Warning>0465</Warning>
   </Exception>
-</SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+</SuppressWarnings>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_two_unapproved_warnings_suppressed_and_they_are_exceptions_for_another_project()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <SuppressWarnings>
   <Exception>
     <Project>SomeNonExistingProject.csproj</Project>
     <Warning>0420</Warning>
     <Warning>0465</Warning>
   </Exception>
-</SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+</SuppressWarnings>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_exception_misses_project()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <SuppressWarnings>
   <Exception>Some text</Exception>
   <Exception><Project>SuppressTwoWarnings.csproj</Project></Exception>
-</SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(configErrors, "Errors");
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldBeEmpty();
+</SuppressWarnings>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_two_unapproved_warnings_suppressed_in_one_config_only()
         {
-            const string config = "<SuppressWarnings></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarningsInOneConfig.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<SuppressWarnings></SuppressWarnings>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarningsInOneConfig.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_one_unapproved_warning_suppressed()
         {
-            const string config = "<SuppressWarnings><Warning>0465</Warning></SuppressWarnings>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<SuppressWarnings><Warning>0465</Warning></SuppressWarnings>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
         }
     }
 }

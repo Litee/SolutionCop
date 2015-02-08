@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
-using Shouldly;
 using Xunit;
 using Xunit.Extensions;
 
@@ -12,19 +10,17 @@ namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
-    public class TreatStyleCopWarningsAsErrorsRuleTests : IDisposable
+    public class TreatStyleCopWarningsAsErrorsRuleTests : ProjectRuleTest
     {
-        private readonly TreatStyleCopWarningsAsErrorsRule _instance;
-
         public TreatStyleCopWarningsAsErrorsRuleTests()
+            : base(new TreatStyleCopWarningsAsErrorsRule())
         {
-            _instance = new TreatStyleCopWarningsAsErrorsRule();
         }
 
         [Fact]
         public void Should_generate_proper_default_configuration()
         {
-            Approvals.Verify(_instance.DefaultConfig);
+            Approvals.Verify(Instance.DefaultConfig);
         }
 
         [Theory]
@@ -32,22 +28,15 @@ namespace SolutionCop.DefaultRules.Tests
         [InlineData("TreatStyleCopWarningsAsErrors_Global.csproj")]
         public void Should_pass_if_all_must_and_all_are(string csproj)
         {
-            const string config = "<TreatStyleCopWarningsAsErrors></TreatStyleCopWarningsAsErrors>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\" + csproj).FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<TreatStyleCopWarningsAsErrors></TreatStyleCopWarningsAsErrors>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\" + csproj).FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_all_must_and_all_in_one_config_are()
         {
-            const string config = "<TreatStyleCopWarningsAsErrors></TreatStyleCopWarningsAsErrors>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\TreatStyleCopWarningsAsErrors_OneOfTwo.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<TreatStyleCopWarningsAsErrors></TreatStyleCopWarningsAsErrors>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\TreatStyleCopWarningsAsErrors_OneOfTwo.csproj").FullName, xmlConfig);
         }
 
         [Theory]
@@ -58,12 +47,8 @@ namespace SolutionCop.DefaultRules.Tests
         {
             // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
-            const string config = "<TreatStyleCopWarningsAsErrors></TreatStyleCopWarningsAsErrors>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\" + csproj).FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<TreatStyleCopWarningsAsErrors></TreatStyleCopWarningsAsErrors>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\" + csproj).FullName, xmlConfig);
         }
 
         [Theory]
@@ -72,32 +57,27 @@ namespace SolutionCop.DefaultRules.Tests
         [InlineData("NoStyleCopWarningsAsErrors_Global.csproj")]
         public void Should_pass_if_no_warnings_treated_as_errors_but_project_is_in_exceptions_list(string csproj)
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <TreatStyleCopWarningsAsErrors>
   <Exception><Project>NoStyleCopWarningsAsErrors_Default.csproj</Project></Exception>
   <Exception><Project>NoStyleCopWarningsAsErrors_All.csproj</Project></Exception>
   <Exception><Project>NoStyleCopWarningsAsErrors_Global.csproj</Project></Exception>
-</TreatStyleCopWarningsAsErrors>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\" + csproj).FullName);
-            errors.ShouldBeEmpty();
+</TreatStyleCopWarningsAsErrors>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\" + csproj).FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<TreatStyleCopWarningsAsErrors enabled=\"false\"></TreatStyleCopWarningsAsErrors>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\TreatStyleCopWarningsAsErrors_OneOfTwo.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<TreatStyleCopWarningsAsErrors enabled=\"false\"></TreatStyleCopWarningsAsErrors>");
+            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\TreatStyleCopWarningsAsErrors_OneOfTwo.csproj").FullName, xmlConfig);
         }
 
-        public void Dispose()
+        [Fact]
+        public void Should_fail_if_exception_misses_project()
         {
-            // Setting to null to switch back to standard file naming for approvals.
-            NamerFactory.AdditionalInformation = null;
+            var xmlConfig = XElement.Parse("<TreatStyleCopWarningsAsErrors><Exception/></TreatStyleCopWarningsAsErrors>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\TreatStyleCopWarningsAsErrors_OneOfTwo.csproj").FullName, xmlConfig);
         }
     }
 }

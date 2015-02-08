@@ -22,7 +22,7 @@ namespace SolutionCop.Core
             _saveConfigFileAction = saveConfigFileAction;
         }
 
-        public IEnumerable<string> Parse(string pathToSolutionFile, ref string pathToConfigFile, IEnumerable<IProjectRule> rules)
+        public Dictionary<string, XElement> Parse(string pathToSolutionFile, ref string pathToConfigFile, IEnumerable<IProjectRule> rules, List<string> errors)
         {
             if (string.IsNullOrEmpty(pathToConfigFile))
             {
@@ -32,20 +32,20 @@ namespace SolutionCop.Core
             if (File.Exists(pathToConfigFile))
             {
                 Console.Out.WriteLine("INFO: Existing config file found: {0}", pathToConfigFile);
-                return Parse(pathToConfigFile, File.ReadAllText(pathToConfigFile), rules);
+                return Parse(pathToConfigFile, File.ReadAllText(pathToConfigFile), rules, errors);
             }
             else
             {
                 Console.Out.WriteLine("WARN: Config file does not exist. Creating a new one {0}", pathToConfigFile);
-                return Parse(pathToConfigFile, "<Rules></Rules>", rules);
+                return Parse(pathToConfigFile, "<Rules></Rules>", rules, errors);
             }
         }
 
-        public IEnumerable<string> Parse(string pathToConfigFile, string rulesConfiguration, IEnumerable<IProjectRule> rules)
+        public Dictionary<string, XElement> Parse(string pathToConfigFile, string rulesConfiguration, IEnumerable<IProjectRule> rules, List<string> errors)
         {
-            var errors = new List<string>();
             try
             {
+                var ruleConfigsMap = new Dictionary<string, XElement>();
                 var xmlAllRuleConfigs = XDocument.Parse(rulesConfiguration);
                 bool saveConfigFileOnExit = false;
                 var xmlRules = xmlAllRuleConfigs.Element("Rules");
@@ -60,24 +60,15 @@ namespace SolutionCop.Core
                         var xmlRuleConfig = xmlRules.Element(rule.Id);
                         if (xmlRuleConfig == null)
                         {
+                            ruleConfigsMap.Add(rule.Id, rule.DefaultConfig);
+                            // Adding default section into original DOM for saving
                             xmlRules.Add(rule.DefaultConfig);
                             Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);
                             saveConfigFileOnExit = true;
                         }
                         else
                         {
-                            Console.Out.WriteLine("DEBUG: Parsing config for rule {0}...", rule.Id);
-                            var ruleConfigErrors = rule.ParseConfig(xmlRuleConfig).ToArray();
-                            if (ruleConfigErrors.Any())
-                            {
-                                foreach (var error in ruleConfigErrors)
-                                {
-                                    Console.Out.WriteLine("ERROR: {0}", error);
-                                    Console.Out.WriteLine("ERROR: Rule {0} disabled", rule.Id);
-                                    saveConfigFileOnExit = true;
-                                    errors.Add(error);
-                                }
-                            }
+                            ruleConfigsMap.Add(rule.Id, xmlRuleConfig);
                         }
                     }
                     errors.AddRange(xmlRules.Elements().Select(x => x.Name.LocalName).Except(rules.Select(x => x.Id)).Select(unknownSectionName => string.Format("Unknown configuration section {0}", unknownSectionName)));
@@ -97,12 +88,13 @@ namespace SolutionCop.Core
                         _saveConfigFileAction(pathToConfigFile, memoryStream.ToArray());
                     }
                 }
+                return ruleConfigsMap;
             }
             catch (Exception e)
             {
                 errors.Add("Cannot parse rules configuration: " + e.Message);
             }
-            return errors;
+            return null;
         }
     }
 }

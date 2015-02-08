@@ -3,134 +3,103 @@ using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
-using Shouldly;
+using SolutionCop.Core;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof (DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
-    public class NuGetPackagesUsageRuleTests
+    public class NuGetPackagesUsageRuleTests : ProjectRuleTest
     {
-        private readonly NuGetPackagesUsageRule _instance;
-
-        public NuGetPackagesUsageRuleTests()
+        public NuGetPackagesUsageRuleTests() : base(new NuGetPackagesUsageRule())
         {
-            _instance = new NuGetPackagesUsageRule();
         }
 
         [Fact]
         public void Should_generate_proper_default_configuration()
         {
-            Approvals.Verify(_instance.DefaultConfig);
+            Approvals.Verify(Instance.DefaultConfig);
         }
 
         [Fact]
         public void Should_pass_if_same_package_version_used_in_project()
         {
-            const string config = "<NuGetPackagesUsage/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage\UsesTwoPackages.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<NuGetPackagesUsage/>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage\UsesTwoPackages.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_there_is_an_unreferenced_package()
         {
-            const string config = "<NuGetPackagesUsage/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<NuGetPackagesUsage/>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_unreferenced_package_is_an_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackagesUsage>
   <Exception><Package>xunit</Package></Exception>
   <Exception><Package>someUnusedDummyPackage</Package></Exception>
-</NuGetPackagesUsage>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackagesUsage>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_project_is_an_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackagesUsage>
   <Exception><Project>NonExistingProject.csproj</Project></Exception>
   <Exception><Project>UsesOnePackage.csproj</Project></Exception>
-</NuGetPackagesUsage>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackagesUsage>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_project_is_an_exception_but_package_is_not()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackagesUsage>
   <Exception>
     <Project>UsesOnePackage.csproj</Project>
     <Package>someUnusedDummyPackage</Package>
   </Exception>
-</NuGetPackagesUsage>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+</NuGetPackagesUsage>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_package_is_an_exception_but_project_is_not()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackagesUsage>
   <Exception>
     <Project>NonExistingProject.csproj</Project>
     <Package>xunit</Package>
   </Exception>
-</NuGetPackagesUsage>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+</NuGetPackagesUsage>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_exception_misses_project_and_package()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackagesUsage>
   <Exception>Some Text</Exception>
   <Exception><Package>someUnusedDummyPackage</Package></Exception>
-</NuGetPackagesUsage>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(configErrors, "Errors");
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackagesUsage>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<NuGetPackagesUsage enabled=\"false\"/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<NuGetPackagesUsage enabled=\"false\"/>");
+            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
         }
     }
 }

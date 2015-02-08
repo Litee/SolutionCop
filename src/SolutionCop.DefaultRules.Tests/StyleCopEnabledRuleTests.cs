@@ -10,87 +10,64 @@ namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof (DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
-    public class StyleCopEnabledRuleTests
+    public class StyleCopEnabledRuleTests : ProjectRuleTest
     {
-        private readonly StyleCopEnabledRule _instance;
-
-        public StyleCopEnabledRuleTests()
+        public StyleCopEnabledRuleTests() : base(new StyleCopEnabledRule())
         {
-            _instance = new StyleCopEnabledRule();
         }
 
         [Fact]
         public void Should_generate_proper_default_configuration()
         {
-            Approvals.Verify(_instance.DefaultConfig);
+            Approvals.Verify(Instance.DefaultConfig);
         }
 
         [Fact]
         public void Should_pass_if_StyleCop_is_enabled()
         {
-            const string config = "<StyleCopEnabled/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabled.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<StyleCopEnabled/>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabled.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_StyleCop_is_enabled_with_old_format()
         {
-            const string config = "<StyleCopEnabled/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabledOldFormat.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<StyleCopEnabled/>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabledOldFormat.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_exception()
         {
-            const string config = @"<StyleCopEnabled>
+            var xmlConfig = XElement.Parse(@"<StyleCopEnabled>
 <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
 <Exception><Project>StyleCopDisabled.csproj</Project></Exception>
-</StyleCopEnabled>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
-            errors.ShouldBeEmpty();
+</StyleCopEnabled>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_exception_misses_project()
         {
-            const string config = @"<StyleCopEnabled>
+            var xmlConfig = XElement.Parse(@"<StyleCopEnabled>
 <Exception>Some text</Exception>
 <Exception><Project>StyleCopDisabled.csproj</Project></Exception>
-</StyleCopEnabled>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(configErrors, "Errors");
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
-            errors.ShouldBeEmpty();
+</StyleCopEnabled>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_StyleCop_is_disabled()
         {
-            const string config = "<StyleCopEnabled/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+            var xmlConfig = XElement.Parse("<StyleCopEnabled/>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = "<StyleCopEnabled enabled=\"false\"/>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
-            errors.ShouldBeEmpty();
+            var xmlConfig = XElement.Parse("<StyleCopEnabled enabled=\"false\"/>");
+            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
         }
     }
 }

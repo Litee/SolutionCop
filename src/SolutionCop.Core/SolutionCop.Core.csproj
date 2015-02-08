@@ -50,6 +50,7 @@
     <Compile Include="RulesDirectoryCatalog.cs" />
     <Compile Include="SolutionInfo.cs" />
     <Compile Include="SolutionParser.cs" />
+    <Compile Include="ValidationResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

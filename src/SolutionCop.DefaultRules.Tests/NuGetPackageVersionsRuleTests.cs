@@ -4,143 +4,115 @@ using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Shouldly;
+using SolutionCop.Core;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests
 {
     [UseReporter(typeof (DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
-    public class NuGetPackageVersionsRuleTests
+    public class NuGetPackageVersionsRuleTests : ProjectRuleTest
     {
-        private readonly NuGetPackageVersionsRule _instance;
-
         public NuGetPackageVersionsRuleTests()
+            : base(new NuGetPackageVersionsRule())
         {
-            _instance = new NuGetPackageVersionsRule();
         }
 
         [Fact]
         public void Should_generate_proper_default_configuration()
         {
-            Approvals.Verify(_instance.DefaultConfig);
+            Approvals.Verify(Instance.DefaultConfig);
         }
 
         [Fact]
         public void Should_pass_if_all_used_packages_match_rules()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='0.0.0'></Package>
-</NuGetPackageVersions>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackageVersions>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_no_packages_used()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='0.0.0'></Package>
-</NuGetPackageVersions>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageVersions_2\UsesNoPackages.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackageVersions>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions_2\UsesNoPackages.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_version_does_not_match_the_rule()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
   <Package id='ApprovalTests' version='[2.0]'></Package>
   <Package id='xunit' version='[1.9.2]'></Package>
-</NuGetPackageVersions>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+</NuGetPackageVersions>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_version_does_not_match_the_rule_but_project_is_an_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
   <Package id='ApprovalTests' version='[2.0]'></Package>
   <Package id='xunit' version='[1.9.2]'></Package>
   <Exception>
     <Project>UsesTwoPackages.csproj</Project>
   </Exception>
-</NuGetPackageVersions>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackageVersions>");
+            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
         }
 
         [Fact]
-        public void Should_fail_if_exception_misses_project()
+        public void Should_fail_if_project_is_missing_in_exception()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
   <Package id='ApprovalTests' version='[2.0]'></Package>
   <Package id='xunit' version='[1.9.2]'></Package>
   <Exception>Some text</Exception>
-</NuGetPackageVersions>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldNotBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackageVersions>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_fail_if_unknown_package_used()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
   <Package id='xunit' version='[1.9.2]'></Package>
-</NuGetPackageVersions>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
-            errors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(errors, "Errors");
+</NuGetPackageVersions>");
+            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
         }
 
         [Fact]
-        public void Should_fail_if_rule_has_bad_format()
+        public void Should_fail_if_version_has_bad_format()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='test'></Package>
-</NuGetPackageVersions>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldNotBeEmpty();
-            Approvals.VerifyAll(configErrors, "Errors");
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackageVersions>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
-            const string config = @"
+            var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions enabled='false'>
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='0.0.0'></Package>
-</NuGetPackageVersions>";
-            var configErrors = _instance.ParseConfig(XElement.Parse(config));
-            configErrors.ShouldBeEmpty();
-            var errors = _instance.ValidateProject(new FileInfo(@"..\..\Data\NuGetPackageVersions_2\UsesTwoPackages.csproj").FullName);
-            errors.ShouldBeEmpty();
+</NuGetPackageVersions>");
+            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\NuGetPackageVersions_2\UsesTwoPackages.csproj").FullName, xmlConfig);
         }
     }
 }
