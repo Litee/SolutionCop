@@ -43,6 +43,18 @@ namespace SolutionCop.Core.Tests
             Assert.NotEmpty(errors);
         }
 
+        [Fact]
+        public void Should_fail_for_config_with_wrong_root_element()
+        {
+            const string xmlRules = @"
+<SomeRoot>
+  <Dummy />
+</SomeRoot>
+";
+            var errors = ConfigurationFileParser.Parse("MySolution.sln", XDocument.Parse(xmlRules), new IProjectRule[] { new DummyRule() });
+            Assert.NotEmpty(errors);
+        }
+
         private class DummyRule : IProjectRule
         {
             private readonly bool _isEnabled = false;

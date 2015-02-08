@@ -35,40 +35,44 @@ namespace SolutionCop.Core
         {
             var errors = new List<string>();
             bool saveConfigFileOnExit = false;
-            foreach (var rule in rules)
+            var xmlRules = xmlAllRuleConfigs.Element("Rules");
+            if (xmlRules == null)
             {
-                var xmlRuleConfig = xmlAllRuleConfigs.Element("Rules").Element(rule.Id);
-                if (xmlRuleConfig == null)
+                errors.Add("Root XML element should be <Rules>");
+            }
+            else
+            {
+                foreach (var rule in rules)
                 {
-                    xmlAllRuleConfigs.Element("Rules").Add(rule.DefaultConfig);
-                    Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);
-                    saveConfigFileOnExit = true;
-                }
-                else
-                {
-                    Console.Out.WriteLine("DEBUG: Parsing config for rule {0}...", rule.Id);
-                    var ruleConfigErrors = rule.ParseConfig(xmlRuleConfig);
-                    if (ruleConfigErrors.Any())
+                    var xmlRuleConfig = xmlRules.Element(rule.Id);
+                    if (xmlRuleConfig == null)
                     {
-                        foreach (var error in ruleConfigErrors)
+                        xmlRules.Add(rule.DefaultConfig);
+                        Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);
+                        saveConfigFileOnExit = true;
+                    }
+                    else
+                    {
+                        Console.Out.WriteLine("DEBUG: Parsing config for rule {0}...", rule.Id);
+                        var ruleConfigErrors = rule.ParseConfig(xmlRuleConfig).ToArray();
+                        if (ruleConfigErrors.Any())
                         {
-                            Console.Out.WriteLine("ERROR: {0}", error);
-                            Console.Out.WriteLine("ERROR: Rule {0} disabled", rule.Id);
-                            saveConfigFileOnExit = true;
-                            errors.Add(error);
+                            foreach (var error in ruleConfigErrors)
+                            {
+                                Console.Out.WriteLine("ERROR: {0}", error);
+                                Console.Out.WriteLine("ERROR: Rule {0} disabled", rule.Id);
+                                saveConfigFileOnExit = true;
+                                errors.Add(error);
+                            }
                         }
                     }
                 }
-            }
-            errors.AddRange(xmlAllRuleConfigs.Element("Rules")
-                .Elements()
-                .Select(x => x.Name.LocalName)
-                .Except(rules.Select(x => x.Id))
-                .Select(unknownSectionName => string.Format("Unknown configuration section {0}", unknownSectionName)));
-            if (saveConfigFileOnExit)
-            {
-                Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
-                xmlAllRuleConfigs.Save(pathToConfigFile);
+                errors.AddRange(xmlRules.Elements().Select(x => x.Name.LocalName).Except(rules.Select(x => x.Id)).Select(unknownSectionName => string.Format("Unknown configuration section {0}", unknownSectionName)));
+                if (saveConfigFileOnExit)
+                {
+                    Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
+                    xmlAllRuleConfigs.Save(pathToConfigFile);
+                }
             }
             return errors;
         }
