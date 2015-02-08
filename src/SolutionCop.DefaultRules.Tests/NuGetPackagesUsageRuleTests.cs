@@ -1,9 +1,7 @@
 using System.IO;
 using System.Xml.Linq;
-using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
-using SolutionCop.Core;
 using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests

@@ -8,7 +8,7 @@ namespace SolutionCop.DefaultRules
 {
     public class TreatWarningsAsErrorsRule : StandardProjectRule
     {
-        private IEnumerable<string> _warningsThatMustBeTreatedAsErrors;
+        private string[] _warningsThatMustBeTreatedAsErrors;
         private bool _allWarningsMustBeTreatedAsErrors;
         private readonly IDictionary<string, string[]> _exceptions = new Dictionary<string, string[]>();
 
@@ -40,7 +40,7 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
-            _warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x));
+            _warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
             _allWarningsMustBeTreatedAsErrors = !_warningsThatMustBeTreatedAsErrors.Any() && xmlRuleConfigs.Element("AllWarnings") != null;
             // Clear is required for cases when errors are enumerated twice
             _exceptions.Clear();
@@ -106,28 +106,6 @@ namespace SolutionCop.DefaultRules
                     }
                 }
             }
-        }
-
-        private bool TreatsSpecificWarningAsAnError(XElement xmlPropertyGroup, IEnumerable<string> warningsThatMustBeTreatedAsErrors)
-        {
-            var xmlWarningsAsErrors = xmlPropertyGroup.Descendants(Namespace + "WarningsAsErrors").FirstOrDefault();
-            var warningsTreatedAsErrorsInProject = xmlWarningsAsErrors == null ? new string[0] : xmlWarningsAsErrors.Value.Split(',').Select(x => x.Trim());
-            Console.Out.WriteLine("{0} vs {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), string.Join(", ", warningsTreatedAsErrorsInProject));
-            return !warningsThatMustBeTreatedAsErrors.Except(warningsTreatedAsErrorsInProject).Any();
-        }
-
-        private bool TreatsAllWarningsAsErrors(XElement xmlPropertyGroup)
-        {
-            var xmlTreatWarningsAsErrors = xmlPropertyGroup.Descendants(Namespace + "TreatWarningsAsErrors").FirstOrDefault();
-            // Not all warnings are treated as errors within the project
-            if (xmlTreatWarningsAsErrors != null)
-            {
-                if (xmlTreatWarningsAsErrors.Value == "true")
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

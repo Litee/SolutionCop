@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using NuGet;
 using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules

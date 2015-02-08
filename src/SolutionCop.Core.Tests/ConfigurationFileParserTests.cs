@@ -15,12 +15,8 @@ namespace SolutionCop.Core.Tests
     [UseApprovalSubdirectory("ApprovedResults")]
     public class ConfigurationFileParserTests
     {
-        public ConfigurationFileParserTests()
-        {
-        }
-
         [Theory]
-        [InlineData()]
+        [InlineData]
         public void Should_pass_for_empty_config()
         {
             const string xmlRules = @"<Rules></Rules>";
@@ -124,8 +120,6 @@ namespace SolutionCop.Core.Tests
 
         private class DummyRule : IProjectRule
         {
-            private readonly bool _isEnabled = false;
-
             public string Id
             {
                 get { return "Dummy"; }
@@ -139,11 +133,6 @@ namespace SolutionCop.Core.Tests
             public XElement DefaultConfig
             {
                 get { return new XElement(Id); }
-            }
-
-            public bool IsEnabled
-            {
-                get { return _isEnabled; }
             }
 
             public ValidationResult ValidateProject(string projectFilePath, XElement xmlRuleConfigs)

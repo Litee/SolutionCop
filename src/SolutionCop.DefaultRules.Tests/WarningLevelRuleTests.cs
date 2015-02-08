@@ -1,6 +1,5 @@
 using System.IO;
 using System.Xml.Linq;
-using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Xunit;

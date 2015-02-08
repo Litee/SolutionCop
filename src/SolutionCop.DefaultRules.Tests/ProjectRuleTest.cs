@@ -25,8 +25,7 @@ namespace SolutionCop.DefaultRules.Tests
             Approvals.Verify(Instance.DefaultConfig);
         }
 
-        protected IProjectRule Instance { get; private set;
-        }
+        protected IProjectRule Instance { get; private set; }
 
         protected void ShouldPassNormally(string projectFileName, XElement xmlConfig)
         {
@@ -35,6 +34,7 @@ namespace SolutionCop.DefaultRules.Tests
             validationResult.HasErrorsInConfiguration.ShouldBe(false);
             validationResult.Errors.ShouldBeEmpty();
         }
+
         protected void ShouldPassAsDisabled(string projectFileName, XElement xmlConfig)
         {
             var validationResult = Instance.ValidateProject(projectFileName, xmlConfig);
