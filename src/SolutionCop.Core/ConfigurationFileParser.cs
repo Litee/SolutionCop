@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace SolutionCop.Core
@@ -83,9 +85,17 @@ namespace SolutionCop.Core
                     if (saveConfigFileOnExit)
                     {
                         Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
-                        var stringWriter = new StringWriter();
-                        xmlAllRuleConfigs.Save(stringWriter);
-                        _fileSystem.File.WriteAllText(pathToConfigFile, stringWriter.ToString());
+                        var stringBuilder = new StringBuilder();
+                        var settings = new XmlWriterSettings
+                        {
+                            Encoding = Encoding.UTF8,
+                            Indent = true,
+                        };
+                        using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+                        {
+                            xmlAllRuleConfigs.Save(xmlWriter);
+                        }
+                        _fileSystem.File.WriteAllText(pathToConfigFile, stringBuilder.ToString());
                     }
                 }
             }
