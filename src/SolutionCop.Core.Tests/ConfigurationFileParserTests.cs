@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using System.IO.Abstractions;
-using System.IO.Abstractions.TestingHelpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Shouldly;
 using Xunit;
+using Xunit.Extensions;
 
 namespace SolutionCop.Core.Tests
 {
@@ -14,23 +15,25 @@ namespace SolutionCop.Core.Tests
     [UseApprovalSubdirectory("ApprovedResults")]
     public class ConfigurationFileParserTests
     {
-        private readonly IFileSystem _fileSystemMock;
-        private readonly ConfigurationFileParser _instance;
-
         public ConfigurationFileParserTests()
         {
-            _fileSystemMock = new MockFileSystem();
-            _instance = new ConfigurationFileParser(_fileSystemMock);
         }
 
-        [Fact]
+        [Theory]
+        [InlineData()]
         public void Should_pass_for_empty_config()
         {
             const string xmlRules = @"<Rules></Rules>";
-            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
-            errors.ShouldBeEmpty<string>();
-            var newContent = _fileSystemMock.File.ReadAllText("SolutionCop.xml");
-            Approvals.Verify(newContent);
+            var newConfigFileContent = "";
+            Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
+            {
+                newConfigFileContent = Encoding.UTF8.GetString(bytes);
+            };
+            var instance = CreateInstance(saveConfigFileAction);
+            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            errors.ShouldBeEmpty();
+            newConfigFileContent.ShouldNotBeEmpty();
+            Approvals.Verify(newConfigFileContent);
         }
 
         [Fact]
@@ -40,8 +43,15 @@ namespace SolutionCop.Core.Tests
 <Rules>
   <Dummy />
 </Rules>";
-            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
-            Assert.Empty(errors);
+            var newConfigFileContent = "";
+            Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
+            {
+                newConfigFileContent = Encoding.UTF8.GetString(bytes);
+            };
+            var instance = CreateInstance(saveConfigFileAction);
+            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            errors.ShouldBeEmpty();
+            newConfigFileContent.ShouldBeEmpty();
         }
 
         [Fact]
@@ -53,8 +63,15 @@ namespace SolutionCop.Core.Tests
   <Dummy />
 </Rules>
 ";
-            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
-            Assert.NotEmpty(errors);
+            var newConfigFileContent = "";
+            Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
+            {
+                newConfigFileContent = Encoding.UTF8.GetString(bytes);
+            };
+            var instance = CreateInstance(saveConfigFileAction);
+            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            errors.ShouldNotBeEmpty();
+            newConfigFileContent.ShouldBeEmpty();
         }
 
         [Fact]
@@ -65,20 +82,39 @@ namespace SolutionCop.Core.Tests
   <Dummy />
 </SomeRoot>
 ";
-            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
-            Assert.NotEmpty(errors);
+            var newConfigFileContent = "";
+            Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
+            {
+                newConfigFileContent = Encoding.UTF8.GetString(bytes);
+            };
+            var instance = CreateInstance(saveConfigFileAction);
+            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            errors.ShouldNotBeEmpty();
+            newConfigFileContent.ShouldBeEmpty();
         }
 
         [Fact]
-        public void Should_fail_for_misformed_xml()
+        public void Should_fail_for_malformed_xml()
         {
             const string xmlRules = @"
 <Rules>
   <BadElement>
 </Rules>
 ";
-            var errors = _instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
-            Assert.NotEmpty(errors);
+            var newConfigFileContent = "";
+            Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
+            {
+                newConfigFileContent = Encoding.UTF8.GetString(bytes);
+            };
+            var instance = CreateInstance(saveConfigFileAction);
+            var errors = instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() });
+            errors.ShouldNotBeEmpty();
+            newConfigFileContent.ShouldBeEmpty();
+        }
+
+        private ConfigurationFileParser CreateInstance(Action<string, byte[]> saveConfigFileAction)
+        {
+            return new ConfigurationFileParser(saveConfigFileAction);
         }
 
         private class DummyRule : IProjectRule
@@ -107,7 +143,7 @@ namespace SolutionCop.Core.Tests
 
             public IEnumerable<string> ValidateProject(string projectFilePath)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             public IEnumerable<string> ParseConfig(XElement xmlRuleConfigs)

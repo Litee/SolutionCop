@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -11,29 +10,29 @@ namespace SolutionCop.Core
 {
     public class ConfigurationFileParser
     {
-        private readonly IFileSystem _fileSystem;
+        private readonly Action<string, byte[]> _saveConfigFileAction;
 
-        public ConfigurationFileParser() : this(new FileSystem())
+        public ConfigurationFileParser() : this(File.WriteAllBytes)
         {
         }
 
         // Constructor is used for testing
-        internal ConfigurationFileParser(IFileSystem fileSystem)
+        internal ConfigurationFileParser(Action<string, byte[]> saveConfigFileAction)
         {
-            _fileSystem = fileSystem;
+            _saveConfigFileAction = saveConfigFileAction;
         }
 
         public IEnumerable<string> Parse(string pathToSolutionFile, ref string pathToConfigFile, IEnumerable<IProjectRule> rules)
         {
             if (string.IsNullOrEmpty(pathToConfigFile))
             {
-                pathToConfigFile = _fileSystem.Path.Combine(_fileSystem.Path.GetDirectoryName(pathToSolutionFile), "SolutionCop.xml");
+                pathToConfigFile = Path.Combine(Path.GetDirectoryName(pathToSolutionFile), "SolutionCop.xml");
                 Console.Out.WriteLine("INFO: Custom path to config file is not specified, using default one: {0}", pathToConfigFile);
             }
-            if (_fileSystem.File.Exists(pathToConfigFile))
+            if (File.Exists(pathToConfigFile))
             {
                 Console.Out.WriteLine("INFO: Existing config file found: {0}", pathToConfigFile);
-                return Parse(pathToConfigFile, _fileSystem.File.ReadAllText(pathToConfigFile), rules);
+                return Parse(pathToConfigFile, File.ReadAllText(pathToConfigFile), rules);
             }
             else
             {
@@ -95,7 +94,7 @@ namespace SolutionCop.Core
                         {
                             xmlAllRuleConfigs.Save(xmlWriter);
                         }
-                        _fileSystem.File.WriteAllBytes(pathToConfigFile, memoryStream.ToArray());
+                        _saveConfigFileAction(pathToConfigFile, memoryStream.ToArray());
                     }
                 }
             }
