@@ -44,7 +44,7 @@ namespace SolutionCop.CommandLine
 
                 if (errors.Any())
                 {
-                    Console.WriteLine("ERROR: ***** Full list of errors: *****");
+                    Console.Out.WriteLine("ERROR: ***** Full list of errors: *****");
                     errors.ForEach(x => Console.Out.WriteLine("ERROR: {0}", x));
                     if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
                     {
