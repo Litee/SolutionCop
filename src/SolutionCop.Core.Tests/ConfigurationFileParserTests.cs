@@ -45,7 +45,7 @@ namespace SolutionCop.Core.Tests
 
         private class DummyRule : IProjectRule
         {
-            private bool _isEnabled = false;
+            private readonly bool _isEnabled = false;
 
             public string Id
             {
