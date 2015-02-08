@@ -22,6 +22,19 @@ namespace SolutionCop.DefaultRules
             get { return "NuGetPackageVersions"; }
         }
 
+        public override XElement DefaultConfig
+        {
+            get
+            {
+                var element = new XElement(Id);
+                element.SetAttributeValue("enabled", "false");
+                element.Add(new XElement("Package", new XAttribute("id", "first-package-id"), new XAttribute("version", "1.0.0")));
+                element.Add(new XElement("Package", new XAttribute("id", "second-package-id"), new XAttribute("version", "[2.0.3]")));
+                element.Add(new XElement("Package", new XAttribute("id", "third-package-id"), new XAttribute("version", "[1.5.0, 2.0.0)")));
+                return element;
+            }
+        }
+
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
             foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
