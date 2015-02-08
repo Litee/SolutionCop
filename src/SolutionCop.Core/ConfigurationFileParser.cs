@@ -85,17 +85,17 @@ namespace SolutionCop.Core
                     if (saveConfigFileOnExit)
                     {
                         Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
-                        var stringBuilder = new StringBuilder();
                         var settings = new XmlWriterSettings
                         {
                             Encoding = Encoding.UTF8,
                             Indent = true,
                         };
-                        using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+                        var memoryStream = new MemoryStream();
+                        using (var xmlWriter = XmlWriter.Create(memoryStream, settings))
                         {
                             xmlAllRuleConfigs.Save(xmlWriter);
                         }
-                        _fileSystem.File.WriteAllText(pathToConfigFile, stringBuilder.ToString());
+                        _fileSystem.File.WriteAllBytes(pathToConfigFile, memoryStream.ToArray());
                     }
                 }
             }
