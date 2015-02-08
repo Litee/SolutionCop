@@ -1,7 +1,12 @@
 ﻿<NuGetPackagesUsage enabled="false">
   <Exception>
-    <!--As exception you can specify project name or package name or both (AND logic)-->
-    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
-    <Package>PUT PACKAGE ID TO IGNORE HERE (e.g. Rx-Main)</Package>
+    <Project>ProjectIsAllowedNotToReferenceSpecificPackage.csproj</Project>
+    <Package>package-id</Package>
+  </Exception>
+  <Exception>
+    <Package>second-package-id</Package>
+  </Exception>
+  <Exception>
+    <Package>third-package-id</Package>
   </Exception>
 </NuGetPackagesUsage>

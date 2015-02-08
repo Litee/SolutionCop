@@ -26,11 +26,9 @@ namespace SolutionCop.DefaultRules
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                var xmlException = new XElement("Exception");
-                xmlException.Add(new XComment("As exception you can specify project name or package name or both (AND logic)"));
-                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
-                xmlException.Add(new XElement("Package", "PUT PACKAGE ID TO IGNORE HERE (e.g. Rx-Main)"));
-                element.Add(xmlException);
+                element.Add(new XElement("Exception", new XElement("Project", "ProjectIsAllowedNotToReferenceSpecificPackage.csproj"), new XElement("Package", "package-id")));
+                element.Add(new XElement("Exception", new XElement("Package", "second-package-id")));
+                element.Add(new XElement("Exception", new XElement("Package", "third-package-id")));
                 return element;
             }
         }

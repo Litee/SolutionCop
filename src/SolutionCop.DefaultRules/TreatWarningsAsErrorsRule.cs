@@ -29,11 +29,11 @@ namespace SolutionCop.DefaultRules
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
                 element.Add(new XElement("AllWarnings"));
-                var xmlException = new XElement("Exception");
-                xmlException.Add(new XComment("As exception you can specify project name or warnings or both (AND logic)"));
-                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
-                xmlException.Add(new XElement("Warning", "PUT SPECIFIC WARNING YOU WANT TO IGNORE HERE (e.g. 0123)"));
-                element.Add(xmlException);
+                element.Add(new XComment("You may also define specific warnings"));
+                element.Add(new XComment(new XElement("Warning", "0123").ToString()));
+                element.Add(new XComment(new XElement("Warning", "0124").ToString()));
+                element.Add(new XElement("Exception", new XElement("Project", "ProjectToExcludeFromCheck.csproj")));
+                element.Add(new XElement("Exception", new XElement("Project", "ProjectIsAllowedNotToTreatSomeWarningsAsErrors.csproj"), new XElement("Warning", "0125")));
                 return element;
             }
         }

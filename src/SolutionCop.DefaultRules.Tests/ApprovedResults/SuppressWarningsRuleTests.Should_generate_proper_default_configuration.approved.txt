@@ -1,5 +1,11 @@
 ﻿<SuppressWarnings enabled="false">
+  <Warning>0123</Warning>
+  <Warning>0124</Warning>
   <Exception>
-    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
+    <Project>ProjectToExcludeFromCheck.csproj</Project>
+  </Exception>
+  <Exception>
+    <Project>ProjectIsAllowedToSuppressAnExtraWarning.csproj</Project>
+    <Warning>0125</Warning>
   </Exception>
 </SuppressWarnings>

@@ -11,21 +11,19 @@ Any rule can be disabled by setting *enabled* attribute to *false*. Note that to
 ## Supported rules
 
 * Basic
-  * TargetFrameworkVersion
-  * FilesIncludedIntoProject
-  * TreatWarningsAsErrors
-  * SuppressWarnings
+  * [TargetFrameworkVersion](https://github.com/Litee/SolutionCop/wiki/TargetFrameworkVersion)
+  * [TreatWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatWarningsAsErrors)
+  * [SuppressWarnings](https://github.com/Litee/SolutionCop/wiki/SuppressWarnings)
   * [WarningLevel](https://github.com/Litee/SolutionCop/wiki/WarningLevel)
+  * FilesIncludedIntoProject - TODO wiki
 * NuGet
   * [NuGetAutomaticPackagesRestore](https://github.com/Litee/SolutionCop/wiki/NuGetAutomaticPackagesRestore)
   * [NuGetPackagesUsage](https://github.com/Litee/SolutionCop/wiki/NuGetPackagesUsage)
-  * ReferenceNuGetPackagesOnly
+  * [ReferenceNuGetPackagesOnly](https://github.com/Litee/SolutionCop/wiki/ReferenceNuGetPackagesOnly)
   * [NuGetPackageVersions](https://github.com/Litee/SolutionCop/wiki/NuGetPackageVersions)
 * StyleCop
-  * StyleCopEnabled
-  * TreatStyleCopWarningsAsErrors
-
-TODO - add rule details to wiki
+  * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
+  * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)
 
 ### TODO rules:
 * Copy Local

@@ -1,8 +1,13 @@
 ﻿<TreatWarningsAsErrors enabled="false">
   <AllWarnings />
+  <!--You may also define specific warnings-->
+  <!--<Warning>0123</Warning>-->
+  <!--<Warning>0124</Warning>-->
   <Exception>
-    <!--As exception you can specify project name or warnings or both (AND logic)-->
-    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
-    <Warning>PUT SPECIFIC WARNING YOU WANT TO IGNORE HERE (e.g. 0123)</Warning>
+    <Project>ProjectToExcludeFromCheck.csproj</Project>
+  </Exception>
+  <Exception>
+    <Project>ProjectIsAllowedNotToTreatSomeWarningsAsErrors.csproj</Project>
+    <Warning>0125</Warning>
   </Exception>
 </TreatWarningsAsErrors>

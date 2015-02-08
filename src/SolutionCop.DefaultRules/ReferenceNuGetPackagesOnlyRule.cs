@@ -26,9 +26,7 @@ namespace SolutionCop.DefaultRules
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                var xmlException = new XElement("Exception");
-                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
-                element.Add(xmlException);
+                element.Add(new XElement("Exception", new XElement("Project", "ProjectToExcludeFromCheck.csproj")));
                 return element;
             }
         }

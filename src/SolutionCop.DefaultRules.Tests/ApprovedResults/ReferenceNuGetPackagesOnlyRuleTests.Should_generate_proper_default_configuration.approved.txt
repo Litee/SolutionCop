@@ -1,5 +1,5 @@
 ﻿<ReferenceNuGetPackagesOnly enabled="false">
   <Exception>
-    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
+    <Project>ProjectToExcludeFromCheck.csproj</Project>
   </Exception>
 </ReferenceNuGetPackagesOnly>

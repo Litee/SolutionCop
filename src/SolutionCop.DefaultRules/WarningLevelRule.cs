@@ -28,10 +28,8 @@ namespace SolutionCop.DefaultRules
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
                 element.Add(new XElement("MinimalValue", "4"));
-                var xmlException = new XElement("Exception");
-                xmlException.Add(new XElement("Project", "PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)"));
-                xmlException.Add(new XComment(new XElement("MinimalValue", "(OPTIONAL) PUT MINIMAL WARNING LEVEL FOR THE PROJECT HERE (e.g. 1)").ToString()));
-                element.Add(xmlException);
+                element.Add(new XElement("Exception", new XElement("Project", "ProjectThatIsAllowedToHaveWarningLevel_2.csproj"), new XElement("MinimalValue", "2")));
+                element.Add(new XElement("Exception", new XElement("Project", "AnotherProjectToFullyExcludeFromChecks.csproj")));
                 return element;
             }
         }
