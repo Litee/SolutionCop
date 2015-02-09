@@ -19,21 +19,21 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_warning_level_in_project_is_as_expected()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_if_warning_level_in_project_is_as_expected_in_global_section()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInGlobalConfiguration.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInGlobalConfiguration.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_project_file_not_found()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations-DoesNotExist.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations-DoesNotExist.csproj").FullName);
             // TODO
 //            errors.First().ShouldStartWith("Project file not found:");
 //            errors.First().ShouldContain("WarningLevelTwoInAllConfigurations-DoesNotExist.csproj");
@@ -43,14 +43,14 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_warning_level_in_project_is_higher_than_expected()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>0</MinimalValue></WarningLevel>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_warning_level_in_project_is_lower_than_expected()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>4</MinimalValue></WarningLevel>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>SomeNonExistingProjectName.csproj</Project>
   </Exception>
 </WarningLevel>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace SolutionCop.DefaultRules.Tests
     <MinimalValue>2</MinimalValue>
   </Exception>
 </WarningLevel>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
@@ -102,35 +102,35 @@ namespace SolutionCop.DefaultRules.Tests
     <MinimalValue>0</MinimalValue>
   </Exception>
 </WarningLevel>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_warning_level_in_project_is_lower_than_expected_in_one_configuration()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>3</MinimalValue></WarningLevel>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInOneConfigurationAndThreeInAnother.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInOneConfigurationAndThreeInAnother.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_warning_level_in_project_is_specified_in_one_configuration_only()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInOneConfiguration.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInOneConfiguration.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<WarningLevel enabled=\"false\"><MinimalValue>4</MinimalValue></WarningLevel>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_without_minimal_value_specified_if_rule_disabled()
         {
             var xmlConfig = XElement.Parse("<WarningLevel enabled=\"false\"/>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         // Check bad configurations
@@ -139,14 +139,14 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_fail_if_no_minimal_value_specified()
         {
             var xmlConfig = XElement.Parse("<WarningLevel enabled=\"true\"/>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_parameter_is_float()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>4.2</MinimalValue></WarningLevel>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
@@ -163,7 +163,7 @@ namespace SolutionCop.DefaultRules.Tests
     <MinimalValue>1</MinimalValue>
   </Exception>
 </WarningLevel>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
 
         [Fact]
@@ -178,7 +178,7 @@ namespace SolutionCop.DefaultRules.Tests
     <MinimalValue>1</MinimalValue>
   </Exception>
 </WarningLevel>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName);
         }
     }
 }

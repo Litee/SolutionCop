@@ -18,14 +18,14 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_all_files_are_included()
         {
             var xmlConfig = XElement.Parse("<FilesIncludedIntoProject/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\AllFilesIncludedIntoProject.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject\AllFilesIncludedIntoProject.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_file_is_not_included()
         {
             var xmlConfig = XElement.Parse("<FilesIncludedIntoProject/>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
   <Exception><Project>FileNotIncludedIntoProject.csproj</Project></Exception>
 </FilesIncludedIntoProject>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Exception>Some text</Exception>
   <Exception><Project>FileNotIncludedIntoProject.csproj</Project></Exception>
 </FilesIncludedIntoProject>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
         }
 
         [Fact]
@@ -58,14 +58,14 @@ namespace SolutionCop.DefaultRules.Tests
   <Dummy>Some text</Dummy>
   <Exception><Project>FileNotIncludedIntoProject.csproj</Project></Exception>
 </FilesIncludedIntoProject>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<FilesIncludedIntoProject enabled=\"false\"/>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);
         }
     }
 }

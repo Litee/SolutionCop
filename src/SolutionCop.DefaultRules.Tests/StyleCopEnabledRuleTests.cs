@@ -18,14 +18,14 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_StyleCop_is_enabled()
         {
             var xmlConfig = XElement.Parse("<StyleCopEnabled/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabled.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabled.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_if_StyleCop_is_enabled_with_old_format()
         {
             var xmlConfig = XElement.Parse("<StyleCopEnabled/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabledOldFormat.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabledOldFormat.csproj").FullName);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace SolutionCop.DefaultRules.Tests
 <Exception><Project>SomeNonExistingProject.csproj</Project></Exception>
 <Exception><Project>StyleCopDisabled.csproj</Project></Exception>
 </StyleCopEnabled>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace SolutionCop.DefaultRules.Tests
 <Exception>Some text</Exception>
 <Exception><Project>StyleCopDisabled.csproj</Project></Exception>
 </StyleCopEnabled>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
         }
 
         [Fact]
@@ -55,21 +55,21 @@ namespace SolutionCop.DefaultRules.Tests
 <Dummy>Some text</Dummy>
 <Exception><Project>StyleCopDisabled.csproj</Project></Exception>
 </StyleCopEnabled>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_StyleCop_is_disabled()
         {
             var xmlConfig = XElement.Parse("<StyleCopEnabled/>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<StyleCopEnabled enabled=\"false\"/>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName);
         }
     }
 }

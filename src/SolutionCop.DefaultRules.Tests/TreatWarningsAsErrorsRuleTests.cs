@@ -22,7 +22,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_all_must_and_all_are(string csproj)
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -33,7 +33,7 @@ namespace SolutionCop.DefaultRules.Tests
             // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -47,14 +47,14 @@ namespace SolutionCop.DefaultRules.Tests
   <Exception><Project>TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj</Project></Exception>
   <Exception><Project>SomeNonExistingProjectName.csproj</Project></Exception>
 </TreatWarningsAsErrors>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Fact]
         public void Should_fail_if_all_must_and_all_in_one_config_are()
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName);
         }
 
         [Theory]
@@ -66,7 +66,7 @@ namespace SolutionCop.DefaultRules.Tests
             // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/></TreatWarningsAsErrors>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -75,7 +75,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_two_must_and_all_warnings_as_errors(string csproj)
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><Warning>0420,0465</Warning></TreatWarningsAsErrors>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -84,7 +84,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_two_must_and_those_two_are(string csproj)
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><Warning>0420</Warning><Warning>0465</Warning></TreatWarningsAsErrors>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -93,7 +93,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_two_must_and_those_two_are_in_different_order(string csproj)
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><Warning>0465</Warning><Warning>0420</Warning></TreatWarningsAsErrors>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -102,14 +102,14 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_one_must_and_this_specific_one_and_one_more_are(string csproj)
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><Warning>0465</Warning></TreatWarningsAsErrors>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Fact]
         public void Should_fail_if_two_must_and_both_are_but_only_in_one_configuration()
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><Warning>0420</Warning><Warning>0465</Warning></TreatWarningsAsErrors>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatTwoWarningsAsErrorsInOneConfigurationOnly.csproj").FullName);
         }
 
         [Theory]
@@ -120,7 +120,7 @@ namespace SolutionCop.DefaultRules.Tests
             // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><Warning>0466</Warning><Warning>0421</Warning></TreatWarningsAsErrors>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -132,7 +132,7 @@ namespace SolutionCop.DefaultRules.Tests
             // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><Warning>0465 </Warning><Warning> 0420</Warning></TreatWarningsAsErrors>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -144,7 +144,7 @@ namespace SolutionCop.DefaultRules.Tests
             // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><Warning>0465</Warning></TreatWarningsAsErrors>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -153,7 +153,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_none_must_and_all_are(string csproj)
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -162,7 +162,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_none_must_and_two_are(string csproj)
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Theory]
@@ -174,28 +174,28 @@ namespace SolutionCop.DefaultRules.Tests
             // Special step to generate unique *.received.txt files for each theory run. Note that it is cleared in Dispose() method to avoid affecting other tests.
             NamerFactory.AdditionalInformation = csproj;
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors enabled=\"false\"><AllWarnings/></TreatWarningsAsErrors>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_unknown_element_in_config()
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/><Dummy/></TreatWarningsAsErrors>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_exception_is_empty()
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/><Exception/></TreatWarningsAsErrors>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName);
         }
     }
 }

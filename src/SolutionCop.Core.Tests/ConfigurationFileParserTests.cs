@@ -135,7 +135,7 @@ namespace SolutionCop.Core.Tests
                 get { return new XElement(Id); }
             }
 
-            public ValidationResult ValidateProject(string projectFilePath, XElement xmlRuleConfigs)
+            public ValidationResult ValidateProjects(XElement xmlRuleConfigs, params string[] projectFilePaths)
             {
                 throw new NotImplementedException();
             }

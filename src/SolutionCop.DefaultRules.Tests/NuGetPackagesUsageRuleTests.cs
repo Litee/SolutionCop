@@ -18,14 +18,14 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_same_package_version_used_in_project()
         {
             var xmlConfig = XElement.Parse("<NuGetPackagesUsage/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage\UsesTwoPackages.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_there_is_an_unreferenced_package()
         {
             var xmlConfig = XElement.Parse("<NuGetPackagesUsage/>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Exception><Package>xunit</Package></Exception>
   <Exception><Package>someUnusedDummyPackage</Package></Exception>
 </NuGetPackagesUsage>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Exception><Project>NonExistingProject.csproj</Project></Exception>
   <Exception><Project>UsesOnePackage.csproj</Project></Exception>
 </NuGetPackagesUsage>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package>someUnusedDummyPackage</Package>
   </Exception>
 </NuGetPackagesUsage>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Package>xunit</Package>
   </Exception>
 </NuGetPackagesUsage>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Exception>Some Text</Exception>
   <Exception><Package>someUnusedDummyPackage</Package></Exception>
 </NuGetPackagesUsage>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
 
         [Fact]
@@ -95,14 +95,14 @@ namespace SolutionCop.DefaultRules.Tests
   <Dummy>Some Text</Dummy>
   <Exception><Package>someUnusedDummyPackage</Package></Exception>
 </NuGetPackagesUsage>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<NuGetPackagesUsage enabled=\"false\"/>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
     }
 }

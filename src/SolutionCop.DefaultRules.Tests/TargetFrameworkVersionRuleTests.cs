@@ -22,7 +22,7 @@ namespace SolutionCop.DefaultRules.Tests
 <TargetFrameworkVersion>
   <FrameworkVersion>3.5</FrameworkVersion>
 </TargetFrameworkVersion>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace SolutionCop.DefaultRules.Tests
   <FrameworkVersion>4.5</FrameworkVersion>
   <FrameworkVersion>3.5</FrameworkVersion>
 </TargetFrameworkVersion>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace SolutionCop.DefaultRules.Tests
   <FrameworkVersion>4.0</FrameworkVersion>
   <FrameworkVersion>4.5</FrameworkVersion>
 </TargetFrameworkVersion>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>SomeNonExistingProject.csproj</Project>
   </Exception>
 </TargetFrameworkVersion>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>SomeNonExistingProject.csproj</Project>
   </Exception>
 </TargetFrameworkVersion>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>SomeNonExistingProject.csproj</Project>
   </Exception>
 </TargetFrameworkVersion>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -108,14 +108,14 @@ namespace SolutionCop.DefaultRules.Tests
   <FrameworkVersion>4.0</FrameworkVersion>
   <FrameworkVersion>4.5</FrameworkVersion>
 </TargetFrameworkVersion>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_rule_is_enabled_but_no_versions_specified()
         {
             var xmlConfig = XElement.Parse("<TargetFrameworkVersion enabled=\"true\"></TargetFrameworkVersion>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace SolutionCop.DefaultRules.Tests
     <FrameworkVersion>4.5.1</FrameworkVersion>
   </Exception>
 </TargetFrameworkVersion>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Exception>
   </Exception>
 </TargetFrameworkVersion>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
 
         [Fact]
@@ -155,7 +155,7 @@ namespace SolutionCop.DefaultRules.Tests
     <FrameworkVersion>4.5.1</FrameworkVersion>
   </Exception>
 </TargetFrameworkVersion>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName);
         }
     }
 }

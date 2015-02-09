@@ -19,7 +19,7 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_pass_if_NuGet_targets_file_is_not_referenced()
         {
             var xmlConfig = XElement.Parse("<NuGetAutomaticPackagesRestore/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
         }
 
         [Fact]
@@ -34,14 +34,14 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>SomeOtherProject.csproj</Project>
   </Exception>
 </NuGetAutomaticPackagesRestore>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_if_old_restore_mode_is_used()
         {
             var xmlConfig = XElement.Parse("<NuGetAutomaticPackagesRestore enabled=\"true\"/>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\OldNuGetRestoreMode.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\OldNuGetRestoreMode.csproj").FullName);
         }
 
         [Fact]
@@ -51,14 +51,14 @@ namespace SolutionCop.DefaultRules.Tests
 <NuGetAutomaticPackagesRestore>
   <Exception>Some text</Exception>
 </NuGetAutomaticPackagesRestore>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<NuGetAutomaticPackagesRestore enabled=\"false\"/>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName);
         }
     }
 }

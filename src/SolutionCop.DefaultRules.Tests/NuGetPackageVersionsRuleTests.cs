@@ -23,7 +23,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='0.0.0'></Package>
 </NuGetPackageVersions>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='0.0.0'></Package>
 </NuGetPackageVersions>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions_2\UsesNoPackages.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions_2\UsesNoPackages.csproj").FullName);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Package id='ApprovalTests' version='[2.0]'></Package>
   <Package id='xunit' version='[1.9.2]'></Package>
 </NuGetPackageVersions>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>UsesTwoPackages.csproj</Project>
   </Exception>
 </NuGetPackageVersions>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Package id='xunit' version='[1.9.2]'></Package>
   <Exception>Some text</Exception>
 </NuGetPackageVersions>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace SolutionCop.DefaultRules.Tests
 <NuGetPackageVersions>
   <Package id='xunit' version='[1.9.2]'></Package>
 </NuGetPackageVersions>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='test'></Package>
 </NuGetPackageVersions>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='test'></Package>
 </NuGetPackageVersions>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
 
         [Fact]
@@ -115,7 +115,7 @@ namespace SolutionCop.DefaultRules.Tests
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='0.0.0'></Package>
 </NuGetPackageVersions>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\NuGetPackageVersions_2\UsesTwoPackages.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions_2\UsesTwoPackages.csproj").FullName);
         }
     }
 }

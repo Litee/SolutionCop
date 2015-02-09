@@ -27,7 +27,7 @@ namespace SolutionCop.DefaultRules
 
         protected abstract IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs);
 
-        public ValidationResult ValidateProject(string projectFilePath, XElement xmlRuleConfigs)
+        public ValidationResult ValidateProjects(XElement xmlRuleConfigs, params string[] projectFilePaths)
         {
             var isEnabled = false;
             var hasErrorsInConfiguration = false;
@@ -52,14 +52,17 @@ namespace SolutionCop.DefaultRules
                 }
                 else
                 {
-                    if (File.Exists(projectFilePath))
+                    foreach (var projectFilePath in projectFilePaths)
                     {
-                        var xmlProject = XDocument.Load(projectFilePath);
-                        errors.AddRange(ValidateProjectPrimaryChecks(xmlProject, projectFilePath));
-                    }
-                    else
-                    {
-                        errors.Add(string.Format("Project file not found: {0}", Path.GetFileName(projectFilePath)));
+                        if (File.Exists(projectFilePath))
+                        {
+                            var xmlProject = XDocument.Load(projectFilePath);
+                            errors.AddRange(ValidateProjectPrimaryChecks(xmlProject, projectFilePath));
+                        }
+                        else
+                        {
+                            errors.Add(string.Format("Project file not found: {0}", Path.GetFileName(projectFilePath)));
+                        }
                     }
                 }
             }

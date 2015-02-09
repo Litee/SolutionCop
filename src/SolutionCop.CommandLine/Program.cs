@@ -38,7 +38,7 @@ namespace SolutionCop.CommandLine
                     Console.Out.WriteLine("INFO: Analyzing project {0}", projectPath);
                     foreach (var rule in rules)
                     {
-                        var validationResult = rule.ValidateProject(projectPath, ruleConfigsMap[rule.Id]);
+                        var validationResult = rule.ValidateProjects(ruleConfigsMap[rule.Id], projectPath);
                         errors.AddRange(validationResult.Errors);
                         validationResults.Add(validationResult);
                     }

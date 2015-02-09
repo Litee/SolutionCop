@@ -18,14 +18,14 @@ namespace SolutionCop.DefaultRules.Tests
         public void Should_accept_project_references_to_packages_only()
         {
             var xmlConfig = XElement.Parse("<ReferenceNuGetPackagesOnly/>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\ReferencesPackagesFolderOnly.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\ReferencesPackagesFolderOnly.csproj").FullName);
         }
 
         [Fact]
         public void Should_fail_for_project_with_direct_references_to_binaries()
         {
             var xmlConfig = XElement.Parse("<ReferenceNuGetPackagesOnly/>");
-            ShouldFailNormally(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, xmlConfig);
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>SomeAnotherProject.csproj</Project>
   </Exception>
 </ReferenceNuGetPackagesOnly>");
-            ShouldPassNormally(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, xmlConfig);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>SomeAnotherProject.csproj</Project>
   </Exception>
 </ReferenceNuGetPackagesOnly>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName);
         }
 
         [Fact]
@@ -66,14 +66,14 @@ namespace SolutionCop.DefaultRules.Tests
     <Project>SomeAnotherProject.csproj</Project>
   </Exception>
 </ReferenceNuGetPackagesOnly>");
-            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, xmlConfig);
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName);
         }
 
         [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<ReferenceNuGetPackagesOnly enabled=\"false\"/>");
-            ShouldPassAsDisabled(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, xmlConfig);
+            ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName);
         }
     }
 }

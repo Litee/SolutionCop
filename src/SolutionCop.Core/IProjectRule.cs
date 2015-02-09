@@ -10,6 +10,6 @@ namespace SolutionCop.Core
 
         XElement DefaultConfig { get; }
 
-        ValidationResult ValidateProject(string projectFilePath, XElement xmlRuleConfigs);
+        ValidationResult ValidateProjects(XElement xmlRuleConfigs, params string[] projectFilePaths);
     }
 }
