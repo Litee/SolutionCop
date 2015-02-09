@@ -24,11 +24,15 @@ If no configuration file is specified then tool will look for SolutionCop.xml fi
   * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
   * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)
 
+## How to get
+
+NuGet.exe Install SolutionCop -Prerelease
+
 ## Compatibility
 
 * Tool is using .NET 4.0
 
-### TODO (rules in priority order)
+## TODO (rules in priority order)
 * Forbid pre-release versions of packages (should be added to NuGetPackageVersions rule)
 * Unapproved build configurations
 * Binary within NuGet package is referenced directly without proper reference in packages.config
@@ -40,7 +44,7 @@ If no configuration file is specified then tool will look for SolutionCop.xml fi
 * Check VS solution version
 * No duplicate id in packages.config (looks like low priority - haven't seen this problem in practice for a long time)
 
-### TODO (other)
+## TODO (other)
 * Group errors in output by project or by rule
 * Provide NuGet commands in log for upgrading to the lowest version
 * Option to fail on missing sections instead of creating them
