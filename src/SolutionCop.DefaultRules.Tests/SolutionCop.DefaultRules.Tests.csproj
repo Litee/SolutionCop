@@ -60,6 +60,7 @@
     <Compile Include="NuGetAutomaticPackagesRestoreRuleTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SameNuGetPackageVersionsRuleTests.cs" />
     <Compile Include="NuGetPackagesUsageRuleTests.cs">
       <SubType>Code</SubType>
     </Compile>

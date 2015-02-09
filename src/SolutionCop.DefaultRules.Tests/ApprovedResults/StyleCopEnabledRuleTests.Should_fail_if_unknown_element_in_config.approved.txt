@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule StyleCopEnabled: Unknown elements Dummy in configuration.
+﻿Errors[0] = Bad configuration for rule StyleCopEnabled: Unknown element(s) Dummy in configuration.

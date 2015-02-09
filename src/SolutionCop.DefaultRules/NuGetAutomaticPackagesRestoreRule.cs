@@ -36,7 +36,7 @@ namespace SolutionCop.DefaultRules
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception").ToArray();
             if (unknownElements.Any())
             {
-                yield return string.Format("Bad configuration for rule {0}: Unknown elements {1} in configuration.", Id, string.Join(",", unknownElements));
+                yield return string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements));
                 yield break;
             }
             foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))

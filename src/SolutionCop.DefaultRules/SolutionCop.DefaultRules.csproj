@@ -50,6 +50,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NuGetAutomaticPackagesRestoreRule.cs" />
+    <Compile Include="SameNuGetPackageVersionsRule.cs" />
     <Compile Include="NuGetPackagesUsageRule.cs">
       <SubType>Code</SubType>
     </Compile>

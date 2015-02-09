@@ -6,18 +6,19 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class NuGetPackagesUsageRule : StandardProjectRule
+    public class SameNuGetPackageVersionsRule : StandardProjectRule
     {
         private readonly List<Tuple<string, string>> _exceptions = new List<Tuple<string, string>>();
+        private readonly Dictionary<string, HashSet<string>> _usedIds = new Dictionary<string, HashSet<string>>();
 
         public override string DisplayName
         {
-            get { return "Verify that all packages specified in packages.config are used in *.csproj (exceptions supported)"; }
+            get { return "Verify that all project within solution use same version of packages (exceptions supported)"; }
         }
 
         public override string Id
         {
-            get { return "NuGetPackagesUsage"; }
+            get { return "SameNuGetPackageVersions"; }
         }
 
         public override XElement DefaultConfig
@@ -74,12 +75,19 @@ namespace SolutionCop.DefaultRules
                     }
                     else
                     {
-                        var hintPathSubstring = "\\packages\\" + packageId + "." + packageVersion + "\\";
-                        var xmlHintPaths = xmlProject.Descendants(Namespace + "HintPath").Where(x => x.Value.Contains(hintPathSubstring));
-                        if (!xmlHintPaths.Any())
+                        if (_usedIds.ContainsKey(packageId))
                         {
-                            yield return string.Format("Package {0} with version {1} is declared in projects.config, but not referenced in project {2}", packageId, packageVersion, projectFileName);
+                            var otherUsedPackageIds = _usedIds[packageId].Where(x => x != packageVersion);
+                            if (otherUsedPackageIds.Any())
+                            {
+                                yield return string.Format("Package {0} uses different versions {1} and {2}  in project {3}", packageId, otherUsedPackageIds.First(), packageVersion, projectFileName);
+                            }
                         }
+                        else
+                        {
+                            _usedIds[packageId] = new HashSet<string>();
+                        }
+                        _usedIds[packageId].Add(packageVersion);
                     }
                 }
             }

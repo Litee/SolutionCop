@@ -1,0 +1,1 @@
+﻿Errors[0] = Package xunit uses different versions 1.9.2 and 1.9.1  in project Project.csproj
