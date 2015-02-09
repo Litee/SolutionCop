@@ -51,6 +51,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse(@"
+<FilesIncludedIntoProject>
+  <Dummy>Some text</Dummy>
+  <Exception><Project>FileNotIncludedIntoProject.csproj</Project></Exception>
+</FilesIncludedIntoProject>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName, xmlConfig);
+        }
+
+        [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<FilesIncludedIntoProject enabled=\"false\"/>");

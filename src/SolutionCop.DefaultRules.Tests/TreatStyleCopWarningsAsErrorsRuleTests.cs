@@ -72,5 +72,12 @@ namespace SolutionCop.DefaultRules.Tests
             var xmlConfig = XElement.Parse("<TreatStyleCopWarningsAsErrors><Exception/></TreatStyleCopWarningsAsErrors>");
             ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\TreatStyleCopWarningsAsErrors_OneOfTwo.csproj").FullName, xmlConfig);
         }
+
+        [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse("<TreatStyleCopWarningsAsErrors><Dummy/><Exception><Project>NoStyleCopWarningsAsErrors_Default.csproj</Project></Exception></TreatStyleCopWarningsAsErrors>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TreatStyleCopWarningsAsErrors\TreatStyleCopWarningsAsErrors_OneOfTwo.csproj").FullName, xmlConfig);
+        }
     }
 }

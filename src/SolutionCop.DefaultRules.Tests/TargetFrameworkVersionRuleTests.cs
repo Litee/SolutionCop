@@ -130,5 +130,32 @@ namespace SolutionCop.DefaultRules.Tests
 </TargetFrameworkVersion>");
             ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
         }
+
+        [Fact(Skip = "Idea for new check to implement")]
+        public void Should_fail_if_exception_is_empty()
+        {
+            var xmlConfig = XElement.Parse(@"
+<TargetFrameworkVersion enabled='true'>
+  <FrameworkVersion>4.0</FrameworkVersion>
+  <Exception>
+  </Exception>
+</TargetFrameworkVersion>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+        }
+
+        [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse(@"
+<TargetFrameworkVersion enabled='true'>
+  <FrameworkVersion>4.0</FrameworkVersion>
+  <Dummy/>
+  <Exception>
+    <Project>TargetFramework3_5.csproj</Project>
+    <FrameworkVersion>4.5.1</FrameworkVersion>
+  </Exception>
+</TargetFrameworkVersion>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
+        }
     }
 }

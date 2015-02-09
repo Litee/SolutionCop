@@ -36,6 +36,9 @@ namespace SolutionCop.DefaultRules.Tests
   <Exception>
     <Project>HasReferencesToLocalBinaries.csproj</Project>
   </Exception>
+  <Exception>
+    <Project>SomeAnotherProject.csproj</Project>
+  </Exception>
 </ReferenceNuGetPackagesOnly>");
             ShouldPassNormally(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, xmlConfig);
         }
@@ -46,6 +49,22 @@ namespace SolutionCop.DefaultRules.Tests
             var xmlConfig = XElement.Parse(@"
 <ReferenceNuGetPackagesOnly>
   <Exception>Some text</Exception>
+  <Exception>
+    <Project>SomeAnotherProject.csproj</Project>
+  </Exception>
+</ReferenceNuGetPackagesOnly>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, xmlConfig);
+        }
+
+        [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse(@"
+<ReferenceNuGetPackagesOnly>
+  <Dummy>Some text</Dummy>
+  <Exception>
+    <Project>SomeAnotherProject.csproj</Project>
+  </Exception>
 </ReferenceNuGetPackagesOnly>");
             ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnlyRule\HasReferencesToLocalBinaries.csproj").FullName, xmlConfig);
         }

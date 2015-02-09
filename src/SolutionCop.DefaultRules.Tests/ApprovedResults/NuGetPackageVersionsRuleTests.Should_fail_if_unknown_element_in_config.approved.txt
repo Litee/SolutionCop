@@ -1,0 +1,1 @@
+﻿Errors[0] = Bad configuration for rule NuGetPackageVersions: Unknown elements Dummy in configuration.

@@ -165,5 +165,20 @@ namespace SolutionCop.DefaultRules.Tests
 </WarningLevel>");
             ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
         }
+
+        [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse(@"
+<WarningLevel>
+  <MinimalValue>4</MinimalValue>
+  <Dummy>4</Dummy>
+  <Exception>
+    <Project>WarningLevelTwoInAllConfigurations.csproj</Project>
+    <MinimalValue>1</MinimalValue>
+  </Exception>
+</WarningLevel>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations.csproj").FullName, xmlConfig);
+        }
     }
 }

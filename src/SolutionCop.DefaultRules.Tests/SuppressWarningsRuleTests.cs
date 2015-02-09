@@ -130,6 +130,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse(@"
+<SuppressWarnings>
+  <Dummy>Some text</Dummy>
+  <Exception><Project>SuppressTwoWarnings.csproj</Project></Exception>
+</SuppressWarnings>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\SuppressWarnings\SuppressTwoWarnings.csproj").FullName, xmlConfig);
+        }
+
+        [Fact]
         public void Should_fail_if_two_unapproved_warnings_suppressed_in_one_config_only()
         {
             var xmlConfig = XElement.Parse("<SuppressWarnings></SuppressWarnings>");

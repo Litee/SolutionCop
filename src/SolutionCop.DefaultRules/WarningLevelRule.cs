@@ -36,6 +36,12 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
+            var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "MinimalValue").ToArray();
+            if (unknownElements.Any())
+            {
+                yield return string.Format("Bad configuration for rule {0}: Unknown elements {1} in configuration.", Id, string.Join(",", unknownElements));
+                yield break;
+            }
             var xmlMinimalValue = xmlRuleConfigs.Element("MinimalValue");
             if (xmlMinimalValue == null)
             {

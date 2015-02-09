@@ -49,6 +49,16 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse(@"<StyleCopEnabled>
+<Dummy>Some text</Dummy>
+<Exception><Project>StyleCopDisabled.csproj</Project></Exception>
+</StyleCopEnabled>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopDisabled.csproj").FullName, xmlConfig);
+        }
+
+        [Fact]
         public void Should_fail_if_StyleCop_is_disabled()
         {
             var xmlConfig = XElement.Parse("<StyleCopEnabled/>");

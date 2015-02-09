@@ -37,6 +37,12 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
+            var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "Warning").ToArray();
+            if (unknownElements.Any())
+            {
+                yield return string.Format("Bad configuration for rule {0}: Unknown elements {1} in configuration.", Id, string.Join(",", unknownElements));
+                yield break;
+            }
             _warningsAllowedToSuppress = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim());
             // Clear is required for cases when errors are enumerated twice
             _exceptions.Clear();

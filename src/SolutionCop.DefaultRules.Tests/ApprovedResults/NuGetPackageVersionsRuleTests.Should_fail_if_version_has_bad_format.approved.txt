@@ -1,1 +1,1 @@
-﻿Errors[0] = Cannot parse package version rule test for package test in config NuGetPackageVersions
+﻿Errors[0] = Cannot parse package version rule test for package xunit in config NuGetPackageVersions

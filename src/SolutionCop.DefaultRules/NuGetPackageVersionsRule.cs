@@ -37,6 +37,12 @@ namespace SolutionCop.DefaultRules
 
         protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
         {
+            var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "Package").ToArray();
+            if (unknownElements.Any())
+            {
+                yield return string.Format("Bad configuration for rule {0}: Unknown elements {1} in configuration.", Id, string.Join(",", unknownElements));
+                yield break;
+            }
             foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
@@ -49,11 +55,11 @@ namespace SolutionCop.DefaultRules
                     _exceptions = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
                 }
             }
-            var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName.ToLower() == "package");
+            var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName == "Package");
             foreach (var xmlPackageRule in xmlPackageRules)
             {
+                var packageRuleId = xmlPackageRule.Attribute("id").Value.Trim();
                 var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
-                var packageRuleId = xmlPackageRule.Attribute("version").Value.Trim();
                 IVersionSpec versionSpec;
                 if (!VersionUtility.TryParseVersionSpec(packageRuleVersion, out versionSpec))
                 {

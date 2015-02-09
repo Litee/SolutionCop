@@ -185,6 +185,13 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/><Dummy/></TreatWarningsAsErrors>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName, xmlConfig);
+        }
+
+        [Fact]
         public void Should_fail_if_exception_is_empty()
         {
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/><Exception/></TreatWarningsAsErrors>");

@@ -88,6 +88,17 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackagesUsage>
+  <Dummy>Some Text</Dummy>
+  <Exception><Package>someUnusedDummyPackage</Package></Exception>
+</NuGetPackagesUsage>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName, xmlConfig);
+        }
+
+        [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<NuGetPackagesUsage enabled=\"false\"/>");

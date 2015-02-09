@@ -27,7 +27,12 @@ namespace SolutionCop.DefaultRules.Tests
         {
             var xmlConfig = XElement.Parse(@"
 <NuGetAutomaticPackagesRestore>
-  <Exception><Project>NoNuGet.csproj</Project></Exception>
+  <Exception>
+    <Project>NoNuGet.csproj</Project>
+  </Exception>
+  <Exception>
+    <Project>SomeOtherProject.csproj</Project>
+  </Exception>
 </NuGetAutomaticPackagesRestore>");
             ShouldPassNormally(new FileInfo(@"..\..\Data\NuGetAutomaticPackagesRestoreRule\NoNuGet.csproj").FullName, xmlConfig);
         }

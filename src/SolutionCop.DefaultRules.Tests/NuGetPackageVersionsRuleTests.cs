@@ -96,6 +96,18 @@ namespace SolutionCop.DefaultRules.Tests
         }
 
         [Fact]
+        public void Should_fail_if_unknown_element_in_config()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Dummy></Dummy>
+  <Package id='ApprovalTests' version='0.0.0'></Package>
+  <Package id='xunit' version='test'></Package>
+</NuGetPackageVersions>");
+            ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName, xmlConfig);
+        }
+
+        [Fact]
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse(@"
