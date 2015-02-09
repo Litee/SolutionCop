@@ -33,15 +33,12 @@ namespace SolutionCop.CommandLine
                 var ruleConfigsMap = ConfigurationFileParser.Parse(commandLineParameters.PathToSolution, ref pathToConfigFile, rules, errors);
 
                 Console.Out.WriteLine("INFO: Starting analysis...");
-                foreach (var projectPath in solutionInfo.ProjectFilePaths)
+                foreach (var rule in rules)
                 {
-                    Console.Out.WriteLine("INFO: Analyzing project {0}", projectPath);
-                    foreach (var rule in rules)
-                    {
-                        var validationResult = rule.ValidateProjects(ruleConfigsMap[rule.Id], projectPath);
-                        errors.AddRange(validationResult.Errors);
-                        validationResults.Add(validationResult);
-                    }
+                    Console.Out.WriteLine("INFO: Analyzing projects using rule {0}", rule.Id);
+                    var validationResult = rule.ValidateProjects(ruleConfigsMap[rule.Id], solutionInfo.ProjectFilePaths.ToArray());
+                    errors.AddRange(validationResult.Errors);
+                    validationResults.Add(validationResult);
                 }
                 Console.Out.WriteLine("INFO: Analysis finished!");
 

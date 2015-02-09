@@ -7,19 +7,15 @@
   <TreatWarningsAsErrors enabled="true">
     <AllWarnings />
   </TreatWarningsAsErrors>
-  <SuppressWarnings enabled="true">
-  </SuppressWarnings>
+  <SuppressWarnings enabled="true"></SuppressWarnings>
   <WarningLevel>
     <MinimalValue>4</MinimalValue>
   </WarningLevel>
   <StyleCopEnabled enabled="false" />
-  <NuGetAutomaticPackagesRestore enabled="true">
-  </NuGetAutomaticPackagesRestore>
-  <NuGetPackagesUsage enabled="true">
-  </NuGetPackagesUsage>
+  <NuGetAutomaticPackagesRestore enabled="true"></NuGetAutomaticPackagesRestore>
+  <NuGetPackagesUsage enabled="true"></NuGetPackagesUsage>
   <NuGetPackageVersions enabled="false" />
-  <TreatStyleCopWarningsAsErrors enabled="false">
-  </TreatStyleCopWarningsAsErrors>
-  <FilesIncludedIntoProject enabled="true">
-  </FilesIncludedIntoProject>
+  <TreatStyleCopWarningsAsErrors enabled="false"></TreatStyleCopWarningsAsErrors>
+  <FilesIncludedIntoProject enabled="true"></FilesIncludedIntoProject>
+  <SameNuGetPackageVersions enabled="true"></SameNuGetPackageVersions>
 </Rules>
