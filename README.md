@@ -19,6 +19,7 @@ If no configuration file is specified then tool will look for SolutionCop.xml fi
   * [NuGetPackagesUsage](https://github.com/Litee/SolutionCop/wiki/NuGetPackagesUsage)
   * [ReferenceNuGetPackagesOnly](https://github.com/Litee/SolutionCop/wiki/ReferenceNuGetPackagesOnly)
   * [NuGetPackageVersions](https://github.com/Litee/SolutionCop/wiki/NuGetPackageVersions)
+  * SameNuGetPackageVersionsRule - TODO wiki
 * StyleCop
   * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
   * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)
@@ -28,7 +29,6 @@ If no configuration file is specified then tool will look for SolutionCop.xml fi
 * Tool is using .NET 4.0
 
 ### TODO (rules in priority order)
-* Same package versions should be used across projects (support exceptions)
 * Forbid pre-release versions of packages (should be added to NuGetPackageVersions rule)
 * Unapproved build configurations
 * Binary within NuGet package is referenced directly without proper reference in packages.config
