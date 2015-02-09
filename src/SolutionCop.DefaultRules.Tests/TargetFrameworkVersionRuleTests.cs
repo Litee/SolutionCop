@@ -131,7 +131,7 @@ namespace SolutionCop.DefaultRules.Tests
             ShouldFailOnConfiguration(new FileInfo(@"..\..\Data\TargetFrameworkVersion\TargetFramework3_5.csproj").FullName, xmlConfig);
         }
 
-        [Fact(Skip = "Idea for new check to implement")]
+        [Fact]
         public void Should_fail_if_exception_is_empty()
         {
             var xmlConfig = XElement.Parse(@"
