@@ -1,5 +1,9 @@
 ﻿<FilesIncludedIntoProject enabled="false">
+  <FileName>*.cs</FileName>
   <Exception>
     <Project>ProjectToExcludeFromCheck.csproj</Project>
+  </Exception>
+  <Exception>
+    <FileName>*.approved.cs</FileName>
   </Exception>
 </FilesIncludedIntoProject>

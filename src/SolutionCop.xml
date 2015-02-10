@@ -16,6 +16,14 @@
   <NuGetPackagesUsage enabled="true"></NuGetPackagesUsage>
   <NuGetPackageVersions enabled="false" />
   <TreatStyleCopWarningsAsErrors enabled="false"></TreatStyleCopWarningsAsErrors>
-  <FilesIncludedIntoProject enabled="true"></FilesIncludedIntoProject>
   <SameNuGetPackageVersions enabled="true"></SameNuGetPackageVersions>
+  <FilesIncludedIntoProject enabled="true">
+    <FileName>*.cs</FileName>
+    <Exception>
+      <Project>ProjectToExcludeFromCheck.csproj</Project>
+    </Exception>
+    <Exception>
+      <FileName>My.File.cs</FileName>
+    </Exception>
+  </FilesIncludedIntoProject>
 </Rules>

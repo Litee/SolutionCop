@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule FilesIncludedIntoProject: <Project> element is missing in exceptions list.
+﻿Errors[0] = Bad configuration for rule FilesIncludedIntoProject: <Project> or <FileName> element is missing in exceptions list.

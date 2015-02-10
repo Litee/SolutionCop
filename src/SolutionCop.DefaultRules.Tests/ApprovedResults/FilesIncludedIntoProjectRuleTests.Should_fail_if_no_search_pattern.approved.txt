@@ -1,0 +1,1 @@
+﻿Errors[0] = Bad configuration for rule FilesIncludedIntoProject: No file names to process.
