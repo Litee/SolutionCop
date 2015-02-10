@@ -13,13 +13,13 @@ If no configuration file is specified then tool will look for SolutionCop.xml fi
   * [TreatWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatWarningsAsErrors)
   * [SuppressWarnings](https://github.com/Litee/SolutionCop/wiki/SuppressWarnings)
   * [WarningLevel](https://github.com/Litee/SolutionCop/wiki/WarningLevel)
-  * FilesIncludedIntoProject - TODO wiki
+  * [FilesIncludedIntoProject](https://github.com/Litee/SolutionCop/wiki/FilesIncludedIntoProject)
 * NuGet
   * [NuGetAutomaticPackagesRestore](https://github.com/Litee/SolutionCop/wiki/NuGetAutomaticPackagesRestore)
   * [NuGetPackagesUsage](https://github.com/Litee/SolutionCop/wiki/NuGetPackagesUsage)
   * [ReferenceNuGetPackagesOnly](https://github.com/Litee/SolutionCop/wiki/ReferenceNuGetPackagesOnly)
   * [NuGetPackageVersions](https://github.com/Litee/SolutionCop/wiki/NuGetPackageVersions)
-  * SameNuGetPackageVersionsRule - TODO wiki
+  * [SameNuGetPackageVersions](https://github.com/Litee/SolutionCop/wiki/SameNuGetPackageVersions)
 * StyleCop
   * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
   * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)
@@ -33,6 +33,7 @@ NuGet.exe Install SolutionCop -Prerelease
 * Tool is using .NET 4.0
 
 ## TODO (rules in priority order)
+* No duplicate id in packages.config
 * Forbid pre-release versions of packages (should be added to NuGetPackageVersions rule)
 * Unapproved build configurations
 * Binary within NuGet package is referenced directly without proper reference in packages.config
@@ -42,7 +43,6 @@ NuGet.exe Install SolutionCop -Prerelease
 * Proper owner in AssemblyInfo (FxCop?)
 * Proper copyright date in AssemblyInfo (FxCop?)
 * Check VS solution version
-* No duplicate id in packages.config (looks like low priority - haven't seen this problem in practice for a long time)
 
 ## TODO (other)
 * Group errors in output by project or by rule

@@ -4,6 +4,10 @@
     <Project>ProjectToExcludeFromCheck.csproj</Project>
   </Exception>
   <Exception>
-    <FileName>*.approved.cs</FileName>
+    <Project>ProjectWithSpecificException.csproj</Project>
+    <FileName>ProjectSpecificException*.cs</FileName>
+  </Exception>
+  <Exception>
+    <FileName>*.global.exception.pattern.cs</FileName>
   </Exception>
 </FilesIncludedIntoProject>
