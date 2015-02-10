@@ -6,10 +6,8 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class NuGetPackagesUsageRule : ProjectRule
+    public class NuGetPackagesUsageRule : ProjectRule<Tuple<string, string>[]>
     {
-        private readonly List<Tuple<string, string>> _exceptions = new List<Tuple<string, string>>();
-
         public override string DisplayName
         {
             get { return "Verify that all packages specified in packages.config are used in *.csproj (exceptions supported)"; }
@@ -33,14 +31,15 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
+        protected override Tuple<string, string>[] ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception").ToArray();
             if (unknownElements.Any())
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
-            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            var exceptions = new List<Tuple<string, string>>();
+            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
                 var xmlPackage = xmlException.Element("Package");
@@ -50,12 +49,13 @@ namespace SolutionCop.DefaultRules
                 }
                 else
                 {
-                    _exceptions.Add(new Tuple<string, string>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlPackage == null ? null : xmlPackage.Value.Trim()));
+                    exceptions.Add(new Tuple<string, string>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlPackage == null ? null : xmlPackage.Value.Trim()));
                 }
             }
+            return exceptions.ToArray();
         }
 
-        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<string, string>[] exceptions)
         {
             var pathToPackagesConfigFile = Path.Combine(Path.GetDirectoryName(projectFilePath), "packages.config");
             var projectFileName = Path.GetFileName(projectFilePath);
@@ -67,7 +67,7 @@ namespace SolutionCop.DefaultRules
                     var packageId = xmlUsedPackage.Attribute("id").Value;
                     var packageVersion = xmlUsedPackage.Attribute("version").Value;
                     // TODO Simplify
-                    if (_exceptions.Contains(new Tuple<string, string>(projectFileName, null)) || _exceptions.Contains(new Tuple<string, string>(null, packageId)) || _exceptions.Contains(new Tuple<string, string>(projectFileName, packageId)))
+                    if (exceptions.Contains(new Tuple<string, string>(projectFileName, null)) || exceptions.Contains(new Tuple<string, string>(null, packageId)) || exceptions.Contains(new Tuple<string, string>(projectFileName, packageId)))
                     {
                         Console.Out.WriteLine("DEBUG: Skipping package {0} as an exception in project {1}", packageId, projectFileName);
                     }

@@ -7,7 +7,7 @@ using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
 {
-    public abstract class ProjectRule : IProjectRule
+    public abstract class ProjectRule<T> : IProjectRule
     {
         protected readonly XNamespace Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
@@ -25,7 +25,7 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected abstract void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors);
+        protected abstract T ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors);
 
         public ValidationResult ValidateAllProjects(XElement xmlRuleConfigs, params string[] projectFilePaths)
         {
@@ -45,7 +45,7 @@ namespace SolutionCop.DefaultRules
                 isEnabled = true;
 
                 var configurationErrors = new List<string>();
-                ParseConfigurationSection(xmlRuleConfigs, configurationErrors);
+                var ruleConfiguration = ParseConfigurationSection(xmlRuleConfigs, configurationErrors);
                 if (configurationErrors.Any())
                 {
                     hasErrorsInConfiguration = true;
@@ -58,7 +58,7 @@ namespace SolutionCop.DefaultRules
                         if (File.Exists(projectFilePath))
                         {
                             var xmlProject = XDocument.Load(projectFilePath);
-                            errors.AddRange(ValidateSingleProject(xmlProject, projectFilePath));
+                            errors.AddRange(ValidateSingleProject(xmlProject, projectFilePath, ruleConfiguration));
                         }
                         else
                         {
@@ -74,6 +74,6 @@ namespace SolutionCop.DefaultRules
             return new ValidationResult(Id, isEnabled, hasErrorsInConfiguration, errors.ToArray());
         }
 
-        protected abstract IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath);
+        protected abstract IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, T exceptions);
     }
 }

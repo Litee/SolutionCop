@@ -6,10 +6,8 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class StyleCopEnabledRule : ProjectRule
+    public class StyleCopEnabledRule : ProjectRule<string[]>
     {
-        private IEnumerable<string> _exceptions = new List<string>();
-
         public override string DisplayName
         {
             get { return "Verify that StyleCop is enabled in every project"; }
@@ -31,31 +29,28 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
+        protected override string[] ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception").ToArray();
             if (unknownElements.Any())
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
-            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
                     errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
                 }
-                else
-                {
-                    _exceptions = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
-                }
             }
+            return xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
         }
 
-        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, string[] exceptions)
         {
             var projectFileName = Path.GetFileName(projectFilePath);
-            if (_exceptions.Contains(projectFileName))
+            if (exceptions.Contains(projectFileName))
             {
                 Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", projectFileName);
             }

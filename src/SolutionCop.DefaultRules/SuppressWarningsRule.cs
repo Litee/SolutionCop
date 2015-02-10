@@ -6,11 +6,8 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class SuppressWarningsRule : ProjectRule
+    public class SuppressWarningsRule : ProjectRule<Tuple<string[], IDictionary<string, string[]>>>
     {
-        private readonly IDictionary<string, string[]> _exceptions = new Dictionary<string, string[]>();
-        private IEnumerable<string> _warningsAllowedToSuppress;
-
         public override string DisplayName
         {
             get { return "Verify suppressed warnings"; }
@@ -35,17 +32,16 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
+        protected override Tuple<string[], IDictionary<string, string[]>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "Warning").ToArray();
             if (unknownElements.Any())
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
-            _warningsAllowedToSuppress = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim());
-            // Clear is required for cases when errors are enumerated twice
-            _exceptions.Clear();
-            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            var warningsAllowedToSuppress = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).ToArray();
+            var exceptions = new Dictionary<string, string[]>();
+            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
@@ -55,18 +51,20 @@ namespace SolutionCop.DefaultRules
                 else
                 {
                     var warnings = xmlException.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x));
-                    _exceptions.Add(xmlProject.Value, warnings.ToArray());
+                    exceptions.Add(xmlProject.Value, warnings.ToArray());
                 }
             }
+            return Tuple.Create<string[], IDictionary<string, string[]>>(warningsAllowedToSuppress, exceptions);
         }
 
-        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<string[], IDictionary<string, string[]>> ruleConfiguration)
         {
+            var exceptions = ruleConfiguration.Item2;
             var projectFileName = Path.GetFileName(projectFilePath);
             IEnumerable<string> warningsAllowedToSuppress;
-            if (_exceptions.ContainsKey(projectFileName))
+            if (exceptions.ContainsKey(projectFileName))
             {
-                warningsAllowedToSuppress = _exceptions[projectFileName];
+                warningsAllowedToSuppress = exceptions[projectFileName];
                 if (!warningsAllowedToSuppress.Any())
                 {
                     Console.Out.WriteLine("DEBUG: Project can suppress any warnings: {0}", projectFileName);
@@ -76,7 +74,7 @@ namespace SolutionCop.DefaultRules
             }
             else
             {
-                warningsAllowedToSuppress = _warningsAllowedToSuppress;
+                warningsAllowedToSuppress = ruleConfiguration.Item1;
                 Console.Out.WriteLine("DEBUG: Project has standard warnings {0}: {1}", string.Join(", ", warningsAllowedToSuppress), projectFileName);
             }
             var xmlPropertyGlobalGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null);

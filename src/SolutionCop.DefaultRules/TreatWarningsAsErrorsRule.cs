@@ -6,12 +6,8 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class TreatWarningsAsErrorsRule : ProjectRule
+    public class TreatWarningsAsErrorsRule : ProjectRule<Tuple<string[], bool, IDictionary<string, string[]>>>
     {
-        private string[] _warningsThatMustBeTreatedAsErrors;
-        private bool _allWarningsMustBeTreatedAsErrors;
-        private readonly IDictionary<string, string[]> _exceptions = new Dictionary<string, string[]>();
-
         public override string DisplayName
         {
             get { return "Verify warnings treatment as errors"; }
@@ -38,18 +34,17 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
+        protected override Tuple<string[], bool, IDictionary<string, string[]>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "Warning" && x != "AllWarnings").ToArray();
             if (unknownElements.Any())
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
-            _warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            _allWarningsMustBeTreatedAsErrors = !_warningsThatMustBeTreatedAsErrors.Any() && xmlRuleConfigs.Element("AllWarnings") != null;
-            // Clear is required for cases when errors are enumerated twice
-            _exceptions.Clear();
-            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            var _exceptions = new Dictionary<string, string[]>();
+            var _warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            var _allWarningsMustBeTreatedAsErrors = !_warningsThatMustBeTreatedAsErrors.Any() && xmlRuleConfigs.Element("AllWarnings") != null;
+            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
@@ -62,23 +57,25 @@ namespace SolutionCop.DefaultRules
                     _exceptions.Add(xmlProject.Value, warnings.ToArray());
                 }
             }
+            return Tuple.Create<string[], bool, IDictionary<string, string[]>>(_warningsThatMustBeTreatedAsErrors, _allWarningsMustBeTreatedAsErrors, _exceptions);
         }
 
-        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<string[], bool, IDictionary<string, string[]>> ruleConfiguration)
         {
+            var exceptions = ruleConfiguration.Item3;
             var projectFileName = Path.GetFileName(projectFilePath);
             IEnumerable<string> warningsThatMustBeTreatedAsErrors;
             bool allWarningsMustBeTreatedAsErrors;
-            if (_exceptions.ContainsKey(projectFileName))
+            if (exceptions.ContainsKey(projectFileName))
             {
-                allWarningsMustBeTreatedAsErrors = !_exceptions.Any();
-                warningsThatMustBeTreatedAsErrors = _exceptions[projectFileName];
+                allWarningsMustBeTreatedAsErrors = !exceptions.Any();
+                warningsThatMustBeTreatedAsErrors = exceptions[projectFileName];
                 Console.Out.WriteLine("DEBUG: Project has exceptional warnings {0}: {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
             }
             else
             {
-                allWarningsMustBeTreatedAsErrors = _allWarningsMustBeTreatedAsErrors;
-                warningsThatMustBeTreatedAsErrors = _warningsThatMustBeTreatedAsErrors;
+                allWarningsMustBeTreatedAsErrors = ruleConfiguration.Item2;
+                warningsThatMustBeTreatedAsErrors = ruleConfiguration.Item1;
                 Console.Out.WriteLine("DEBUG: Project has standard warnings {0}: {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
             }
             var xmlPropertyGlobalGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null);

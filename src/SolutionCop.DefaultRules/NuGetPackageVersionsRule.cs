@@ -7,11 +7,8 @@ using NuGet;
 
 namespace SolutionCop.DefaultRules
 {
-    public class NuGetPackageVersionsRule : ProjectRule
+    public class NuGetPackageVersionsRule : ProjectRule<Tuple<List<XElement>, string[]>>
     {
-        private readonly List<XElement> _xmlPackageRules = new List<XElement>();
-        private IEnumerable<string> _exceptions = new List<string>();
-
         public override string DisplayName
         {
             get { return "Verify that NuGet package versions match rules"; }
@@ -35,26 +32,24 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
+        protected override Tuple<List<XElement>, string[]> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "Package").ToArray();
             if (unknownElements.Any())
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
-            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
                     errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
                 }
-                else
-                {
-                    _exceptions = xmlRuleConfigs.Descendants("Exception").Select(x => x.Value.Trim());
-                }
             }
+            var exceptions = xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
             var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName == "Package");
+            var _xmlPackageRules = new List<XElement>();
             foreach (var xmlPackageRule in xmlPackageRules)
             {
                 var packageRuleId = xmlPackageRule.Attribute("id").Value.Trim();
@@ -69,12 +64,15 @@ namespace SolutionCop.DefaultRules
                     _xmlPackageRules.Add(xmlPackageRule);
                 }
             }
+            return Tuple.Create(_xmlPackageRules, exceptions);
         }
 
-        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<List<XElement>, string[]> ruleConfiguration)
         {
+            var xmlPackageRules = ruleConfiguration.Item1;
+            var exceptions = ruleConfiguration.Item2;
             var projectFileName = Path.GetFileName(projectFilePath);
-            if (_exceptions.Contains(projectFileName))
+            if (exceptions.Contains(projectFileName))
             {
                 Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));
             }
@@ -88,7 +86,7 @@ namespace SolutionCop.DefaultRules
                     {
                         var packageId = xmlUsedPackage.Attribute("id").Value;
                         var packageVersion = xmlUsedPackage.Attribute("version").Value;
-                        var xmlPackageRule = _xmlPackageRules.FirstOrDefault(x => x.Attribute("id").Value == packageId);
+                        var xmlPackageRule = xmlPackageRules.FirstOrDefault(x => x.Attribute("id").Value == packageId);
                         if (xmlPackageRule == null)
                         {
                             yield return string.Format("Unknown package {0} with version {1} in project {2}", packageId, packageVersion, projectFileName);

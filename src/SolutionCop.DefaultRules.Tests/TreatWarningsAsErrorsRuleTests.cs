@@ -197,5 +197,7 @@ namespace SolutionCop.DefaultRules.Tests
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/><Exception/></TreatWarningsAsErrors>");
             ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName);
         }
+
+        // TODO Case for exception with warnings inside
     }
 }

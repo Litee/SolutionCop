@@ -6,11 +6,8 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class WarningLevelRule : ProjectRule
+    public class WarningLevelRule : ProjectRule<Tuple<int, IDictionary<string, int>>>
     {
-        private readonly IDictionary<string, int> _exceptions = new Dictionary<string, int>();
-        private int _requiredWarningLevel = 4;
-
         public override string DisplayName
         {
             get { return "Verify warning level"; }
@@ -34,7 +31,7 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
+        protected override Tuple<int, IDictionary<string, int>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "MinimalValue").ToArray();
             if (unknownElements.Any())
@@ -42,17 +39,17 @@ namespace SolutionCop.DefaultRules
                 errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
             var xmlMinimalValue = xmlRuleConfigs.Element("MinimalValue");
+            int requiredWarningLevel = 4;
             if (xmlMinimalValue == null)
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: <MinimalValue> element is missing.", Id));
             }
-            else if (!Int32.TryParse((string)xmlMinimalValue, out _requiredWarningLevel))
+            else if (!Int32.TryParse((string)xmlMinimalValue, out requiredWarningLevel))
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: <MinimalValue> element must contain an integer.", Id));
             }
-            // Clear is required for cases when errors are enumerated twice
-            _exceptions.Clear();
-            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            var exceptions = new Dictionary<string, int>();
+            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
@@ -63,22 +60,25 @@ namespace SolutionCop.DefaultRules
                 {
                     xmlMinimalValue = xmlException.Element("MinimalValue");
                     var minimalValue = xmlMinimalValue == null ? 0 : Convert.ToInt32(xmlMinimalValue.Value.Trim());
-                    _exceptions.Add(xmlProject.Value, minimalValue);
+                    exceptions.Add(xmlProject.Value, minimalValue);
                 }
             }
+            return Tuple.Create<int, IDictionary<string, int>>(requiredWarningLevel, exceptions);
         }
 
-        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<int, IDictionary<string, int>> ruleConfiguration)
         {
+            var exceptions = ruleConfiguration.Item2;
             var projectFileName = Path.GetFileName(projectFilePath);
-            var requiredWarningLevel = _requiredWarningLevel;
-            if (_exceptions.ContainsKey(projectFileName))
+            int requiredWarningLevel;
+            if (exceptions.ContainsKey(projectFileName))
             {
-                requiredWarningLevel = _exceptions[projectFileName];
+                requiredWarningLevel = exceptions[projectFileName];
                 Console.Out.WriteLine("DEBUG: Project has exceptional warning level {0}: {1}", requiredWarningLevel, projectFileName);
             }
             else
             {
+                requiredWarningLevel = ruleConfiguration.Item1;
                 Console.Out.WriteLine("DEBUG: Project has standard warning level {0}: {1}", requiredWarningLevel, projectFileName);
             }
             var xmlGlobalPropertyGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null);

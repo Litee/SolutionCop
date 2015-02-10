@@ -6,11 +6,8 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class TargetFrameworkVersionRule : ProjectRule
+    public class TargetFrameworkVersionRule : ProjectRule<Tuple<string[], IDictionary<string, string[]>>>
     {
-        private IEnumerable<string> _targetFrameworkVersions;
-        private readonly IDictionary<string, string[]> _exceptions = new Dictionary<string, string[]>();
-
         public override string DisplayName
         {
             get { return "Verify target .NET framework version"; }
@@ -35,21 +32,20 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
+        protected override Tuple<string[], IDictionary<string, string[]>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "FrameworkVersion").ToArray();
             if (unknownElements.Any())
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
-            _targetFrameworkVersions = xmlRuleConfigs.Elements("FrameworkVersion").Select(x => x.Value.Trim());
-            if (!_targetFrameworkVersions.Any())
+            var targetFrameworkVersions = xmlRuleConfigs.Elements("FrameworkVersion").Select(x => x.Value.Trim()).ToArray();
+            if (!targetFrameworkVersions.Any())
             {
                 errors.Add(string.Format("No target version specified for rule {0}", Id));
             }
-            // Clear is required for cases when errors are enumerated twice
-            _exceptions.Clear();
-            foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
+            var exceptions = new Dictionary<string, string[]>();
+            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
@@ -59,28 +55,30 @@ namespace SolutionCop.DefaultRules
                 else
                 {
                     var warnings = xmlException.Elements("FrameworkVersion").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x));
-                    _exceptions.Add(xmlProject.Value, warnings.ToArray());
+                    exceptions.Add(xmlProject.Value, warnings.ToArray());
                 }
             }
+            return Tuple.Create<string[], IDictionary<string, string[]>>(targetFrameworkVersions, exceptions);
         }
 
-        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<string[], IDictionary<string, string[]>> ruleConfiguration)
         {
+            var targetFrameworkVersions = ruleConfiguration.Item1; ;
+            var exceptions = ruleConfiguration.Item2;
             var projectFileName = Path.GetFileName(projectFilePath);
-            var targetFrameworkVersions = _targetFrameworkVersions;
-            if (_exceptions.ContainsKey(projectFileName))
+            if (exceptions.ContainsKey(projectFileName))
             {
-                if (_exceptions[projectFileName] == null || !_exceptions[projectFileName].Any())
+                if (exceptions[projectFileName] == null || !exceptions[projectFileName].Any())
                 {
                     Console.Out.WriteLine("DEBUG: Project can target any framework version: {0}", projectFileName);
                     yield break;
                 }
                 else
                 {
-                    targetFrameworkVersions = targetFrameworkVersions.Concat(_exceptions[projectFileName]);
+                    targetFrameworkVersions = targetFrameworkVersions.Concat(exceptions[projectFileName]).ToArray();
                 }
             }
-            var invalidFrameworkVersions = xmlProject.Descendants(Namespace + "TargetFrameworkVersion").Select(x => x.Value.Substring(1)).Where(x => targetFrameworkVersions.All(y => y != x));
+            var invalidFrameworkVersions = xmlProject.Descendants(Namespace + "TargetFrameworkVersion").Select(x => x.Value.Substring(1)).Where(x => targetFrameworkVersions.All(y => y != x)).ToArray();
             if (invalidFrameworkVersions.Any())
             {
                 yield return string.Format("Invalid target .NET framework version '{0}' in project {1}", invalidFrameworkVersions.First(), Path.GetFileName(projectFilePath));
