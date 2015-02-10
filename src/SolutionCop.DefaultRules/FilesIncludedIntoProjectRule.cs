@@ -31,7 +31,6 @@ namespace SolutionCop.DefaultRules
 
         protected override string[] ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            var _exceptions = new List<string>();
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception").ToArray();
             if (unknownElements.Any())
             {
@@ -59,7 +58,7 @@ namespace SolutionCop.DefaultRules
             {
                 // TODO Support other extensions
                 var filePaths = Directory.EnumerateFiles(Path.GetDirectoryName(projectFilePath), "*.cs", SearchOption.AllDirectories);
-                foreach (var filePath in filePaths.Where(x => !x.ToLower().Contains(@"\obj\")))
+                foreach (var filePath in filePaths.Where(x => !x.ToLower().Contains(@"\obj\") && !x.ToLower().Contains(@"\bin\")))
                 {
                     var fileName = Path.GetFileName(filePath);
                     // TODO Make more precise

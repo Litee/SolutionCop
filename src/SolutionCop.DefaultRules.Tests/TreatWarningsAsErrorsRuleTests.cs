@@ -41,13 +41,47 @@ namespace SolutionCop.DefaultRules.Tests
         [InlineData("TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj")]
         public void Should_pass_if_all_must_and_only_two_are_but_project_is_in_exceptions_list(string csproj)
         {
-            var xmlConfig = XElement.Parse(@"<TreatWarningsAsErrors>
-<AllWarnings/>
+            var xmlConfig = XElement.Parse(@"
+<TreatWarningsAsErrors>
+  <AllWarnings/>
   <Exception><Project>TreatTwoWarningsAsErrorsInAllConfigurations.csproj</Project></Exception>
   <Exception><Project>TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj</Project></Exception>
   <Exception><Project>SomeNonExistingProjectName.csproj</Project></Exception>
 </TreatWarningsAsErrors>");
             ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\" + csproj).FullName);
+        }
+
+        [Fact]
+        public void Should_pass_if_two_must_and_none_are_but_project_has_these_two_is_in_exceptions_list()
+        {
+            var xmlConfig = XElement.Parse(@"
+<TreatWarningsAsErrors>
+  <Warning>0420</Warning>
+  <Warning>0465</Warning>
+  <Exception>
+    <Project>TreatNoWarningsAsErrors.csproj</Project>
+    <Warning>0420</Warning>
+    <Warning>0465</Warning>
+  </Exception>
+  <Exception><Project>SomeNonExistingProjectName.csproj</Project></Exception>
+</TreatWarningsAsErrors>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName);
+        }
+
+        [Fact]
+        public void Should_fail_if_not_all_warnings_in_exception()
+        {
+            var xmlConfig = XElement.Parse(@"
+<TreatWarningsAsErrors>
+  <Warning>0420</Warning>
+  <Warning>0465</Warning>
+  <Exception>
+    <Project>TreatNoWarningsAsErrors.csproj</Project>
+    <Warning>0420</Warning>
+  </Exception>
+  <Exception><Project>SomeNonExistingProjectName.csproj</Project></Exception>
+</TreatWarningsAsErrors>");
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatNoWarningsAsErrors.csproj").FullName);
         }
 
         [Fact]
@@ -197,7 +231,5 @@ namespace SolutionCop.DefaultRules.Tests
             var xmlConfig = XElement.Parse("<TreatWarningsAsErrors><AllWarnings/><Exception/></TreatWarningsAsErrors>");
             ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\TreatWarningsAsErrors\TreatAllWarningsAsErrorsInOneConfigurationOnly.csproj").FullName);
         }
-
-        // TODO Case for exception with warnings inside
     }
 }

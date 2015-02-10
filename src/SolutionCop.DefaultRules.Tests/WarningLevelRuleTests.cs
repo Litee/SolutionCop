@@ -34,9 +34,6 @@ namespace SolutionCop.DefaultRules.Tests
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>");
             ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\WarningLevelTwoInAllConfigurations-DoesNotExist.csproj").FullName);
-            // TODO
-//            errors.First().ShouldStartWith("Project file not found:");
-//            errors.First().ShouldContain("WarningLevelTwoInAllConfigurations-DoesNotExist.csproj");
         }
 
         [Fact]

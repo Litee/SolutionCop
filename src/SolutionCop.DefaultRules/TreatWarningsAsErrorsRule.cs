@@ -64,18 +64,17 @@ namespace SolutionCop.DefaultRules
         {
             var exceptions = ruleConfiguration.Item3;
             var projectFileName = Path.GetFileName(projectFilePath);
-            IEnumerable<string> warningsThatMustBeTreatedAsErrors;
             bool allWarningsMustBeTreatedAsErrors;
+            var warningsThatMustBeTreatedAsErrors = ruleConfiguration.Item1;
             if (exceptions.ContainsKey(projectFileName))
             {
                 allWarningsMustBeTreatedAsErrors = !exceptions.Any();
-                warningsThatMustBeTreatedAsErrors = exceptions[projectFileName];
+                warningsThatMustBeTreatedAsErrors = warningsThatMustBeTreatedAsErrors.Except(exceptions[projectFileName]).ToArray();
                 Console.Out.WriteLine("DEBUG: Project has exceptional warnings {0}: {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
             }
             else
             {
                 allWarningsMustBeTreatedAsErrors = ruleConfiguration.Item2;
-                warningsThatMustBeTreatedAsErrors = ruleConfiguration.Item1;
                 Console.Out.WriteLine("DEBUG: Project has standard warnings {0}: {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
             }
             var xmlPropertyGlobalGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null);
