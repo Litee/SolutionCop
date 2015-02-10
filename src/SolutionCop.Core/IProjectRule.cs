@@ -6,8 +6,6 @@ namespace SolutionCop.Core
     {
         string Id { get; }
 
-        string DisplayName { get; }
-
         XElement DefaultConfig { get; }
 
         ValidationResult ValidateAllProjects(XElement xmlRuleConfigs, params string[] projectFilePaths);

@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
 {
+    [Export(typeof(IProjectRule))]
     public class SuppressWarningsRule : ProjectRule<Tuple<string[], IDictionary<string, string[]>>>
     {
-        public override string DisplayName
-        {
-            get { return "Verify suppressed warnings"; }
-        }
-
         public override string Id
         {
             get { return "SuppressWarnings"; }

@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
 {
+    [Export(typeof(IProjectRule))]
     public class SameNuGetPackageVersionsRule : ProjectRule<Tuple<string, string>[]>
     {
         private readonly Dictionary<string, HashSet<string>> _usedIds = new Dictionary<string, HashSet<string>>();
-
-        public override string DisplayName
-        {
-            get { return "Verify that all project within solution use same version of packages (exceptions supported)"; }
-        }
 
         public override string Id
         {

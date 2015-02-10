@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using NuGet;
+using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
 {
+    [Export(typeof(IProjectRule))]
     public class NuGetPackageVersionsRule : ProjectRule<Tuple<List<XElement>, string[]>>
     {
-        public override string DisplayName
-        {
-            get { return "Verify that NuGet package versions match rules"; }
-        }
-
         public override string Id
         {
             get { return "NuGetPackageVersions"; }

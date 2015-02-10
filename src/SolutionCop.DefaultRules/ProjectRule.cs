@@ -13,8 +13,6 @@ namespace SolutionCop.DefaultRules
 
         public abstract string Id { get; }
 
-        public abstract string DisplayName { get; }
-
         public virtual XElement DefaultConfig
         {
             get

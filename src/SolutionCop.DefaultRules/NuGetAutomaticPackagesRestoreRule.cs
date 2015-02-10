@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
 {
+    [Export(typeof(IProjectRule))]
     public class NuGetAutomaticPackagesRestoreRule : ProjectRule<string[]>
     {
-        public override string DisplayName
-        {
-            get { return "Verify that correct automatic packages restore mode is used (see https://docs.nuget.org/Consume/Package-Restore/Migrating-to-Automatic-Package-Restore)"; }
-        }
-
         public override string Id
         {
             get { return "NuGetAutomaticPackagesRestore"; }

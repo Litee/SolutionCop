@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
 {
+    [Export(typeof(IProjectRule))]
     public class StyleCopEnabledRule : ProjectRule<string[]>
     {
-        public override string DisplayName
-        {
-            get { return "Verify that StyleCop is enabled in every project"; }
-        }
-
         public override string Id
         {
             get { return "StyleCopEnabled"; }

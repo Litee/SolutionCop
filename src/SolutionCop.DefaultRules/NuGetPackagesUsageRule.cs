@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
 {
+    [Export(typeof(IProjectRule))]
     public class NuGetPackagesUsageRule : ProjectRule<Tuple<string, string>[]>
     {
-        public override string DisplayName
-        {
-            get { return "Verify that all packages specified in packages.config are used in *.csproj (exceptions supported)"; }
-        }
-
         public override string Id
         {
             get { return "NuGetPackagesUsage"; }

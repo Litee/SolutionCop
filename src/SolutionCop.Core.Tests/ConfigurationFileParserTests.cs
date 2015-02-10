@@ -125,11 +125,6 @@ namespace SolutionCop.Core.Tests
                 get { return "Dummy"; }
             }
 
-            public string DisplayName
-            {
-                get { return "Dummy Display Name"; }
-            }
-
             public XElement DefaultConfig
             {
                 get { return new XElement(Id); }
