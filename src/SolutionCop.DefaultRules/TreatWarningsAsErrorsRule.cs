@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class TreatWarningsAsErrorsRule : StandardProjectRule
+    public class TreatWarningsAsErrorsRule : ProjectRule
     {
         private string[] _warningsThatMustBeTreatedAsErrors;
         private bool _allWarningsMustBeTreatedAsErrors;
@@ -38,13 +38,12 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
+        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "Warning" && x != "AllWarnings").ToArray();
             if (unknownElements.Any())
             {
-                yield return string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements));
-                yield break;
+                errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
             _warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
             _allWarningsMustBeTreatedAsErrors = !_warningsThatMustBeTreatedAsErrors.Any() && xmlRuleConfigs.Element("AllWarnings") != null;
@@ -55,7 +54,7 @@ namespace SolutionCop.DefaultRules
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
                 }
                 else
                 {
@@ -65,7 +64,7 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
         {
             var projectFileName = Path.GetFileName(projectFilePath);
             IEnumerable<string> warningsThatMustBeTreatedAsErrors;

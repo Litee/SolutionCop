@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class SuppressWarningsRule : StandardProjectRule
+    public class SuppressWarningsRule : ProjectRule
     {
         private readonly IDictionary<string, string[]> _exceptions = new Dictionary<string, string[]>();
         private IEnumerable<string> _warningsAllowedToSuppress;
@@ -35,13 +35,12 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
+        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "Warning").ToArray();
             if (unknownElements.Any())
             {
-                yield return string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements));
-                yield break;
+                errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
             _warningsAllowedToSuppress = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim());
             // Clear is required for cases when errors are enumerated twice
@@ -51,7 +50,7 @@ namespace SolutionCop.DefaultRules
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
                 }
                 else
                 {
@@ -61,7 +60,7 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
         {
             var projectFileName = Path.GetFileName(projectFilePath);
             IEnumerable<string> warningsAllowedToSuppress;

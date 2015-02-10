@@ -7,7 +7,7 @@ using NuGet;
 
 namespace SolutionCop.DefaultRules
 {
-    public class NuGetPackageVersionsRule : StandardProjectRule
+    public class NuGetPackageVersionsRule : ProjectRule
     {
         private readonly List<XElement> _xmlPackageRules = new List<XElement>();
         private IEnumerable<string> _exceptions = new List<string>();
@@ -35,20 +35,19 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
+        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "Package").ToArray();
             if (unknownElements.Any())
             {
-                yield return string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements));
-                yield break;
+                errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
             foreach (var xmlException in xmlRuleConfigs.Descendants("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
                 }
                 else
                 {
@@ -63,7 +62,7 @@ namespace SolutionCop.DefaultRules
                 IVersionSpec versionSpec;
                 if (!VersionUtility.TryParseVersionSpec(packageRuleVersion, out versionSpec))
                 {
-                    yield return string.Format("Cannot parse package version rule {0} for package {1} in config {2}", packageRuleVersion, packageRuleId, Id);
+                    errors.Add(string.Format("Cannot parse package version rule {0} for package {1} in config {2}", packageRuleVersion, packageRuleId, Id));
                 }
                 else
                 {
@@ -72,7 +71,7 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
         {
             var projectFileName = Path.GetFileName(projectFilePath);
             if (_exceptions.Contains(projectFileName))

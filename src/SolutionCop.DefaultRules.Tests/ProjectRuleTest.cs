@@ -29,7 +29,7 @@ namespace SolutionCop.DefaultRules.Tests
 
         protected void ShouldPassNormally(XElement xmlConfig, params string[] projectFileNames)
         {
-            var validationResult = _instance.ValidateProjects(xmlConfig, projectFileNames);
+            var validationResult = _instance.ValidateAllProjects(xmlConfig, projectFileNames);
             validationResult.IsEnabled.ShouldBe(true);
             validationResult.HasErrorsInConfiguration.ShouldBe(false);
             validationResult.Errors.ShouldBeEmpty();
@@ -37,7 +37,7 @@ namespace SolutionCop.DefaultRules.Tests
 
         protected void ShouldPassAsDisabled(XElement xmlConfig, params string[] projectFileNames)
         {
-            var validationResult = _instance.ValidateProjects(xmlConfig, projectFileNames);
+            var validationResult = _instance.ValidateAllProjects(xmlConfig, projectFileNames);
             validationResult.IsEnabled.ShouldBe(false);
             validationResult.HasErrorsInConfiguration.ShouldBe(false);
             validationResult.Errors.ShouldBeEmpty();
@@ -45,7 +45,7 @@ namespace SolutionCop.DefaultRules.Tests
 
         protected void ShouldFailNormally(XElement xmlConfig, params string[] projectFileNames)
         {
-            var validationResult = _instance.ValidateProjects(xmlConfig, projectFileNames);
+            var validationResult = _instance.ValidateAllProjects(xmlConfig, projectFileNames);
             validationResult.IsEnabled.ShouldBe(true);
             validationResult.HasErrorsInConfiguration.ShouldBe(false);
             validationResult.Errors.ShouldNotBeEmpty();
@@ -54,7 +54,7 @@ namespace SolutionCop.DefaultRules.Tests
 
         protected void ShouldFailOnConfiguration(XElement xmlConfig, params string[] projectFileNames)
         {
-            var validationResult = _instance.ValidateProjects(xmlConfig, projectFileNames);
+            var validationResult = _instance.ValidateAllProjects(xmlConfig, projectFileNames);
             validationResult.IsEnabled.ShouldBe(true);
             validationResult.HasErrorsInConfiguration.ShouldBe(true);
             validationResult.Errors.ShouldNotBeEmpty();

@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
 {
-    public class TargetFrameworkVersionRule : StandardProjectRule
+    public class TargetFrameworkVersionRule : ProjectRule
     {
         private IEnumerable<string> _targetFrameworkVersions;
         private readonly IDictionary<string, string[]> _exceptions = new Dictionary<string, string[]>();
@@ -35,18 +35,17 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs)
+        protected override void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "FrameworkVersion").ToArray();
             if (unknownElements.Any())
             {
-                yield return string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements));
-                yield break;
+                errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
             }
             _targetFrameworkVersions = xmlRuleConfigs.Elements("FrameworkVersion").Select(x => x.Value.Trim());
             if (!_targetFrameworkVersions.Any())
             {
-                yield return string.Format("No target version specified for rule {0}", Id);
+                errors.Add(string.Format("No target version specified for rule {0}", Id));
             }
             // Clear is required for cases when errors are enumerated twice
             _exceptions.Clear();
@@ -55,7 +54,7 @@ namespace SolutionCop.DefaultRules
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    yield return string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id);
+                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
                 }
                 else
                 {
@@ -65,7 +64,7 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected override IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath)
         {
             var projectFileName = Path.GetFileName(projectFilePath);
             var targetFrameworkVersions = _targetFrameworkVersions;

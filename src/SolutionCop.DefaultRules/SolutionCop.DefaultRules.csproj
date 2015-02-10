@@ -60,7 +60,7 @@
     <Compile Include="ReferenceNuGetPackagesOnlyRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StandardProjectRule.cs" />
+    <Compile Include="ProjectRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StyleCopEnabledRule.cs">
       <SubType>Code</SubType>

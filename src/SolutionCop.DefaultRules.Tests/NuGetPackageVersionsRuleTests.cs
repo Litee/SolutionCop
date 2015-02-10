@@ -102,7 +102,7 @@ namespace SolutionCop.DefaultRules.Tests
 <NuGetPackageVersions>
   <Dummy></Dummy>
   <Package id='ApprovalTests' version='0.0.0'></Package>
-  <Package id='xunit' version='test'></Package>
+  <Package id='xunit' version='[1.9.2]'></Package>
 </NuGetPackageVersions>");
             ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }

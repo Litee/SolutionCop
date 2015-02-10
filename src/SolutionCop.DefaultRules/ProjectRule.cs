@@ -7,7 +7,7 @@ using SolutionCop.Core;
 
 namespace SolutionCop.DefaultRules
 {
-    public abstract class StandardProjectRule : IProjectRule
+    public abstract class ProjectRule : IProjectRule
     {
         protected readonly XNamespace Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
@@ -25,9 +25,9 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected abstract IEnumerable<string> ParseConfigSectionCustomParameters(XElement xmlRuleConfigs);
+        protected abstract void ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors);
 
-        public ValidationResult ValidateProjects(XElement xmlRuleConfigs, params string[] projectFilePaths)
+        public ValidationResult ValidateAllProjects(XElement xmlRuleConfigs, params string[] projectFilePaths)
         {
             var isEnabled = false;
             var hasErrorsInConfiguration = false;
@@ -44,7 +44,8 @@ namespace SolutionCop.DefaultRules
             {
                 isEnabled = true;
 
-                var configurationErrors = ParseConfigSectionCustomParameters(xmlRuleConfigs).ToArray();
+                var configurationErrors = new List<string>();
+                ParseConfigurationSection(xmlRuleConfigs, configurationErrors);
                 if (configurationErrors.Any())
                 {
                     hasErrorsInConfiguration = true;
@@ -57,7 +58,7 @@ namespace SolutionCop.DefaultRules
                         if (File.Exists(projectFilePath))
                         {
                             var xmlProject = XDocument.Load(projectFilePath);
-                            errors.AddRange(ValidateProjectPrimaryChecks(xmlProject, projectFilePath));
+                            errors.AddRange(ValidateSingleProject(xmlProject, projectFilePath));
                         }
                         else
                         {
@@ -73,6 +74,6 @@ namespace SolutionCop.DefaultRules
             return new ValidationResult(Id, isEnabled, hasErrorsInConfiguration, errors.ToArray());
         }
 
-        protected abstract IEnumerable<string> ValidateProjectPrimaryChecks(XDocument xmlProject, string projectFilePath);
+        protected abstract IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath);
     }
 }
