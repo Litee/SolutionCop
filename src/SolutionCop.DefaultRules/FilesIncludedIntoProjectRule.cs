@@ -24,6 +24,7 @@ namespace SolutionCop.DefaultRules
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
                 element.Add(new XElement("FileName", "*.cs"));
+                element.Add(new XElement("FileName", "*.xaml"));
                 element.Add(new XElement("Exception", new XElement("Project", "ProjectToExcludeFromCheck.csproj")));
                 element.Add(new XElement("Exception", new XElement("Project", "ProjectWithSpecificException.csproj"), new XElement("FileName", "ProjectSpecificException*.cs")));
                 element.Add(new XElement("Exception", new XElement("FileName", "*.global.exception.pattern.cs")));

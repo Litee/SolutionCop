@@ -1,5 +1,6 @@
 ﻿<FilesIncludedIntoProject enabled="false">
   <FileName>*.cs</FileName>
+  <FileName>*.xaml</FileName>
   <Exception>
     <Project>ProjectToExcludeFromCheck.csproj</Project>
   </Exception>
