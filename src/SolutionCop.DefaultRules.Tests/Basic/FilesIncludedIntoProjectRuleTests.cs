@@ -71,6 +71,16 @@ namespace SolutionCop.DefaultRules.Tests.Basic
         }
 
         [Fact]
+        public void Should_pass_if_file_name_has_non_standard_char()
+        {
+            var xmlConfig = XElement.Parse(@"
+<FilesIncludedIntoProject>
+  <FileName>*.cs</FileName>
+</FilesIncludedIntoProject>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject_2\AllFilesIncludedIntoProject.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_pass_if_file_name_with_wildcard_is_an_exception()
         {
             var xmlConfig = XElement.Parse(@"
