@@ -33,18 +33,18 @@ NuGet.exe Install SolutionCop -Prerelease
 * Tool is using .NET 4.0
 
 ## TODO (rules in priority order)
-* Forbid pre-release versions of packages (should be added to NuGetPackageVersions rule)
+* Forbid pre-release versions of packages (extension of NuGetPackageVersions rules)
 * Unapproved build configurations
+* Missing build configurations
 * Binary within NuGet package is referenced directly without proper reference in packages.config
 * Check for "Copy Local" used
 * Assembly and root namespace should have same name
 * Classify project by type (e.g. production, testing) and disallow references between some groups
-* Proper owner in AssemblyInfo (FxCop?)
-* Proper copyright date in AssemblyInfo (FxCop?)
+* Proper owner in AssemblyInfo (can it be done via FxCop?)
+* Proper copyright date in AssemblyInfo (can it be done via FxCop?)
 * Check VS solution version
 
 ## TODO (other)
-* Group errors in output by project or by rule
 * Provide NuGet commands in log for upgrading to the lowest version
 * Option to fail on missing sections instead of creating them
 * Provide links to rule details in output
