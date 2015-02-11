@@ -73,9 +73,10 @@ namespace SolutionCop.DefaultRules.NuGet
                     }
                     else
                     {
-                        if (_usedIds.ContainsKey(packageId))
+                        HashSet<string> value;
+                        if (_usedIds.TryGetValue(packageId, out value))
                         {
-                            var otherUsedPackageIds = _usedIds[packageId].Where(x => x != packageVersion);
+                            var otherUsedPackageIds = value.Where(x => x != packageVersion).ToArray();
                             if (otherUsedPackageIds.Any())
                             {
                                 yield return string.Format("Package {0} uses different versions {1} and {2}  in project {3}", packageId, otherUsedPackageIds.First(), packageVersion, projectFileName);

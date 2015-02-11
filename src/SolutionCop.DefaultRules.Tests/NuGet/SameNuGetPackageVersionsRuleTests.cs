@@ -35,6 +35,14 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         }
 
         [Fact]
+        public void Should_fail_if_projects_has_duplicate_versions()
+        {
+            var xmlConfig = XElement.Parse("<SameNuGetPackageVersions/>");
+            ShouldFailNormally(xmlConfig,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\DuplicateIds\Project.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_pass_if_package_is_an_exception()
         {
             var xmlConfig = XElement.Parse(@"
