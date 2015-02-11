@@ -52,3 +52,5 @@ NuGet.exe Install SolutionCop -Prerelease
 * Allow to search custom rules in other folders
 * Support build configurations as exception
 * Move error messages to resources
+* XSD for config
+* MSBuild integration
