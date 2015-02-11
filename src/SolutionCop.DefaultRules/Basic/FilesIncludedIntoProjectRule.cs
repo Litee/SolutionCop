@@ -97,7 +97,7 @@ namespace SolutionCop.DefaultRules.Basic
                         if (!xmlHintPaths.Any())
                         {
                             // TODO Yak!
-                            var fileSubPath = Path.GetFullPath(filePath).Substring(Path.GetDirectoryName(projectFilePath).Length + 1);
+                            var fileSubPath = Path.GetFileName(Path.GetDirectoryName(projectFilePath)) + Path.DirectorySeparatorChar + Path.GetFullPath(filePath).Substring(Path.GetDirectoryName(projectFilePath).Length + 1);
                             yield return string.Format("File is not referenced in project: {0}", fileSubPath);
                         }
                     }
