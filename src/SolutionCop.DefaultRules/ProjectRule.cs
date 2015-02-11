@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using SolutionCop.Core;
+using SolutionCop.DefaultRules.Properties;
 
 namespace SolutionCop.DefaultRules
 {
@@ -71,6 +72,25 @@ namespace SolutionCop.DefaultRules
             }
             return new ValidationResult(Id, isEnabled, hasErrorsInConfiguration, errors.ToArray());
         }
+
+/*
+        protected void ValidateConfigSectionStructure(XElement xmlConfig, IDictionary<string, string[]> allowedItems, List<string> errors)
+        {
+            var unknownFirstLevelElements = xmlConfig.Elements().Select(x => x.Name.LocalName).Where(x => allowedItems.Keys.All(y => y != x)).ToArray();
+            errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("Unknown element(s) {0} in configuration.", string.Join(",", unknownFirstLevelElements))));
+
+            foreach (var xmlFirstLevel in xmlConfig.Elements())
+            {
+                var firstLevelElementName = xmlFirstLevel.Name.LocalName;
+                string[] allowedSecondLevelItems;
+                if (allowedItems.TryGetValue(firstLevelElementName, out allowedSecondLevelItems))
+                {
+                    var unknownSecondLevelElements = xmlFirstLevel.Elements().Select(x => x.Name.LocalName).Where(x => allowedSecondLevelItems.All(y => y != x)).ToArray();
+                    errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("Unknown element(s) {0} in configuration.", string.Join(",", unknownSecondLevelElements))));
+                }
+            }
+        }
+*/
 
         protected abstract IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, T exceptions);
     }

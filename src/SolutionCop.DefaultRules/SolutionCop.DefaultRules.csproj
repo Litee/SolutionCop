@@ -51,6 +51,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NuGetAutomaticPackagesRestoreRule.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SameNuGetPackageVersionsRule.cs" />
     <Compile Include="NuGetPackagesUsageRule.cs">
       <SubType>Code</SubType>
@@ -91,6 +96,13 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="SolutionCop.DefaultRules.v2.ncrunchproject" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

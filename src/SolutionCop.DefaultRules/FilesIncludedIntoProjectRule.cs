@@ -39,27 +39,26 @@ namespace SolutionCop.DefaultRules
             }
             var config = new FilesIncludedIntoProjectRuleConfig();
             config.FilePatternsToProcess.AddRange(xmlRuleConfigs.Elements("FileName").Select(x => x.Value.Trim()));
-            if (config.FilePatternsToProcess.Any())
-                foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
-                {
-                    var xmlProject = xmlException.Element("Project");
-                    var xmlFile = xmlException.Element("FileName");
-                    if (xmlProject == null && xmlFile == null)
-                    {
-                        errors.Add(string.Format("Bad configuration for rule {0}: <Project> or <FileName> element is missing in exceptions list.", Id));
-                    }
-                    else if (xmlProject != null)
-                    {
-                        config.ProjectSpecificFilePatternExceptions.Add(xmlProject.Value.Trim(), xmlException.Elements("FileName").Select(x => x.Value.Trim()).ToArray());
-                    }
-                    else
-                    {
-                        config.GlobalFilePatternExceptions.AddRange(xmlException.Elements("FileName").Select(x => x.Value.Trim()));
-                    }
-                }
-            else
+            if (!config.FilePatternsToProcess.Any())
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: No file names to process.", Id));
+            }
+            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
+            {
+                var xmlProject = xmlException.Element("Project");
+                var xmlFile = xmlException.Element("FileName");
+                if (xmlProject == null && xmlFile == null)
+                {
+                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> or <FileName> element is missing in exceptions list.", Id));
+                }
+                else if (xmlProject != null)
+                {
+                    config.ProjectSpecificFilePatternExceptions.Add(xmlProject.Value.Trim(), xmlException.Elements("FileName").Select(x => x.Value.Trim()).ToArray());
+                }
+                else
+                {
+                    config.GlobalFilePatternExceptions.AddRange(xmlException.Elements("FileName").Select(x => x.Value.Trim()));
+                }
             }
             return config;
         }

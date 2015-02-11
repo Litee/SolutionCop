@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using SolutionCop.Core;
+using SolutionCop.DefaultRules.Properties;
 
 namespace SolutionCop.DefaultRules
 {
@@ -34,7 +35,7 @@ namespace SolutionCop.DefaultRules
             var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "MinimalValue").ToArray();
             if (unknownElements.Any())
             {
-                errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
+                errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format(Resources.UnknownElements, string.Join(",", unknownElements))));
             }
             var xmlMinimalValue = xmlRuleConfigs.Element("MinimalValue");
             int requiredWarningLevel = 4;
@@ -44,7 +45,7 @@ namespace SolutionCop.DefaultRules
             }
             else if (!Int32.TryParse((string)xmlMinimalValue, out requiredWarningLevel))
             {
-                errors.Add(string.Format("Bad configuration for rule {0}: <MinimalValue> element must contain an integer.", Id));
+                errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("<MinimalValue> element must contain an integer.")));
             }
             var exceptions = new Dictionary<string, int>();
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
