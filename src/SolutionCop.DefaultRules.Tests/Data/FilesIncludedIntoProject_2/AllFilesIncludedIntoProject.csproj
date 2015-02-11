@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dir\My.File%271.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

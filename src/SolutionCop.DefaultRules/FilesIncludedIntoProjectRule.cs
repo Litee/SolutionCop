@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Xml.Linq;
 
 namespace SolutionCop.DefaultRules
@@ -93,7 +95,7 @@ namespace SolutionCop.DefaultRules
                     {
                         var fileName = Path.GetFileName(filePath);
                         // TODO Make more precise
-                        var xmlHintPaths = xmlProject.Descendants(Namespace + "Compile").Where(x => x.Attribute("Include").Value.Contains(fileName));
+                        var xmlHintPaths = xmlProject.Descendants(Namespace + "Compile").Where(x => HttpUtility.UrlDecode(x.Attribute("Include").Value).Contains(fileName));
                         if (!xmlHintPaths.Any())
                         {
                             // TODO Yak!
