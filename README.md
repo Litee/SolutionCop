@@ -33,9 +33,6 @@ NuGet.exe Install SolutionCop -Prerelease
 * Tool is using .NET 4.0
 
 ## TODO (rules in priority order)
-* Forbid pre-release versions of packages (extension of NuGetPackageVersions rules)
-* Unapproved build configurations
-* Missing build configurations
 * Binary within NuGet package is referenced directly without proper reference in packages.config
 * Check for "Copy Local" used
 * Assembly and root namespace should have same name
@@ -45,12 +42,9 @@ NuGet.exe Install SolutionCop -Prerelease
 * Check VS solution version
 
 ## TODO (other)
-* Provide NuGet commands in log for upgrading to the lowest version
 * Option to fail on missing sections instead of creating them
 * Provide links to rule details in output
 * Treat each rule as a separate test suite for TeamCity (not sure whether it will work better than current plain list)
 * Allow to search custom rules in other folders
-* Support build configurations as exception
 * Move error messages to resources
 * XSD for config
-* MSBuild integration
