@@ -1,5 +1,0 @@
-﻿<TreatStyleCopWarningsAsErrors enabled="false">
-  <Exception>
-    <Project>ProjectToExcludeFromCheck.csproj</Project>
-  </Exception>
-</TreatStyleCopWarningsAsErrors>

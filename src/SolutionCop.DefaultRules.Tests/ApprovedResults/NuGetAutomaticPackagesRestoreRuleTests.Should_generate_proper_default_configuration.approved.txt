@@ -1,5 +1,0 @@
-﻿<NuGetAutomaticPackagesRestore enabled="false">
-  <Exception>
-    <Project>PUT PROJECT TO IGNORE HERE (e.g. FakeProject.csproj)</Project>
-  </Exception>
-</NuGetAutomaticPackagesRestore>

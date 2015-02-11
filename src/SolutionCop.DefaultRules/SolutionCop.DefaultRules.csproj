@@ -47,43 +47,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilesIncludedIntoProjectRule.cs">
+    <Compile Include="Basic\FilesIncludedIntoProjectRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NuGetAutomaticPackagesRestoreRule.cs" />
+    <Compile Include="NuGet\NuGetAutomaticPackagesRestoreRule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SameNuGetPackageVersionsRule.cs" />
-    <Compile Include="NuGetPackagesUsageRule.cs">
+    <Compile Include="NuGet\SameNuGetPackageVersionsRule.cs" />
+    <Compile Include="NuGet\NuGetPackagesUsageRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NuGetPackageVersionsRule.cs">
+    <Compile Include="NuGet\NuGetPackageVersionsRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ReferenceNuGetPackagesOnlyRule.cs">
+    <Compile Include="NuGet\ReferenceNuGetPackagesOnlyRule.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ProjectRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StyleCopEnabledRule.cs">
+    <Compile Include="StyleCop\StyleCopEnabledRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SuppressWarningsRule.cs">
+    <Compile Include="Basic\SuppressWarningsRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TargetFrameworkVersionRule.cs">
+    <Compile Include="Basic\TargetFrameworkVersionRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TreatStyleCopWarningsAsErrorsRule.cs">
+    <Compile Include="StyleCop\TreatStyleCopWarningsAsErrorsRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TreatWarningsAsErrorsRule.cs">
+    <Compile Include="Basic\TreatWarningsAsErrorsRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WarningLevelRule.cs">
+    <Compile Include="Basic\WarningLevelRule.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

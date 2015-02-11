@@ -1,5 +1,0 @@
-﻿<NuGetPackageVersions enabled="false">
-  <Package id="first-package-id" version="1.0.0" />
-  <Package id="second-package-id" version="[2.0.3]" />
-  <Package id="third-package-id" version="[1.5.0, 2.0.0)" />
-</NuGetPackageVersions>
