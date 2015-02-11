@@ -33,7 +33,6 @@ NuGet.exe Install SolutionCop -Prerelease
 * Tool is using .NET 4.0
 
 ## TODO (rules in priority order)
-* No duplicate id in packages.config
 * Forbid pre-release versions of packages (should be added to NuGetPackageVersions rule)
 * Unapproved build configurations
 * Binary within NuGet package is referenced directly without proper reference in packages.config
