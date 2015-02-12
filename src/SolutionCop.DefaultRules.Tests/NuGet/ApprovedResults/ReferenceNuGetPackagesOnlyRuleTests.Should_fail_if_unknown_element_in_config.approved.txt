@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule ReferenceNuGetPackagesOnly: Unknown element <Dummy>.
+﻿Errors[0] = Bad configuration for rule ReferenceNuGetPackagesOnly: Unknown entry within <ReferenceNuGetPackagesOnly>: <Dummy>. Allowed entries: <Exception>.

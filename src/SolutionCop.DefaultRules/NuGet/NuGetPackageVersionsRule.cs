@@ -32,7 +32,7 @@ namespace SolutionCop.DefaultRules.NuGet
 
         protected override Tuple<List<XElement>, string[]> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "Package");
+            ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, "Exception", "Package");
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");

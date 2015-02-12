@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule SameNuGetPackageVersions: Unknown element <Dummy>.
+﻿Errors[0] = Bad configuration for rule SameNuGetPackageVersions: Unknown entry within <SameNuGetPackageVersions>: <Dummy>. Allowed entries: <Exception>.

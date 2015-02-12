@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule TreatStyleCopWarningsAsErrors: Unknown element <Dummy>.
+﻿Errors[0] = Bad configuration for rule TreatStyleCopWarningsAsErrors: Unknown entry within <TreatStyleCopWarningsAsErrors>: <Dummy>. Allowed entries: <Exception>.

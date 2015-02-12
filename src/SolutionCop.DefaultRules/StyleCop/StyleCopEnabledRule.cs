@@ -29,7 +29,7 @@ namespace SolutionCop.DefaultRules.StyleCop
 
         protected override string[] ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception");
+            ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, "Exception");
             var badExceptionConfigs = xmlRuleConfigs.Elements("Exception")
                 .Select(x => x.Element("Project"))
                 .Where(x => x == null)

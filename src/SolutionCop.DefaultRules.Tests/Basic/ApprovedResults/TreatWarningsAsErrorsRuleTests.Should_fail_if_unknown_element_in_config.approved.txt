@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule TreatWarningsAsErrors: Unknown element <Dummy>.
+﻿Errors[0] = Bad configuration for rule TreatWarningsAsErrors: Unknown entry within <TreatWarningsAsErrors>: <Dummy>. Allowed entries: <Exception>, <Warning>, <AllWarnings>.

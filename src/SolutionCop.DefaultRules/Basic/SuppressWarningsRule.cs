@@ -32,7 +32,7 @@ namespace SolutionCop.DefaultRules.Basic
 
         protected override Tuple<string[], IDictionary<string, string[]>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "Warning");
+            ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, "Exception", "Warning");
             var warningsAllowedToSuppress = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).ToArray();
             var exceptions = new Dictionary<string, string[]>();
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))

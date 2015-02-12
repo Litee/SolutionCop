@@ -33,7 +33,7 @@ namespace SolutionCop.DefaultRules.Basic
 
         protected override FilesIncludedIntoProjectRuleConfig ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "FileName");
+            ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, "Exception", "FileName");
 
             var config = new FilesIncludedIntoProjectRuleConfig();
             config.FilePatternsToProcess.AddRange(xmlRuleConfigs.Elements("FileName").Select(x => x.Value.Trim()));

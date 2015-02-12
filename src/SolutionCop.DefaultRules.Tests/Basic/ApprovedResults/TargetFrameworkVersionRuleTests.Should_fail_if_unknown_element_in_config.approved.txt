@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule TargetFrameworkVersion: Unknown element <Dummy>.
+﻿Errors[0] = Bad configuration for rule TargetFrameworkVersion: Unknown entry within <TargetFrameworkVersion>: <Dummy>. Allowed entries: <Exception>, <FrameworkVersion>.

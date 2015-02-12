@@ -34,7 +34,7 @@ namespace SolutionCop.DefaultRules.Basic
 
         protected override Tuple<string[], bool, IDictionary<string, string[]>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "Warning", "AllWarnings");
+            ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, "Exception", "Warning", "AllWarnings");
             var exceptions = new Dictionary<string, string[]>();
             var warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
             var allWarningsMustBeTreatedAsErrors = !warningsThatMustBeTreatedAsErrors.Any() && xmlRuleConfigs.Element("AllWarnings") != null;
@@ -60,10 +60,11 @@ namespace SolutionCop.DefaultRules.Basic
             var projectFileName = Path.GetFileName(projectFilePath);
             bool allWarningsMustBeTreatedAsErrors;
             var warningsThatMustBeTreatedAsErrors = ruleConfiguration.Item1;
-            if (exceptions.ContainsKey(projectFileName))
+            string[] value;
+            if (exceptions.TryGetValue(projectFileName, out value))
             {
                 allWarningsMustBeTreatedAsErrors = !exceptions.Any();
-                warningsThatMustBeTreatedAsErrors = warningsThatMustBeTreatedAsErrors.Except(exceptions[projectFileName]).ToArray();
+                warningsThatMustBeTreatedAsErrors = warningsThatMustBeTreatedAsErrors.Except(value).ToArray();
                 Console.Out.WriteLine("DEBUG: Project has exceptional warnings {0}: {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
             }
             else

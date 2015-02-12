@@ -32,7 +32,7 @@ namespace SolutionCop.DefaultRules.Basic
 
         protected override Tuple<string[], IDictionary<string, string[]>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "FrameworkVersion");
+            ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, "Exception", "FrameworkVersion");
             var targetFrameworkVersions = xmlRuleConfigs.Elements("FrameworkVersion").Select(x => x.Value.Trim()).ToArray();
             if (!targetFrameworkVersions.Any())
             {

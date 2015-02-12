@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule FilesIncludedIntoProject: Unknown element(s) <Dummy>,<Dummy2>.
+﻿Errors[0] = Bad configuration for rule FilesIncludedIntoProject: Unknown entries within <FilesIncludedIntoProject>: <Dummy>, <Dummy2>. Allowed entries: <Exception>, <FileName>.
