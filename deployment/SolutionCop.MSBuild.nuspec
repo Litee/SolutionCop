@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SolutionCop.MSBuild</id>
+    <version>$version$</version>
+    <title>SolutionCop.MSBuild</title>
+    <authors>Andrey Lipatkin</authors>
+    <owners>litee</owners>
+    <copyright>2015 Andrey Lipatkin</copyright>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/Litee/SolutionCop</projectUrl>
+    <!--<iconUrl></iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Tool for static analysis of Visual Studio solutions and projects.</description>
+    <language>en-US</language>
+    <tags>VS, VisualStudio, StyleCop, FxCop</tags>
+    <releaseNotes>https://github.com/Litee/SolutionCop/releases</releaseNotes>
+  </metadata>
+  <files>
+    <file src="..\src\SolutionCop.MSBuild\Bin\Debug\*.dll" target="tools/bin" />
+    <file src="..\src\build\*.Targets" target="build" />
+  </files>
+</package>
