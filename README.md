@@ -33,18 +33,14 @@ NuGet.exe Install SolutionCop -Prerelease
 * Tool is using .NET 4.0
 
 ## TODO (rules in priority order)
-* Binary within NuGet package is referenced directly without proper reference in packages.config
 * Check for "Copy Local" used
-* Assembly and root namespace should have same name
 * Classify project by type (e.g. production, testing) and disallow references between some groups
 * Proper owner in AssemblyInfo (can it be done via FxCop?)
 * Proper copyright date in AssemblyInfo (can it be done via FxCop?)
-* Check VS solution version
 
 ## TODO (other)
 * Option to fail on missing sections instead of creating them
 * Provide links to rule details in output
 * Treat each rule as a separate test suite for TeamCity (not sure whether it will work better than current plain list)
-* Allow to search custom rules in other folders
 * Move error messages to resources
 * XSD for config
