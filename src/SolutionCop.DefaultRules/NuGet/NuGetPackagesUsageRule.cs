@@ -31,11 +31,7 @@ namespace SolutionCop.DefaultRules.NuGet
 
         protected override Tuple<string, string>[] ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception").ToArray();
-            if (unknownElements.Any())
-            {
-                errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
-            }
+            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception");
             var exceptions = new List<Tuple<string, string>>();
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {

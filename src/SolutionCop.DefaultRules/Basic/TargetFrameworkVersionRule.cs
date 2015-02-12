@@ -32,11 +32,7 @@ namespace SolutionCop.DefaultRules.Basic
 
         protected override Tuple<string[], IDictionary<string, string[]>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "FrameworkVersion").ToArray();
-            if (unknownElements.Any())
-            {
-                errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
-            }
+            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "FrameworkVersion");
             var targetFrameworkVersions = xmlRuleConfigs.Elements("FrameworkVersion").Select(x => x.Value.Trim()).ToArray();
             if (!targetFrameworkVersions.Any())
             {

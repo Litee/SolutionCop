@@ -155,6 +155,7 @@ namespace SolutionCop.DefaultRules.Tests.Basic
 <FilesIncludedIntoProject>
   <FileName>*.cs</FileName>
   <Dummy>Some text</Dummy>
+  <Dummy2>Some text</Dummy2>
   <Exception><Project>FileNotIncludedIntoProject.csproj</Project></Exception>
 </FilesIncludedIntoProject>");
             ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject\FileNotIncludedIntoProject.csproj").FullName);

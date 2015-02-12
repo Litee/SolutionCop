@@ -33,11 +33,8 @@ namespace SolutionCop.DefaultRules.Basic
 
         protected override FilesIncludedIntoProjectRuleConfig ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "FileName").ToArray();
-            if (unknownElements.Any())
-            {
-                errors.Add(string.Format("Bad configuration for rule {0}: Unknown element(s) {1} in configuration.", Id, string.Join(",", unknownElements)));
-            }
+            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "FileName");
+
             var config = new FilesIncludedIntoProjectRuleConfig();
             config.FilePatternsToProcess.AddRange(xmlRuleConfigs.Elements("FileName").Select(x => x.Value.Trim()));
             if (!config.FilePatternsToProcess.Any())

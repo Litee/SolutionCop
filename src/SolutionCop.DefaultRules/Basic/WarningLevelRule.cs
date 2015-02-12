@@ -32,11 +32,7 @@ namespace SolutionCop.DefaultRules.Basic
 
         protected override Tuple<int, IDictionary<string, int>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
-            var unknownElements = xmlRuleConfigs.Elements().Select(x => x.Name.LocalName).Where(x => x != "Exception" && x != "MinimalValue").ToArray();
-            if (unknownElements.Any())
-            {
-                errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format(Resources.UnknownElements, string.Join(",", unknownElements))));
-            }
+            ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "MinimalValue");
             var xmlMinimalValue = xmlRuleConfigs.Element("MinimalValue");
             int requiredWarningLevel = 4;
             if (xmlMinimalValue == null)

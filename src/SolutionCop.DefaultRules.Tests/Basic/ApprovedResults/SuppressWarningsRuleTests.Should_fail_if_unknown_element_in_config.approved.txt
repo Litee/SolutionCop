@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule SuppressWarnings: Unknown element(s) Dummy in configuration.
+﻿Errors[0] = Bad configuration for rule SuppressWarnings: Unknown element <Dummy>.

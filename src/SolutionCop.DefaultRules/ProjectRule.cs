@@ -73,24 +73,22 @@ namespace SolutionCop.DefaultRules
             return new ValidationResult(Id, isEnabled, hasErrorsInConfiguration, errors.ToArray());
         }
 
-/*
-        protected void ValidateConfigSectionStructure(XElement xmlConfig, IDictionary<string, string[]> allowedItems, List<string> errors)
+        protected void ValidateConfigSectionElements(XElement xmlConfig, List<string> errors, params string[] supportedElementNames)
         {
-            var unknownFirstLevelElements = xmlConfig.Elements().Select(x => x.Name.LocalName).Where(x => allowedItems.Keys.All(y => y != x)).ToArray();
-            errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("Unknown element(s) {0} in configuration.", string.Join(",", unknownFirstLevelElements))));
-
-            foreach (var xmlFirstLevel in xmlConfig.Elements())
+            var unknownFirstLevelElements = xmlConfig.Elements()
+                .Select(x => x.Name.LocalName)
+                .Where(x => supportedElementNames.All(y => y != x))
+                .Select(x => string.Format("<{0}>", x))
+                .ToArray();
+            if (unknownFirstLevelElements.Count() == 1)
             {
-                var firstLevelElementName = xmlFirstLevel.Name.LocalName;
-                string[] allowedSecondLevelItems;
-                if (allowedItems.TryGetValue(firstLevelElementName, out allowedSecondLevelItems))
-                {
-                    var unknownSecondLevelElements = xmlFirstLevel.Elements().Select(x => x.Name.LocalName).Where(x => allowedSecondLevelItems.All(y => y != x)).ToArray();
-                    errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("Unknown element(s) {0} in configuration.", string.Join(",", unknownSecondLevelElements))));
-                }
+                errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("Unknown element {0}.", string.Join(",", unknownFirstLevelElements))));
+            }
+            else if (unknownFirstLevelElements.Count() > 1)
+            {
+                errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("Unknown element(s) {0}.", string.Join(",", unknownFirstLevelElements))));
             }
         }
-*/
 
         protected abstract IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, T exceptions);
     }
