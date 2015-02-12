@@ -24,6 +24,7 @@
     </Exception>
     <Exception>
       <FileName>My.File.cs</FileName>
+      <FileName>My.File'1.cs</FileName>
     </Exception>
   </FilesIncludedIntoProject>
 </Rules>

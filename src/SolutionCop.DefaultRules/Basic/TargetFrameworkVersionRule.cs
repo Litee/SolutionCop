@@ -57,19 +57,20 @@ namespace SolutionCop.DefaultRules.Basic
 
         protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<string[], IDictionary<string, string[]>> ruleConfiguration)
         {
-            var targetFrameworkVersions = ruleConfiguration.Item1; ;
+            var targetFrameworkVersions = ruleConfiguration.Item1;
             var exceptions = ruleConfiguration.Item2;
             var projectFileName = Path.GetFileName(projectFilePath);
-            if (exceptions.ContainsKey(projectFileName))
+            string[] value;
+            if (exceptions.TryGetValue(projectFileName, out value))
             {
-                if (exceptions[projectFileName] == null || !exceptions[projectFileName].Any())
+                if (value == null || !value.Any())
                 {
                     Console.Out.WriteLine("DEBUG: Project can target any framework version: {0}", projectFileName);
                     yield break;
                 }
                 else
                 {
-                    targetFrameworkVersions = targetFrameworkVersions.Concat(exceptions[projectFileName]).ToArray();
+                    targetFrameworkVersions = targetFrameworkVersions.Concat(value).ToArray();
                 }
             }
             var invalidFrameworkVersions = xmlProject.Descendants(Namespace + "TargetFrameworkVersion").Select(x => x.Value.Substring(1)).Where(x => targetFrameworkVersions.All(y => y != x)).ToArray();

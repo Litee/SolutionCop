@@ -34,7 +34,7 @@ namespace SolutionCop.DefaultRules.NuGet
         protected override Tuple<string, string>[] ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception");
-            var _exceptions = new List<Tuple<string, string>>();
+            var exceptions = new List<Tuple<string, string>>();
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
@@ -45,10 +45,10 @@ namespace SolutionCop.DefaultRules.NuGet
                 }
                 else
                 {
-                    _exceptions.Add(new Tuple<string, string>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlPackage == null ? null : xmlPackage.Value.Trim()));
+                    exceptions.Add(new Tuple<string, string>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlPackage == null ? null : xmlPackage.Value.Trim()));
                 }
             }
-            return _exceptions.ToArray();
+            return exceptions.ToArray();
         }
 
         protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<string, string>[] exceptions)

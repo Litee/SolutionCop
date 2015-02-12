@@ -55,10 +55,9 @@ namespace SolutionCop.DefaultRules.Basic
         {
             var exceptions = ruleConfiguration.Item2;
             var projectFileName = Path.GetFileName(projectFilePath);
-            IEnumerable<string> warningsAllowedToSuppress;
-            if (exceptions.ContainsKey(projectFileName))
+            string[] warningsAllowedToSuppress;
+            if (exceptions.TryGetValue(projectFileName, out warningsAllowedToSuppress))
             {
-                warningsAllowedToSuppress = exceptions[projectFileName];
                 if (!warningsAllowedToSuppress.Any())
                 {
                     Console.Out.WriteLine("DEBUG: Project can suppress any warnings: {0}", projectFileName);
@@ -71,7 +70,7 @@ namespace SolutionCop.DefaultRules.Basic
                 warningsAllowedToSuppress = ruleConfiguration.Item1;
                 Console.Out.WriteLine("DEBUG: Project has standard warnings {0}: {1}", string.Join(", ", warningsAllowedToSuppress), projectFileName);
             }
-            var xmlPropertyGlobalGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null);
+            var xmlPropertyGlobalGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null).ToArray();
             var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
             foreach (var xmlPropertyGroupWithCondition in xmlPropertyGroupsWithConditions)
             {
@@ -79,7 +78,7 @@ namespace SolutionCop.DefaultRules.Basic
                 if (xmlNoWarn != null)
                 {
                     var suppressedWarnings = xmlNoWarn.Value.Split(',').Select(x => x.Trim());
-                    var warningsNotAllowedToSuppress = suppressedWarnings.Except(warningsAllowedToSuppress);
+                    var warningsNotAllowedToSuppress = suppressedWarnings.Except(warningsAllowedToSuppress).ToArray();
                     if (warningsNotAllowedToSuppress.Count() == 1)
                     {
                         yield return string.Format("Unapproved warning {0} is suppressed in project {1}", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath));

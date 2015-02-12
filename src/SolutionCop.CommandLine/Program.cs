@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using CommandLine;
 using SolutionCop.Core;
 
@@ -47,8 +46,15 @@ namespace SolutionCop.CommandLine
             Console.Out.WriteLine("INFO: Starting analysis...");
             foreach (var rule in rules)
             {
+
+                var xmlRuleConfigs = ruleConfigsMap[rule.Id];
+                if (xmlRuleConfigs == null)
+                {
+                    errors.Add(string.Format("Configuration section is not found for rule {0}", rule.Id));
+                    continue;
+                }
                 Console.Out.WriteLine("INFO: Analyzing projects using rule {0}", rule.Id);
-                var validationResult = rule.ValidateAllProjects(ruleConfigsMap[rule.Id], solutionInfo.ProjectFilePaths.ToArray());
+                var validationResult = rule.ValidateAllProjects(xmlRuleConfigs, solutionInfo.ProjectFilePaths.ToArray());
                 errors.AddRange(validationResult.Errors);
                 validationResults.Add(validationResult);
             }
@@ -71,7 +77,6 @@ namespace SolutionCop.CommandLine
                 Console.Out.WriteLine("INFO: No errors found!");
                 if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
                 {
-                    // TODO
                     Console.Out.WriteLine("##teamcity[buildStatus status='SUCCESS' text='PASSED - {0}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)));
                 }
             }

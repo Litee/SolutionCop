@@ -43,7 +43,7 @@ namespace SolutionCop.DefaultRules.NuGet
             }
             var exceptions = xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
             var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName == "Package");
-            var _xmlPackageRules = new List<XElement>();
+            var packageRules = new List<XElement>();
             foreach (var xmlPackageRule in xmlPackageRules)
             {
                 var packageRuleId = xmlPackageRule.Attribute("id").Value.Trim();
@@ -55,10 +55,10 @@ namespace SolutionCop.DefaultRules.NuGet
                 }
                 else
                 {
-                    _xmlPackageRules.Add(xmlPackageRule);
+                    packageRules.Add(xmlPackageRule);
                 }
             }
-            return Tuple.Create(_xmlPackageRules, exceptions);
+            return Tuple.Create(packageRules, exceptions);
         }
 
         protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<List<XElement>, string[]> ruleConfiguration)

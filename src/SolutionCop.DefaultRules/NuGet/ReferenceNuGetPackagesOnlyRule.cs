@@ -41,10 +41,10 @@ namespace SolutionCop.DefaultRules.NuGet
             return xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
         }
 
-        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, string[] _exceptions)
+        protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, string[] exceptions)
         {
             var projectFileName = Path.GetFileName(projectFilePath);
-            if (_exceptions.Contains(projectFileName))
+            if (exceptions.Contains(projectFileName))
             {
                 Console.Out.WriteLine("DEBUG: Skipping project with disabled StyleCop as an exception: {0}", Path.GetFileName(projectFilePath));
             }

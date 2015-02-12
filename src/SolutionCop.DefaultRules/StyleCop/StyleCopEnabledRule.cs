@@ -30,14 +30,11 @@ namespace SolutionCop.DefaultRules.StyleCop
         protected override string[] ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception");
-            foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
-            {
-                var xmlProject = xmlException.Element("Project");
-                if (xmlProject == null)
-                {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
-                }
-            }
+            var badExceptionConfigs = xmlRuleConfigs.Elements("Exception")
+                .Select(x => x.Element("Project"))
+                .Where(x => x == null)
+                .Select(xmlProject => string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+            errors.AddRange(badExceptionConfigs);
             return xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
         }
 

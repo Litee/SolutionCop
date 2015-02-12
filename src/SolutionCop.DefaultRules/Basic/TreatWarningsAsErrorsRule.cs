@@ -35,9 +35,9 @@ namespace SolutionCop.DefaultRules.Basic
         protected override Tuple<string[], bool, IDictionary<string, string[]>> ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors)
         {
             ValidateConfigSectionElements(xmlRuleConfigs, errors, "Exception", "Warning", "AllWarnings");
-            var _exceptions = new Dictionary<string, string[]>();
-            var _warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            var _allWarningsMustBeTreatedAsErrors = !_warningsThatMustBeTreatedAsErrors.Any() && xmlRuleConfigs.Element("AllWarnings") != null;
+            var exceptions = new Dictionary<string, string[]>();
+            var warningsThatMustBeTreatedAsErrors = xmlRuleConfigs.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            var allWarningsMustBeTreatedAsErrors = !warningsThatMustBeTreatedAsErrors.Any() && xmlRuleConfigs.Element("AllWarnings") != null;
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
@@ -48,10 +48,10 @@ namespace SolutionCop.DefaultRules.Basic
                 else
                 {
                     var warnings = xmlException.Elements("Warning").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x));
-                    _exceptions.Add(xmlProject.Value, warnings.ToArray());
+                    exceptions.Add(xmlProject.Value, warnings.ToArray());
                 }
             }
-            return Tuple.Create<string[], bool, IDictionary<string, string[]>>(_warningsThatMustBeTreatedAsErrors, _allWarningsMustBeTreatedAsErrors, _exceptions);
+            return Tuple.Create<string[], bool, IDictionary<string, string[]>>(warningsThatMustBeTreatedAsErrors, allWarningsMustBeTreatedAsErrors, exceptions);
         }
 
         protected override IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, Tuple<string[], bool, IDictionary<string, string[]>> ruleConfiguration)
@@ -71,7 +71,7 @@ namespace SolutionCop.DefaultRules.Basic
                 allWarningsMustBeTreatedAsErrors = ruleConfiguration.Item2;
                 Console.Out.WriteLine("DEBUG: Project has standard warnings {0}: {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), projectFileName);
             }
-            var xmlPropertyGlobalGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null);
+            var xmlPropertyGlobalGroups = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") == null).ToArray();
             var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
             foreach (var xmlPropertyGroupWithCondition in xmlPropertyGroupsWithConditions)
             {
@@ -90,7 +90,7 @@ namespace SolutionCop.DefaultRules.Basic
                 else
                 {
                     var xmlWarningsAsErrors = xmlPropertyGroupWithCondition.Descendants(Namespace + "WarningsAsErrors").Concat(xmlPropertyGlobalGroups.Descendants(Namespace + "WarningsAsErrors")).FirstOrDefault();
-                    var warningsTreatedAsErrorsInProject = xmlWarningsAsErrors == null ? new string[0] : xmlWarningsAsErrors.Value.Split(',').Select(x => x.Trim());
+                    var warningsTreatedAsErrorsInProject = xmlWarningsAsErrors == null ? new string[0] : xmlWarningsAsErrors.Value.Split(',').Select(x => x.Trim()).ToArray();
 
                     Console.Out.WriteLine("{0} vs {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), string.Join(", ", warningsTreatedAsErrorsInProject));
 

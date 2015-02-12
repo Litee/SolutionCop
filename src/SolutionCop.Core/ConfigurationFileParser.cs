@@ -94,7 +94,7 @@ namespace SolutionCop.Core
             {
                 errors.Add("Cannot parse rules configuration: " + e.Message);
             }
-            return null;
+            return new Dictionary<string, XElement>();
         }
     }
 }

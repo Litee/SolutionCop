@@ -13,7 +13,7 @@ namespace SolutionCop.DefaultRules.Tests
     [UseApprovalSubdirectory("ApprovedResults")]
     public abstract class ProjectRuleTest : IDisposable
     {
-        private IProjectRule _instance;
+        private readonly IProjectRule _instance;
 
         protected ProjectRuleTest(IProjectRule instance)
         {

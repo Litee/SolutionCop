@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using CommandLine.Text;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace SolutionCop.CommandLine
 {
@@ -15,6 +16,7 @@ namespace SolutionCop.CommandLine
         public BuildServer BuildServerType { get; set; }
 
         [HelpOption]
+        // ReSharper disable once UnusedMember.Global
         public string GetUsage()
         {
             return HelpText.AutoBuild(this);
