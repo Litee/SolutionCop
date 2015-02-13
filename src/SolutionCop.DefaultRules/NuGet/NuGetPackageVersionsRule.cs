@@ -25,7 +25,7 @@ namespace SolutionCop.DefaultRules.NuGet
                 element.SetAttributeValue("enabled", "false");
                 element.Add(new XElement("Package", new XAttribute("id", "first-package-id"), new XAttribute("version", "1.0.0")));
                 element.Add(new XElement("Package", new XAttribute("id", "second-package-id"), new XAttribute("version", "[2.0.3]")));
-                element.Add(new XElement("Package", new XAttribute("id", "third-package-id"), new XAttribute("version", "[1.5.0, 2.0.0)")));
+                element.Add(new XElement("Package", new XAttribute("id", "third-package-id"), new XAttribute("version", "[1.5.0, 2.0.0)"), new XAttribute("prerelease", "false")));
                 return element;
             }
         }
@@ -85,15 +85,21 @@ namespace SolutionCop.DefaultRules.NuGet
                         var xmlPackageRule = xmlPackageRules.FirstOrDefault(x => x.Attribute("id").Value == packageId);
                         if (xmlPackageRule == null)
                         {
-                            yield return string.Format("Unknown package {0} with version {1} in project {2}", packageId, packageVersion, projectFileName);
+                            yield return string.Format("Unknown package '{0}' with version {1} in project {2}", packageId, packageVersion, projectFileName);
                         }
                         else
                         {
                             var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
+                            var noPrereleaseVersions = ((string)xmlPackageRule.Attribute("prerelease") ?? "true").Trim() == "false";
                             IVersionSpec versionSpec = VersionUtility.ParseVersionSpec(packageRuleVersion);
-                            if (!versionSpec.Satisfies(SemanticVersion.Parse(packageVersion)))
+                            var usedSemanticVersion = SemanticVersion.Parse(packageVersion);
+                            if (!versionSpec.Satisfies(usedSemanticVersion))
                             {
-                                yield return string.Format("Version {0} for package {1} does not match rule {2} in project {3}", packageVersion, packageId, packageRuleVersion, projectFileName);
+                                yield return string.Format("Version {0} for package '{1}' does not match rule {2} in project {3}", packageVersion, packageId, packageRuleVersion, projectFileName);
+                            }
+                            else if (noPrereleaseVersions && !string.IsNullOrEmpty(usedSemanticVersion.SpecialVersion))
+                            {
+                                yield return string.Format("Version {0} for package '{1}' must be stable in project {2}", packageVersion, packageId, projectFileName);
                             }
                         }
                     }

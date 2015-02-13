@@ -1,0 +1,1 @@
+﻿Errors[0] = Version 1.9.2-alpha for package 'xunit' must be stable in project UsesTwoPackages.csproj

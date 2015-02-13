@@ -28,6 +28,28 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         }
 
         [Fact]
+        public void Should_pass_if_all_used_packages_match_range_rules()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='[0.0.0, 9.9.9)'></Package>
+  <Package id='xunit' version='[0.0.0, 9.9.9)'></Package>
+</NuGetPackageVersions>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
+        public void Should_fail_if_prerelease_is_not_allowed()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='[0.0.0, 9.9.9)'></Package>
+  <Package id='xunit' version='[0.0.0, 9.9.9)' prerelease='false'></Package>
+</NuGetPackageVersions>");
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_pass_if_no_packages_used()
         {
             var xmlConfig = XElement.Parse(@"
@@ -44,7 +66,7 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
             var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
   <Package id='ApprovalTests' version='[2.0]'></Package>
-  <Package id='xunit' version='[1.9.2]'></Package>
+  <Package id='xunit' version='[1.9.2-alpha]'></Package>
 </NuGetPackageVersions>");
             ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
@@ -80,7 +102,7 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         {
             var xmlConfig = XElement.Parse(@"
 <NuGetPackageVersions>
-  <Package id='xunit' version='[1.9.2]'></Package>
+  <Package id='xunit' version='[1.9.2-alpha]'></Package>
 </NuGetPackageVersions>");
             ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
