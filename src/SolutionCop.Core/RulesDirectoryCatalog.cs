@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel.Composition.Hosting;
-using System.Linq;
-
-namespace SolutionCop.Core
+﻿namespace SolutionCop.Core
 {
+    using System;
+    using System.ComponentModel.Composition.Hosting;
+    using System.Linq;
+
     public class RulesDirectoryCatalog
     {
         public IProjectRule[] LoadRules()

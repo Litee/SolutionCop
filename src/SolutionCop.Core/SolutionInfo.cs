@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace SolutionCop.Core
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class SolutionInfo
     {
         private readonly string[] _projectFilePaths;

@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using SolutionCop.Core;
-using SolutionCop.DefaultRules.Properties;
-
-namespace SolutionCop.DefaultRules.Basic
+﻿namespace SolutionCop.DefaultRules.Basic
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Linq;
+    using Core;
+    using Properties;
+
     [Export(typeof(IProjectRule))]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "OK here")]
     public class WarningLevelRule : ProjectRule<Tuple<int, IDictionary<string, int>>>
     {
         public override string Id

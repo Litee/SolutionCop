@@ -1,14 +1,14 @@
-using System;
-using System.Xml.Linq;
-using ApprovalTests;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
-using Shouldly;
-using SolutionCop.Core;
-using Xunit;
-
 namespace SolutionCop.DefaultRules.Tests
 {
+    using System;
+    using System.Xml.Linq;
+    using ApprovalTests;
+    using ApprovalTests.Namers;
+    using ApprovalTests.Reporters;
+    using Core;
+    using Shouldly;
+    using Xunit;
+
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public abstract class ProjectRuleTest : IDisposable
@@ -18,6 +18,12 @@ namespace SolutionCop.DefaultRules.Tests
         protected ProjectRuleTest(IProjectRule instance)
         {
             _instance = instance;
+        }
+
+        public void Dispose()
+        {
+            // Setting to null to switch back to standard file naming for approvals.
+            NamerFactory.AdditionalInformation = null;
         }
 
         [Fact]
@@ -59,12 +65,6 @@ namespace SolutionCop.DefaultRules.Tests
             validationResult.HasErrorsInConfiguration.ShouldBe(true);
             validationResult.Errors.ShouldNotBeEmpty();
             Approvals.VerifyAll(validationResult.Errors, "Errors");
-        }
-
-        public void Dispose()
-        {
-            // Setting to null to switch back to standard file naming for approvals.
-            NamerFactory.AdditionalInformation = null;
         }
     }
 }

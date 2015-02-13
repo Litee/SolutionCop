@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
-using ApprovalTests;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
-using Shouldly;
-using Xunit;
-using Xunit.Extensions;
-
-namespace SolutionCop.Core.Tests
+﻿namespace SolutionCop.Core.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Xml.Linq;
+    using ApprovalTests;
+    using ApprovalTests.Namers;
+    using ApprovalTests.Reporters;
+    using Shouldly;
+    using Xunit;
+    using Xunit.Extensions;
+
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class ConfigurationFileParserTests
@@ -20,7 +20,7 @@ namespace SolutionCop.Core.Tests
         public void Should_pass_for_empty_config()
         {
             const string xmlRules = @"<Rules></Rules>";
-            var newConfigFileContent = "";
+            var newConfigFileContent = string.Empty;
             Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
             {
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
@@ -40,7 +40,7 @@ namespace SolutionCop.Core.Tests
 <Rules>
   <Dummy />
 </Rules>";
-            var newConfigFileContent = "";
+            var newConfigFileContent = string.Empty;
             Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
             {
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
@@ -61,7 +61,7 @@ namespace SolutionCop.Core.Tests
   <Dummy />
 </Rules>
 ";
-            var newConfigFileContent = "";
+            var newConfigFileContent = string.Empty;
             Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
             {
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
@@ -81,7 +81,7 @@ namespace SolutionCop.Core.Tests
   <Dummy />
 </SomeRoot>
 ";
-            var newConfigFileContent = "";
+            var newConfigFileContent = string.Empty;
             Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
             {
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);
@@ -101,7 +101,7 @@ namespace SolutionCop.Core.Tests
   <BadElement>
 </Rules>
 ";
-            var newConfigFileContent = "";
+            var newConfigFileContent = string.Empty;
             Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
             {
                 newConfigFileContent = Encoding.UTF8.GetString(bytes);

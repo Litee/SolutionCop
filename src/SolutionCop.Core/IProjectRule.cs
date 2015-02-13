@@ -1,7 +1,7 @@
-﻿using System.Xml.Linq;
-
-namespace SolutionCop.Core
+﻿namespace SolutionCop.Core
 {
+    using System.Xml.Linq;
+
     public interface IProjectRule
     {
         string Id { get; }

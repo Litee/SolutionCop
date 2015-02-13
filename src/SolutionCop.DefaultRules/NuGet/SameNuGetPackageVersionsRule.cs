@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using SolutionCop.Core;
-
-namespace SolutionCop.DefaultRules.NuGet
+﻿namespace SolutionCop.DefaultRules.NuGet
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Linq;
+    using Core;
+
     [Export(typeof(IProjectRule))]
     public class SameNuGetPackageVersionsRule : ProjectRule<Tuple<string, string>[]>
     {
@@ -48,6 +48,7 @@ namespace SolutionCop.DefaultRules.NuGet
                     exceptions.Add(new Tuple<string, string>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlPackage == null ? null : xmlPackage.Value.Trim()));
                 }
             }
+
             return exceptions.ToArray();
         }
 
@@ -62,6 +63,7 @@ namespace SolutionCop.DefaultRules.NuGet
                 {
                     var packageId = xmlUsedPackage.Attribute("id").Value;
                     var packageVersion = xmlUsedPackage.Attribute("version").Value;
+
                     // TODO Simplify
                     if (exceptions.Contains(new Tuple<string, string>(projectFileName, null)) || exceptions.Contains(new Tuple<string, string>(null, packageId)) || exceptions.Contains(new Tuple<string, string>(projectFileName, packageId)))
                     {
@@ -82,6 +84,7 @@ namespace SolutionCop.DefaultRules.NuGet
                         {
                             _usedIds[packageId] = new HashSet<string>();
                         }
+
                         _usedIds[packageId].Add(packageVersion);
                     }
                 }

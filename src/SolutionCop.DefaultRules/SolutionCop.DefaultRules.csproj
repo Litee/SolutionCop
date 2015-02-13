@@ -52,6 +52,7 @@
     <Compile Include="Basic\FilesIncludedIntoProjectRule.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Basic\FilesIncludedIntoProjectRuleConfig.cs" />
     <Compile Include="NuGet\NuGetAutomaticPackagesRestoreRule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

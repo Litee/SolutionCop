@@ -1,12 +1,12 @@
-using System.IO;
-using System.Xml.Linq;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
-using SolutionCop.DefaultRules.NuGet;
-using Xunit;
-
 namespace SolutionCop.DefaultRules.Tests.NuGet
 {
+    using System.IO;
+    using System.Xml.Linq;
+    using ApprovalTests.Namers;
+    using ApprovalTests.Reporters;
+    using DefaultRules.NuGet;
+    using Xunit;
+
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class SameNuGetPackageVersionsRuleTests : ProjectRuleTest
@@ -20,7 +20,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         public void Should_pass_if_same_package_versions_used_in_project()
         {
             var xmlConfig = XElement.Parse("<SameNuGetPackageVersions/>");
-            ShouldPassNormally(xmlConfig,
+            ShouldPassNormally(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName);
         }
@@ -29,7 +30,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         public void Should_fail_if_projects_use_different_versions()
         {
             var xmlConfig = XElement.Parse("<SameNuGetPackageVersions/>");
-            ShouldFailNormally(xmlConfig,
+            ShouldFailNormally(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
         }
@@ -38,7 +40,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         public void Should_fail_if_projects_has_duplicate_versions()
         {
             var xmlConfig = XElement.Parse("<SameNuGetPackageVersions/>");
-            ShouldFailNormally(xmlConfig,
+            ShouldFailNormally(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\DuplicateIds\Project.csproj").FullName);
         }
 
@@ -50,7 +53,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
   <Exception><Package>xunit</Package></Exception>
   <Exception><Package>someUnusedDummyPackage</Package></Exception>
 </SameNuGetPackageVersions>");
-            ShouldPassNormally(xmlConfig,
+            ShouldPassNormally(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
         }
@@ -63,7 +67,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
   <Exception><Project>NonExistingProject.csproj</Project></Exception>
   <Exception><Project>Project.csproj</Project></Exception>
 </SameNuGetPackageVersions>");
-            ShouldPassNormally(xmlConfig,
+            ShouldPassNormally(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
         }
@@ -78,7 +83,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
     <Package>someUnusedDummyPackage</Package>
   </Exception>
 </SameNuGetPackageVersions>");
-            ShouldFailNormally(xmlConfig,
+            ShouldFailNormally(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
         }
@@ -93,7 +99,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
     <Package>xunit</Package>
   </Exception>
 </SameNuGetPackageVersions>");
-            ShouldFailNormally(xmlConfig,
+            ShouldFailNormally(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
         }
@@ -106,7 +113,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
   <Exception>Some Text</Exception>
   <Exception><Package>someUnusedDummyPackage</Package></Exception>
 </SameNuGetPackageVersions>");
-            ShouldFailOnConfiguration(xmlConfig,
+            ShouldFailOnConfiguration(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName);
         }
@@ -119,7 +127,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
   <Dummy>Some Text</Dummy>
   <Exception><Package>someUnusedDummyPackage</Package></Exception>
 </SameNuGetPackageVersions>");
-            ShouldFailOnConfiguration(xmlConfig,
+            ShouldFailOnConfiguration(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName);
         }
@@ -128,7 +137,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         public void Should_pass_if_rule_is_disabled()
         {
             var xmlConfig = XElement.Parse("<SameNuGetPackageVersions enabled=\"false\"/>");
-            ShouldPassAsDisabled(xmlConfig,
+            ShouldPassAsDisabled(
+                xmlConfig,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
                 new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
         }

@@ -1,10 +1,16 @@
-﻿using CommandLine;
-using CommandLine.Text;
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
-namespace SolutionCop.CommandLine
+﻿namespace SolutionCop.CommandLine
 {
-    class CommandLineParameters
+    using global::CommandLine;
+    using global::CommandLine.Text;
+
+    internal enum BuildServer
+    {
+        None,
+        TeamCity
+    }
+
+    // ReSharper disable UnusedAutoPropertyAccessor.Global
+    internal class CommandLineParameters
     {
         [Option('s', "solution", Required = true, HelpText = "Path to the Visual Studio solution file to analyze.")]
         public string PathToSolution { get; set; }
@@ -21,11 +27,5 @@ namespace SolutionCop.CommandLine
         {
             return HelpText.AutoBuild(this);
         }
-    }
-
-    internal enum BuildServer
-    {
-        None,
-        TeamCity
     }
 }

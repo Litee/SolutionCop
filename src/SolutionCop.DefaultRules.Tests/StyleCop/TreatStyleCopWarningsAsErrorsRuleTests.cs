@@ -1,13 +1,13 @@
-﻿using System.IO;
-using System.Xml.Linq;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
-using SolutionCop.DefaultRules.StyleCop;
-using Xunit;
-using Xunit.Extensions;
-
-namespace SolutionCop.DefaultRules.Tests.StyleCop
+﻿namespace SolutionCop.DefaultRules.Tests.StyleCop
 {
+    using System.IO;
+    using System.Xml.Linq;
+    using ApprovalTests.Namers;
+    using ApprovalTests.Reporters;
+    using DefaultRules.StyleCop;
+    using Xunit;
+    using Xunit.Extensions;
+
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class TreatStyleCopWarningsAsErrorsRuleTests : ProjectRuleTest

@@ -1,12 +1,12 @@
-﻿using System.IO;
-using System.Xml.Linq;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
-using SolutionCop.DefaultRules.NuGet;
-using Xunit;
-
-namespace SolutionCop.DefaultRules.Tests.NuGet
+﻿namespace SolutionCop.DefaultRules.Tests.NuGet
 {
+    using System.IO;
+    using System.Xml.Linq;
+    using ApprovalTests.Namers;
+    using ApprovalTests.Reporters;
+    using DefaultRules.NuGet;
+    using Xunit;
+
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class ReferenceNuGetPackagesOnlyRuleTests : ProjectRuleTest

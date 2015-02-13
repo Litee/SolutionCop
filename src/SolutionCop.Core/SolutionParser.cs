@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-
-namespace SolutionCop.Core
+﻿namespace SolutionCop.Core
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
     public static class SolutionParser
     {
         public static SolutionInfo LoadFromFile(string pathToSolutionFile)
@@ -14,6 +14,7 @@ namespace SolutionCop.Core
                 Console.Out.WriteLine("FATAL: Cannot find solution file {0}", pathToSolutionFile);
                 return new SolutionInfo();
             }
+
             Console.Out.WriteLine("INFO: Parsing solution {0}", pathToSolutionFile);
             var solutionFileLines = File.ReadAllLines(pathToSolutionFile).ToArray();
             var projectReferenceRegEx = new Regex("Project\\(\"([\\{\\}0-9A-Z\\-]+)\"\\) = \"(.*)\", \"(.*.csproj)\", \"([\\{\\}0-9A-Z\\-]+)\"\\s*");

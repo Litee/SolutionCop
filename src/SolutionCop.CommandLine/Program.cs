@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using CommandLine;
-using SolutionCop.Core;
-
-namespace SolutionCop.CommandLine
+﻿namespace SolutionCop.CommandLine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    using global::CommandLine;
+    using Core;
+
     internal static class Program
     {
         private static readonly RulesDirectoryCatalog RulesDirectoryCatalog = new RulesDirectoryCatalog();
@@ -46,7 +47,6 @@ namespace SolutionCop.CommandLine
             Console.Out.WriteLine("INFO: Starting analysis...");
             foreach (var rule in rules)
             {
-
                 var xmlRuleConfigs = ruleConfigsMap[rule.Id];
                 if (xmlRuleConfigs == null)
                 {
@@ -67,7 +67,7 @@ namespace SolutionCop.CommandLine
                 if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
                 {
                     // adding empty line for a better formatting in TC output
-                    var extendedErrorsInfo = Enumerable.Repeat("", 1).Concat(errors.Select((x, idx) => string.Format("ERROR ({0}/{1}): {2}", idx + 1, errors.Count, x))).Concat(Enumerable.Repeat("", 1)).Concat(validationResults.Select(x => string.Format("INFO: Rule {0} is {1}", x.RuleId, x.IsEnabled ? "enabled" : "disabled")));
+                    var extendedErrorsInfo = Enumerable.Repeat(string.Empty, 1).Concat(errors.Select((x, idx) => string.Format("ERROR ({0}/{1}): {2}", idx + 1, errors.Count, x))).Concat(Enumerable.Repeat(string.Empty, 1)).Concat(validationResults.Select(x => string.Format("INFO: Rule {0} is {1}", x.RuleId, x.IsEnabled ? "enabled" : "disabled")));
                     Console.Out.WriteLine("##teamcity[testFailed name='SolutionCop' message='FAILED - {0}' details='{1}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)), string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
                     Console.Out.WriteLine("##teamcity[buildStatus text='FAILED - {0}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)));
                 }

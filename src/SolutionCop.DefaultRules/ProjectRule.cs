@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using SolutionCop.Core;
-using SolutionCop.DefaultRules.Properties;
-
-namespace SolutionCop.DefaultRules
+﻿namespace SolutionCop.DefaultRules
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Linq;
+    using Core;
+    using Properties;
+
     public abstract class ProjectRule<T> : IProjectRule
     {
         protected readonly XNamespace Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
@@ -24,13 +24,12 @@ namespace SolutionCop.DefaultRules
             }
         }
 
-        protected abstract T ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors);
-
         public ValidationResult ValidateAllProjects(XElement xmlRuleConfigs, params string[] projectFilePaths)
         {
             var isEnabled = false;
             var hasErrorsInConfiguration = false;
             var errors = new List<string>();
+
             // Check that config section is correct
             if (xmlRuleConfigs.Name.LocalName != Id)
             {
@@ -73,6 +72,8 @@ namespace SolutionCop.DefaultRules
             return new ValidationResult(Id, isEnabled, hasErrorsInConfiguration, errors.ToArray());
         }
 
+        protected abstract T ParseConfigurationSection(XElement xmlRuleConfigs, List<string> errors);
+
         protected void ValidateConfigSectionForAllowedElements(XElement xmlElement, List<string> errors, params string[] allowedElementNames)
         {
             var unknownElements = xmlElement.Elements()
@@ -88,6 +89,7 @@ namespace SolutionCop.DefaultRules
                 errors.Add(string.Format(Resources.BadConfiguration, Id, errorDetails));
             }
         }
+
 /*
         protected void ValidateConfigSectionForRequiredElements(XElement xmlElement, List<string> errors, params string[] requiredElementNames)
         {

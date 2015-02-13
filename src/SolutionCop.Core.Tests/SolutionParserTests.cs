@@ -1,11 +1,11 @@
-﻿using System.IO;
-using System.Linq;
-using ApprovalTests;
-using ApprovalTests.Reporters;
-using Xunit;
-
-namespace SolutionCop.Core.Tests
+﻿namespace SolutionCop.Core.Tests
 {
+    using System.IO;
+    using System.Linq;
+    using ApprovalTests;
+    using ApprovalTests.Reporters;
+    using Xunit;
+
     [UseReporter(typeof(DiffReporter))]
     public class SolutionParserTests
     {

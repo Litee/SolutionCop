@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using SolutionCop.Core;
-
 namespace SolutionCop.DefaultRules.NuGet
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Linq;
+    using Core;
+
     [Export(typeof(IProjectRule))]
     public class NuGetAutomaticPackagesRestoreRule : ProjectRule<string[]>
     {
@@ -38,6 +38,7 @@ namespace SolutionCop.DefaultRules.NuGet
                     errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
                 }
             }
+
             return xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
         }
 

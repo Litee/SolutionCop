@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using System.Xml.Linq;
-
-namespace SolutionCop.Core
+﻿namespace SolutionCop.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Xml;
+    using System.Xml.Linq;
+
     public class ConfigurationFileParser
     {
         private readonly Action<string, byte[]> _saveConfigFileAction;

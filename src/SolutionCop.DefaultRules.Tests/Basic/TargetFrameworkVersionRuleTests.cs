@@ -1,17 +1,16 @@
-﻿using System.IO;
-using System.Xml.Linq;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
-using SolutionCop.DefaultRules.Basic;
-using Xunit;
-
-namespace SolutionCop.DefaultRules.Tests.Basic
+﻿namespace SolutionCop.DefaultRules.Tests.Basic
 {
+    using System.IO;
+    using System.Xml.Linq;
+    using ApprovalTests.Namers;
+    using ApprovalTests.Reporters;
+    using DefaultRules.Basic;
+    using Xunit;
+
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class TargetFrameworkVersionRuleTests : ProjectRuleTest
     {
-
         public TargetFrameworkVersionRuleTests() : base(new TargetFrameworkVersionRule())
         {
         }

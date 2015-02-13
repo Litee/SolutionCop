@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using SolutionCop.Core;
-
-namespace SolutionCop.DefaultRules.NuGet
+﻿namespace SolutionCop.DefaultRules.NuGet
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Linq;
+    using Core;
+
     [Export(typeof(IProjectRule))]
     public class ReferenceNuGetPackagesOnlyRule : ProjectRule<string[]>
     {

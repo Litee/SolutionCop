@@ -1,13 +1,13 @@
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Xml.Linq;
-using SolutionCop.Core;
-
 namespace SolutionCop.DefaultRules.Basic
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using System.Xml.Linq;
+    using Core;
+
     [Export(typeof(IProjectRule))]
     public class FilesIncludedIntoProjectRule : ProjectRule<FilesIncludedIntoProjectRuleConfig>
     {
@@ -41,6 +41,7 @@ namespace SolutionCop.DefaultRules.Basic
             {
                 errors.Add(string.Format("Bad configuration for rule {0}: No file names to process.", Id));
             }
+
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
@@ -103,28 +104,6 @@ namespace SolutionCop.DefaultRules.Basic
                     }
                 }
             }
-        }
-    }
-
-    public class FilesIncludedIntoProjectRuleConfig
-    {
-        private readonly List<string> _filePatternsToProcess = new List<string>();
-        private readonly Dictionary<string, string[]> _projectSpecificFilePatternExceptions = new Dictionary<string, string[]>();
-        private readonly List<string> _globalFilePatternExceptions = new List<string>();
-
-        public List<string> FilePatternsToProcess
-        {
-            get { return _filePatternsToProcess; }
-        }
-
-        public Dictionary<string, string[]> ProjectSpecificFilePatternExceptions
-        {
-            get { return _projectSpecificFilePatternExceptions; }
-        }
-
-        public List<string> GlobalFilePatternExceptions
-        {
-            get { return _globalFilePatternExceptions; }
         }
     }
 }

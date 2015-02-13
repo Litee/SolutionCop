@@ -1,13 +1,13 @@
-﻿using System.IO;
-using System.Xml.Linq;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
-using SolutionCop.DefaultRules.Basic;
-using Xunit;
-using Xunit.Extensions;
-
-namespace SolutionCop.DefaultRules.Tests.Basic
+﻿namespace SolutionCop.DefaultRules.Tests.Basic
 {
+    using System.IO;
+    using System.Xml.Linq;
+    using ApprovalTests.Namers;
+    using ApprovalTests.Reporters;
+    using DefaultRules.Basic;
+    using Xunit;
+    using Xunit.Extensions;
+
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class TreatWarningsAsErrorsRuleTests : ProjectRuleTest

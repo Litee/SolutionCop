@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using NuGet;
-using SolutionCop.Core;
-
 namespace SolutionCop.DefaultRules.NuGet
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Linq;
+    using Core;
+    using global::NuGet;
+
     [Export(typeof(IProjectRule))]
     public class NuGetPackageVersionsRule : ProjectRule<Tuple<List<XElement>, string[]>>
     {
@@ -41,6 +41,7 @@ namespace SolutionCop.DefaultRules.NuGet
                     errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
                 }
             }
+
             var exceptions = xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
             var xmlPackageRules = xmlRuleConfigs.Elements().Where(x => x.Name.LocalName == "Package");
             var packageRules = new List<XElement>();
@@ -58,6 +59,7 @@ namespace SolutionCop.DefaultRules.NuGet
                     packageRules.Add(xmlPackageRule);
                 }
             }
+
             return Tuple.Create(packageRules, exceptions);
         }
 
