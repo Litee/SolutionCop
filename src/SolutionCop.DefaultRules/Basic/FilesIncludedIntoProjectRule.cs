@@ -80,15 +80,18 @@ namespace SolutionCop.DefaultRules.Basic
             foreach (var filePatternToProcess in config.FilePatternsToProcess)
             {
                 var filePaths = Directory.EnumerateFiles(Path.GetDirectoryName(projectFilePath), filePatternToProcess, SearchOption.AllDirectories);
+
                 // TODO More flexible folder exclusions
                 foreach (var filePath in filePaths.Where(x => !x.ToLower().Contains(@"\obj\") && !x.ToLower().Contains(@"\bin\")))
                 {
                     var parentDir = Path.GetDirectoryName(filePath);
+
                     // TODO Yak!
                     var matchesExcludeFilePattern = filePatternsToExclude.Any(fileToExclude => Directory.EnumerateFiles(parentDir, fileToExclude).Any(x => x == filePath));
                     if (!matchesExcludeFilePattern)
                     {
                         var fileName = Path.GetFileName(filePath);
+
                         // TODO Make more precise
                         var xmlHintPaths = xmlProject.Descendants(Namespace + "Compile").Where(x => HttpUtility.UrlDecode(x.Attribute("Include").Value).Contains(fileName));
                         if (!xmlHintPaths.Any())

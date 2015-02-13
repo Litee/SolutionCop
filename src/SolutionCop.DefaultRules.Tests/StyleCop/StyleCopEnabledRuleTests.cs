@@ -7,7 +7,7 @@ using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests.StyleCop
 {
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class StyleCopEnabledRuleTests : ProjectRuleTest
     {

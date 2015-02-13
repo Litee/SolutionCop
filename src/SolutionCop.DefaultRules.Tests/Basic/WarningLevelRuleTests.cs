@@ -7,7 +7,7 @@ using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests.Basic
 {
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class WarningLevelRuleTests : ProjectRuleTest
     {
@@ -132,7 +132,6 @@ namespace SolutionCop.DefaultRules.Tests.Basic
         }
 
         // Check bad configurations
-
         [Fact]
         public void Should_fail_if_no_minimal_value_specified()
         {

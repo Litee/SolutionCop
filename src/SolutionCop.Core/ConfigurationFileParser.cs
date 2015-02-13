@@ -61,6 +61,7 @@ namespace SolutionCop.Core
                         if (xmlRuleConfig == null)
                         {
                             ruleConfigsMap.Add(rule.Id, rule.DefaultConfig);
+
                             // Adding default section into original DOM for saving
                             xmlRules.Add(rule.DefaultConfig);
                             Console.Out.WriteLine("WARNING: No config specified for rule {0} - adding default one", rule.Id);

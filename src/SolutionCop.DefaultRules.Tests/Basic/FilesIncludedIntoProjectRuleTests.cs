@@ -7,7 +7,7 @@ using Xunit;
 
 namespace SolutionCop.DefaultRules.Tests.Basic
 {
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
     public class FilesIncludedIntoProjectRuleTests : ProjectRuleTest
     {
