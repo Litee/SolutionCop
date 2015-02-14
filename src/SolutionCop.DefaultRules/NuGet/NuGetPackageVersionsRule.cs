@@ -91,7 +91,7 @@ namespace SolutionCop.DefaultRules.NuGet
                         {
                             var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
                             var noPrereleaseVersions = ((string)xmlPackageRule.Attribute("prerelease") ?? "true").Trim() == "false";
-                            IVersionSpec versionSpec = VersionUtility.ParseVersionSpec(packageRuleVersion);
+                            var versionSpec = VersionUtility.ParseVersionSpec(packageRuleVersion);
                             var usedSemanticVersion = SemanticVersion.Parse(packageVersion);
                             if (!versionSpec.Satisfies(usedSemanticVersion))
                             {

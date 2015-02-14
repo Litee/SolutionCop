@@ -61,6 +61,7 @@
     <Compile Include="NuGet\NuGetAutomaticPackagesRestoreRuleTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Basic\SameNameForAssemblyAndRootNamespaceRuleTests.cs" />
     <Compile Include="NuGet\SameNuGetPackageVersionsRuleTests.cs" />
     <Compile Include="NuGet\NuGetPackagesUsageRuleTests.cs">
       <SubType>Code</SubType>

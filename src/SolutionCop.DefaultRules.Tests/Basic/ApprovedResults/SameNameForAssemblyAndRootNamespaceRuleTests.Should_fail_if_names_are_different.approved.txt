@@ -1,0 +1,1 @@
+﻿Errors[0] = Assembly name 'DifferentNames_2' and root namespace 'DifferentNames' are different in project DifferentNames.csproj
