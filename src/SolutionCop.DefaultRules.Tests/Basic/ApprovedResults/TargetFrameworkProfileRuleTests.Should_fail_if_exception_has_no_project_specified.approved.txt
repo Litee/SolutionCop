@@ -1,0 +1,1 @@
+﻿Errors[0] = Bad configuration for rule TargetFrameworkProfile: <Project> element is missing in exceptions list.

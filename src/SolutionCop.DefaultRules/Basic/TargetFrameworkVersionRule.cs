@@ -48,8 +48,8 @@
                 }
                 else
                 {
-                    var warnings = xmlException.Elements("FrameworkVersion").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x));
-                    exceptions.Add(xmlProject.Value, warnings.ToArray());
+                    var frameworkVersions = xmlException.Elements("FrameworkVersion").Select(x => x.Value.Trim()).Where(x => !string.IsNullOrEmpty(x));
+                    exceptions.Add(xmlProject.Value, frameworkVersions.ToArray());
                 }
             }
             return Tuple.Create<string[], IDictionary<string, string[]>>(targetFrameworkVersions, exceptions);

@@ -1,0 +1,10 @@
+﻿<TargetFrameworkProfile enabled="false">
+  <Profile>Client</Profile>
+  <Exception>
+    <Project>ProjectToExcludeFromCheck.csproj</Project>
+  </Exception>
+  <Exception>
+    <Project>ProjectCanHaveTargetVersion3_5.csproj</Project>
+    <Profile></Profile>
+  </Exception>
+</TargetFrameworkProfile>

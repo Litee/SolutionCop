@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Basic\FilesIncludedIntoProjectRuleTests.cs" />
+    <Compile Include="Basic\TargetFrameworkProfileRuleTests.cs" />
     <Compile Include="NuGet\NuGetAutomaticPackagesRestoreRuleTests.cs">
       <SubType>Code</SubType>
     </Compile>

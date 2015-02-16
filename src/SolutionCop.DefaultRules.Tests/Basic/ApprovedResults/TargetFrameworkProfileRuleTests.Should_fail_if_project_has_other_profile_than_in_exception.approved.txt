@@ -1,0 +1,1 @@
+﻿Errors[0] = Invalid target .NET framework profile 'Client' in project TargetProfileClient.csproj

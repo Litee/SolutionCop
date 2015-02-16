@@ -14,9 +14,9 @@
   <StyleCopEnabled enabled="false" />
   <NuGetAutomaticPackagesRestore enabled="true"></NuGetAutomaticPackagesRestore>
   <NuGetPackagesUsage enabled="true">
-  <Exception>
-    <Package>StyleCop.MSBuild</Package>
-  </Exception>
+    <Exception>
+      <Package>StyleCop.MSBuild</Package>
+    </Exception>
   </NuGetPackagesUsage>
   <NuGetPackageVersions enabled="false" />
   <TreatStyleCopWarningsAsErrors enabled="false"></TreatStyleCopWarningsAsErrors>
@@ -31,9 +31,12 @@
       <FileName>My.File'1.cs</FileName>
     </Exception>
   </FilesIncludedIntoProject>
-  <SameNameForAssemblyAndRootNamespace enabled="false">
+  <SameNameForAssemblyAndRootNamespace enabled="true">
     <Exception>
-      <Project>ProjectToExcludeFromCheck.csproj</Project>
+      <Project>SolutionCop.CommandLine.csproj</Project>
     </Exception>
   </SameNameForAssemblyAndRootNamespace>
+  <TargetFrameworkProfile enabled="true">
+    <Profile></Profile>
+  </TargetFrameworkProfile>
 </Rules>

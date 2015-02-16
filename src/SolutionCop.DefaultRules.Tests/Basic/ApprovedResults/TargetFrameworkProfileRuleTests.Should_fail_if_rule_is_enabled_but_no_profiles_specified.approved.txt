@@ -1,0 +1,1 @@
+﻿Errors[0] = No target profile specified for rule TargetFrameworkProfile
