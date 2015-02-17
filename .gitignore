@@ -184,3 +184,4 @@ FakesAssemblies/
 
 #ApprovedTests
 *.received.txt
+src/publish.cmd
