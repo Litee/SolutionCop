@@ -72,7 +72,11 @@
                             ruleConfigsMap.Add(rule.Id, xmlRuleConfig);
                         }
                     }
-                    errors.AddRange(xmlRules.Elements().Select(x => x.Name.LocalName).Except(rules.Select(x => x.Id)).Select(unknownSectionName => string.Format("Unknown configuration section {0}", unknownSectionName)));
+                    var unknownSectionNames = xmlRules.Elements().Select(x => x.Name.LocalName).Except(rules.Select(x => x.Id));
+                    foreach (var unknownSectionName in unknownSectionNames)
+                    {
+                        Console.Out.WriteLine("WARN: Unknown configuration section {0}", unknownSectionName);
+                    }
                     if (saveConfigFileOnExit)
                     {
                         Console.Out.WriteLine("DEBUG: Config file was updated. Saving...");
