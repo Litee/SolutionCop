@@ -53,7 +53,7 @@
         }
 
         [Fact]
-        public void Should_fail_for_config_with_unknown_section()
+        public void Should_pass_for_config_with_unknown_section()
         {
             const string xmlRules = @"
 <Rules>
@@ -69,7 +69,7 @@
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
             instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
-            errors.ShouldNotBeEmpty();
+            errors.ShouldBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
 
