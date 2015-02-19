@@ -56,7 +56,7 @@
             var projectFileName = Path.GetFileName(projectFilePath);
             if (File.Exists(pathToPackagesConfigFile))
             {
-                var xmlUsedPackages = XDocument.Load(pathToPackagesConfigFile).Element("packages").Elements("package");
+                var xmlUsedPackages = XDocument.Load(pathToPackagesConfigFile).Element("packages").Elements("package").ToArray();
                 foreach (var xmlUsedPackage in xmlUsedPackages)
                 {
                     var packageId = xmlUsedPackage.Attribute("id").Value;
@@ -75,6 +75,23 @@
                         {
                             yield return string.Format("Package {0} with version {1} is declared in projects.config, but not referenced in project {2}", packageId, packageVersion, projectFileName);
                         }
+                    }
+                }
+
+                var xmlHintPathsToPackage = xmlProject.Descendants(Namespace + "HintPath").Where(x => x.Value.Contains(@"\packages\"));
+                foreach (var xmlHintPathToPackage in xmlHintPathsToPackage)
+                {
+                    var packageReference = xmlHintPathToPackage.Value;
+                    if (!xmlUsedPackages.Any(xmlUsedPackage =>
+                    {
+                        var packageId = xmlUsedPackage.Attribute("id").Value;
+                        var packageVersion = xmlUsedPackage.Attribute("version").Value;
+
+                        var hintPathSubstring = "\\packages\\" + packageId + "." + packageVersion + "\\";
+                        return packageReference.Contains(hintPathSubstring);
+                    }))
+                    {
+                        yield return string.Format("Package reference {0} in .csproj file without package entry in packages.config for project {1}", packageReference, projectFileName);
                     }
                 }
             }

@@ -30,6 +30,13 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         }
 
         [Fact]
+        public void Should_fail_if_there_is_an_unknown_package_used()
+        {
+            var xmlConfig = XElement.Parse("<NuGetPackagesUsage/>");
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_4\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_pass_if_unreferenced_package_is_an_exception()
         {
             var xmlConfig = XElement.Parse(@"
