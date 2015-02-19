@@ -26,6 +26,16 @@ namespace SolutionCop.DefaultRules.Tests.Basic
         }
 
         [Fact]
+        public void Should_pass_if_all_files_are_included_with_different_case()
+        {
+            var xmlConfig = XElement.Parse(@"
+<FilesIncludedIntoProject>
+  <FileName>*.cs</FileName>
+</FilesIncludedIntoProject>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\FilesIncludedIntoProject\AllFilesIncludedIntoProject_DifferentCase.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_pass_if_files_do_not_match_search_pattern()
         {
             var xmlConfig = XElement.Parse(@"
