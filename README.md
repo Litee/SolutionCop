@@ -14,8 +14,8 @@ If no configuration file is specified then tool will look for SolutionCop.xml fi
   * [SuppressWarnings](https://github.com/Litee/SolutionCop/wiki/SuppressWarnings)
   * [WarningLevel](https://github.com/Litee/SolutionCop/wiki/WarningLevel)
   * [FilesIncludedIntoProject](https://github.com/Litee/SolutionCop/wiki/FilesIncludedIntoProject)
-  * TargetFrameworkProfile - TODO
-  * SameNameForAssemblyAndRootNamespace - TODO
+  * [SameNameForAssemblyAndRootNamespaTargetFrameworkProfilece](https://github.com/Litee/SolutionCop/wiki/TargetFrameworkProfile)
+  * [SameNameForAssemblyAndRootNamespace](https://github.com/Litee/SolutionCop/wiki/SameNameForAssemblyAndRootNamespace)
 * NuGet
   * [NuGetAutomaticPackagesRestore](https://github.com/Litee/SolutionCop/wiki/NuGetAutomaticPackagesRestore)
   * [NuGetPackagesUsage](https://github.com/Litee/SolutionCop/wiki/NuGetPackagesUsage)
