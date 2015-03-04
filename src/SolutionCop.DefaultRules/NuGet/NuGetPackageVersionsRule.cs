@@ -23,9 +23,10 @@ namespace SolutionCop.DefaultRules.NuGet
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                element.Add(new XElement("Package", new XAttribute("id", "first-package-id"), new XAttribute("version", "1.0.0")));
+                element.Add(new XElement("Package", new XAttribute("id", "first-package-id"), new XAttribute("version", "1.0.0"), new XAttribute("prerelease", "false")));
                 element.Add(new XElement("Package", new XAttribute("id", "second-package-id"), new XAttribute("version", "[2.0.3]")));
-                element.Add(new XElement("Package", new XAttribute("id", "third-package-id"), new XAttribute("version", "[1.5.0, 2.0.0)"), new XAttribute("prerelease", "false")));
+                element.Add(new XElement("Package", new XAttribute("id", "third-package-id"), new XAttribute("version", "[1.5.0, 2.0.0)")));
+                element.Add(new XElement("Package", new XAttribute("id", "fourth-package-id"), new XAttribute("version", "[1.5.0]|[1.6.0]")));
                 return element;
             }
         }
