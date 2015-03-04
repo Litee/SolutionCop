@@ -94,7 +94,7 @@ namespace SolutionCop.DefaultRules.Basic
                         var fileName = Path.GetFileName(filePath);
 
                         // TODO Make more precise
-                        var xmlHintPaths = xmlProject.Descendants(Namespace + "Compile").Where(x => HttpUtility.UrlDecode(x.Attribute("Include").Value).Contains(fileName));
+                        var xmlHintPaths = xmlProject.Descendants(Namespace + "Compile").Where(x => HttpUtility.UrlDecode(x.Attribute("Include").Value).ToLower().Contains(fileName.ToLower()));
                         if (!xmlHintPaths.Any())
                         {
                             // TODO Yak!
