@@ -1,0 +1,1 @@
+﻿Errors[0] = Cannot parse package version rule a|b for package xunit in config NuGetPackageVersions

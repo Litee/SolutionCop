@@ -50,7 +50,7 @@ namespace SolutionCop.DefaultRules.NuGet
                 var packageRuleId = xmlPackageRule.Attribute("id").Value.Trim();
                 var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
                 IVersionSpec versionSpec;
-                if (!VersionUtility.TryParseVersionSpec(packageRuleVersion, out versionSpec))
+                if (packageRuleVersion.Split('|').Select(x => x.Trim()).Any(x => !VersionUtility.TryParseVersionSpec(x, out versionSpec)))
                 {
                     errors.Add(string.Format("Cannot parse package version rule {0} for package {1} in config {2}", packageRuleVersion, packageRuleId, Id));
                 }
@@ -89,11 +89,11 @@ namespace SolutionCop.DefaultRules.NuGet
                         }
                         else
                         {
-                            var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
                             var noPrereleaseVersions = ((string)xmlPackageRule.Attribute("prerelease") ?? "true").Trim() == "false";
-                            var versionSpec = VersionUtility.ParseVersionSpec(packageRuleVersion);
+                            var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
+                            var versionSpecs = packageRuleVersion.Split('|').Select(x => x.Trim()).Select(VersionUtility.ParseVersionSpec);
                             var usedSemanticVersion = SemanticVersion.Parse(packageVersion);
-                            if (!versionSpec.Satisfies(usedSemanticVersion))
+                            if (!versionSpecs.Any(x => x.Satisfies(usedSemanticVersion)))
                             {
                                 yield return string.Format("Version {0} for package '{1}' does not match rule {2} in project {3}", packageVersion, packageId, packageRuleVersion, projectFileName);
                             }

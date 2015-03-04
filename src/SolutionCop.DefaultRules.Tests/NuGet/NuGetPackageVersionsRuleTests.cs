@@ -28,6 +28,28 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         }
 
         [Fact]
+        public void Should_pass_if_all_used_packages_match_strict_rules()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='[2.2]'></Package>
+  <Package id='xunit' version='[1.9.2-alpha]'></Package>
+</NuGetPackageVersions>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
+        public void Should_pass_if_all_used_packages_match_or_rules()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='[2.2]|[2.3]'></Package>
+  <Package id='xunit' version='0.0.0|[1.9.2-alpha]'></Package>
+</NuGetPackageVersions>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_pass_if_all_used_packages_match_range_rules()
         {
             var xmlConfig = XElement.Parse(@"
@@ -114,6 +136,28 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
 <NuGetPackageVersions>
   <Package id='ApprovalTests' version='0.0.0'></Package>
   <Package id='xunit' version='test'></Package>
+</NuGetPackageVersions>");
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
+        public void Should_fail_if_version_has_bad_or_format()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='0.0.0'></Package>
+  <Package id='xunit' version='0.0.0|'></Package>
+</NuGetPackageVersions>");
+            ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
+        public void Should_fail_if_version_has_bad_or_format_2()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='0.0.0'></Package>
+  <Package id='xunit' version='a|b'></Package>
 </NuGetPackageVersions>");
             ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
         }
