@@ -23,10 +23,24 @@ namespace SolutionCop.DefaultRules.Tests.Basic
         }
 
         [Fact]
+        public void Should_pass_with_neither_warning_suppressed_empty_list()
+        {
+            var xmlConfig = XElement.Parse("<SuppressWarnings><Warning>0420</Warning><Warning>0465</Warning></SuppressWarnings>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings_EmptyList.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_pass_with_no_warnings_suppressed()
         {
             var xmlConfig = XElement.Parse("<SuppressWarnings></SuppressWarnings>");
             ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings.csproj").FullName);
+        }
+
+        [Fact]
+        public void Should_pass_with_no_warnings_suppressed_empty_list()
+        {
+            var xmlConfig = XElement.Parse("<SuppressWarnings></SuppressWarnings>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\SuppressWarnings\SuppressNoWarnings_EmptyList.csproj").FullName);
         }
 
         [Fact]
