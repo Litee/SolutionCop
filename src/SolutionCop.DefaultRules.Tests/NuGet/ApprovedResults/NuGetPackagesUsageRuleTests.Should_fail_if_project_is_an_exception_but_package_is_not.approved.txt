@@ -1,1 +1,1 @@
-﻿Errors[0] = Package xunit with version 1.9.2 is declared in projects.config, but not referenced in project UsesOnePackage.csproj
+﻿Errors[0] = Package xunit with version 1.9.2 is declared in packages.config, but not referenced in project UsesOnePackage.csproj
