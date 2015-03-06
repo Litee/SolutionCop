@@ -77,17 +77,20 @@
                 var xmlNoWarn = xmlPropertyGroupWithCondition.Descendants(Namespace + "NoWarn").Concat(xmlPropertyGlobalGroups.Descendants(Namespace + "NoWarn")).FirstOrDefault();
                 if (xmlNoWarn != null)
                 {
-                    var suppressedWarnings = xmlNoWarn.Value.Split(',').Select(x => x.Trim());
-                    var warningsNotAllowedToSuppress = suppressedWarnings.Except(warningsAllowedToSuppress).ToArray();
-                    if (warningsNotAllowedToSuppress.Count() == 1)
+                    var suppressedWarnings = xmlNoWarn.Value.Split(',').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x));
+                    if (suppressedWarnings.Any())
                     {
-                        yield return string.Format("Unapproved warning {0} is suppressed in project {1}", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath));
-                        yield break;
-                    }
-                    if (warningsNotAllowedToSuppress.Count() > 1)
-                    {
-                        yield return string.Format("Unapproved warnings {0} are suppressed in project {1}", string.Join(", ", warningsNotAllowedToSuppress), Path.GetFileName(projectFilePath));
-                        yield break;
+                        var warningsNotAllowedToSuppress = suppressedWarnings.Except(warningsAllowedToSuppress).ToArray();
+                        if (warningsNotAllowedToSuppress.Count() == 1)
+                        {
+                            yield return string.Format("Unapproved warning {0} is suppressed in project {1}", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath));
+                            yield break;
+                        }
+                        if (warningsNotAllowedToSuppress.Count() > 1)
+                        {
+                            yield return string.Format("Unapproved warnings {0} are suppressed in project {1}", string.Join(", ", warningsNotAllowedToSuppress), Path.GetFileName(projectFilePath));
+                            yield break;
+                        }
                     }
                 }
             }

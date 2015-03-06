@@ -73,7 +73,7 @@
                         var xmlHintPaths = xmlProject.Descendants(Namespace + "HintPath").Where(x => x.Value.Contains(hintPathSubstring));
                         if (!xmlHintPaths.Any())
                         {
-                            yield return string.Format("Package {0} with version {1} is declared in projects.config, but not referenced in project {2}", packageId, packageVersion, projectFileName);
+                            yield return string.Format("Package {0} with version {1} is declared in packages.config, but not referenced in project {2}", packageId, packageVersion, projectFileName);
                         }
                     }
                 }
