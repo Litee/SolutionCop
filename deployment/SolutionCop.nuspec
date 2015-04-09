@@ -17,11 +17,11 @@
     <releaseNotes>https://github.com/Litee/SolutionCop/releases</releaseNotes>
   </metadata>
   <files>
-    <file src="Bin\Debug\SolutionCop.exe" target="tools/bin" />
-    <file src="Bin\Debug\SolutionCop.Core.dll" target="tools/bin" />
-    <file src="Bin\Debug\SolutionCop.DefaultRules.dll" target="tools/bin" />
-    <file src="Bin\Debug\CommandLine.dll" target="tools/bin" />
-    <file src="Bin\Debug\NuGet.Core.dll" target="tools/bin" />
-    <file src="Bin\Debug\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
+    <file src="..\src\Bin\Debug\SolutionCop.exe" target="tools/bin" />
+    <file src="..\src\Bin\Debug\SolutionCop.Core.dll" target="tools/bin" />
+    <file src="..\src\Bin\Debug\SolutionCop.DefaultRules.dll" target="tools/bin" />
+    <file src="..\src\Bin\Debug\CommandLine.dll" target="tools/bin" />
+    <file src="..\src\Bin\Debug\NuGet.Core.dll" target="tools/bin" />
+    <file src="..\src\Bin\Debug\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
   </files>
-</package>
+</package>                                       
