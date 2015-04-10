@@ -49,16 +49,20 @@ namespace SolutionCop.DefaultRules.NuGet
             foreach (var xmlPackageRule in xmlPackageRules)
             {
                 var packageRuleId = xmlPackageRule.Attribute("id").Value.Trim();
-                var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
-                IVersionSpec versionSpec;
-                if (packageRuleVersion.Split('|').Select(x => x.Trim()).Any(x => !VersionUtility.TryParseVersionSpec(x, out versionSpec)))
+                var packageRuleVersions = xmlPackageRule.Attribute("version").Value.Trim();
+                bool hasVersionError = false;
+                foreach (var packageRuleVersion in packageRuleVersions.Split('|'))
                 {
-                    errors.Add(string.Format("Cannot parse package version rule {0} for package {1} in config {2}", packageRuleVersion, packageRuleId, Id));
+                    IVersionSpec versionSpec;
+                    if (packageRuleVersion.Split('|').Select(x => x.Trim()).Any(x => !VersionUtility.TryParseVersionSpec(x, out versionSpec)))
+                    {
+                        hasVersionError = true;
+                    }
                 }
+                if (hasVersionError)
+                    errors.Add(string.Format("Cannot parse package version rule {0} for package {1} in config {2}", packageRuleVersions, packageRuleId, Id));
                 else
-                {
                     packageRules.Add(xmlPackageRule);
-                }
             }
 
             return Tuple.Create(packageRules, exceptions);
@@ -91,12 +95,12 @@ namespace SolutionCop.DefaultRules.NuGet
                         else
                         {
                             var noPrereleaseVersions = ((string)xmlPackageRule.Attribute("prerelease") ?? "true").Trim() == "false";
-                            var packageRuleVersion = xmlPackageRule.Attribute("version").Value.Trim();
-                            var versionSpecs = packageRuleVersion.Split('|').Select(x => x.Trim()).Select(VersionUtility.ParseVersionSpec);
+                            var packageRuleVersions = xmlPackageRule.Attribute("version").Value.Trim();
+                            var versionSpecs = packageRuleVersions.Split('|').Select(x => x.Trim()).Select(VersionUtility.ParseVersionSpec);
                             var usedSemanticVersion = SemanticVersion.Parse(packageVersion);
                             if (!versionSpecs.Any(x => x.Satisfies(usedSemanticVersion)))
                             {
-                                yield return string.Format("Version {0} for package '{1}' does not match rule {2} in project {3}", packageVersion, packageId, packageRuleVersion, projectFileName);
+                                yield return string.Format("Version {0} for package '{1}' does not match rule {2} in project {3}", packageVersion, packageId, packageRuleVersions, projectFileName);
                             }
                             else if (noPrereleaseVersions && !string.IsNullOrEmpty(usedSemanticVersion.SpecialVersion))
                             {

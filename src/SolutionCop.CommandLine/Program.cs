@@ -1,4 +1,6 @@
-﻿namespace SolutionCop.CommandLine
+﻿using System.Reflection;
+
+namespace SolutionCop.CommandLine
 {
     using System;
     using System.Collections.Generic;
@@ -18,6 +20,7 @@
             var commandLineParameters = new CommandLineParameters();
             if (Parser.Default.ParseArguments(args, commandLineParameters))
             {
+                Console.Out.WriteLine("INFO: StyleCop version " + Assembly.GetEntryAssembly().GetName().Version);
                 Run(commandLineParameters);
             }
             else

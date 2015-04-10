@@ -61,6 +61,39 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
         }
 
         [Fact]
+        public void Should_pass_if_all_used_packages_match_multiple_range_rules()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='[2.1.5, 2.2)|[2.2, 2.3)'></Package>
+  <Package id='xunit' version='[1.0, 1.0.1)|[1.9.2-alpha, 1.10.0)'></Package>
+</NuGetPackageVersions>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
+        public void Should_pass_if_all_used_packages_match_multiple_range_rules_with_whitespaces()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='[2.1.5, 2.2) |[2.2, 2.3)'></Package>
+  <Package id='xunit' version='[1.0, 1.0.1) | [1.9.2-alpha, 1.10.0)'></Package>
+</NuGetPackageVersions>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
+        public void Should_fail_if_violates_multiple_range_rules()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuGetPackageVersions>
+  <Package id='ApprovalTests' version='[2.1.5, 2.2)|[2.3.1, 2.4)'></Package>
+  <Package id='xunit' version='[1.0, 1.0.1)|[1.9.3, 1.10.0)'></Package>
+</NuGetPackageVersions>");
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackageVersions\UsesTwoPackages.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_fail_if_prerelease_is_not_allowed()
         {
             var xmlConfig = XElement.Parse(@"

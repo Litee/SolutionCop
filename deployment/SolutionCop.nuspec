@@ -14,7 +14,11 @@
     <description>Tool for static analysis of Visual Studio solutions and projects.</description>
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
-    <releaseNotes>https://github.com/Litee/SolutionCop/releases</releaseNotes>
+    <releaseNotes>
+0.4.1 - {New} Writing app version to console
+0.4.0 - {New} Multiple version ranges supported - e.g. "[0.1.1, 0.2)|[0.2.1, 0.3)"
+...
+    </releaseNotes>
   </metadata>
   <files>
     <file src="..\src\Bin\Debug\SolutionCop.exe" target="tools/bin" />

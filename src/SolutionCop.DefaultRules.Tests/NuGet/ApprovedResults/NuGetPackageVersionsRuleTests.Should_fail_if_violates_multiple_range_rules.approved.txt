@@ -1,0 +1,2 @@
+﻿Errors[0] = Version 2.2 for package 'ApprovalTests' does not match rule [2.1.5, 2.2)|[2.3.1, 2.4) in project UsesTwoPackages.csproj
+Errors[1] = Version 1.9.2-alpha for package 'xunit' does not match rule [1.0, 1.0.1)|[1.9.3, 1.10.0) in project UsesTwoPackages.csproj
