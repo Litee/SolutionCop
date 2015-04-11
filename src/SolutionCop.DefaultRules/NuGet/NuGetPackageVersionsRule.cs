@@ -50,19 +50,15 @@ namespace SolutionCop.DefaultRules.NuGet
             {
                 var packageRuleId = xmlPackageRule.Attribute("id").Value.Trim();
                 var packageRuleVersions = xmlPackageRule.Attribute("version").Value.Trim();
-                bool hasVersionError = false;
-                foreach (var packageRuleVersion in packageRuleVersions.Split('|'))
+                IVersionSpec versionSpec;
+                if (packageRuleVersions.Split('|').Select(x => x.Trim()).Any(x => !VersionUtility.TryParseVersionSpec(x, out versionSpec)))
                 {
-                    IVersionSpec versionSpec;
-                    if (packageRuleVersion.Split('|').Select(x => x.Trim()).Any(x => !VersionUtility.TryParseVersionSpec(x, out versionSpec)))
-                    {
-                        hasVersionError = true;
-                    }
-                }
-                if (hasVersionError)
                     errors.Add(string.Format("Cannot parse package version rule {0} for package {1} in config {2}", packageRuleVersions, packageRuleId, Id));
+                }
                 else
+                {
                     packageRules.Add(xmlPackageRule);
+                }
             }
 
             return Tuple.Create(packageRules, exceptions);
