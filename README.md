@@ -28,7 +28,13 @@ If no configuration file is specified then tool will look for SolutionCop.xml fi
 
 ## How to get
 
-NuGet.exe Install SolutionCop -Prerelease
+    NuGet.exe Install SolutionCop
+
+or 
+
+    NuGet.exe Install SolutionCop -Prerelease
+
+depending on how brave you are
 
 ## Compatibility
 
