@@ -1,6 +1,6 @@
 ﻿<ReferenceNuGetPackagesOnly enabled="false">
   <Exception>
     <Project>ProjectToExcludeFromCheck.csproj</Project>
-    <File>my.dll</File>
+    <Assembly>my.dll</Assembly>
   </Exception>
 </ReferenceNuGetPackagesOnly>

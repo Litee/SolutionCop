@@ -22,7 +22,7 @@
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
-                element.Add(new XElement("Exception", new XElement("Project", "ProjectToExcludeFromCheck.csproj"), new XElement("File", "my.dll")));
+                element.Add(new XElement("Exception", new XElement("Project", "ProjectToExcludeFromCheck.csproj"), new XElement("Assembly", "my.dll")));
                 return element;
             }
         }
@@ -34,10 +34,12 @@
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
             {
                 var xmlProject = xmlException.Element("Project");
-                var xmlFiles = xmlException.Elements("File").ToArray();
+
+                // <File> is legacy
+                var xmlFiles = xmlException.Elements("File").Concat(xmlException.Elements("Assembly")).ToArray();
                 if (xmlProject == null && !xmlFiles.Any())
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> or <File> elements are missing in exceptions list.", Id));
+                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> or <Assembly> elements are missing in exceptions list.", Id));
                 }
                 exceptions.Add(new Tuple<string, string[]>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlFiles.Select(x => x.Value.Trim()).ToArray()));
             }

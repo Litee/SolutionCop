@@ -50,8 +50,8 @@
             var xmlConfig = XElement.Parse(@"
 <ReferenceNuGetPackagesOnly>
   <Exception>
-    <File>ApprovalTests.dll</File>
-    <File>ApprovalUtilities.dll</File>
+    <Assembly>ApprovalTests.dll</Assembly>
+    <Assembly>ApprovalUtilities.dll</Assembly>
   </Exception>
 </ReferenceNuGetPackagesOnly>");
             ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnly\HasReferencesToLocalBinaries.csproj").FullName);
@@ -65,8 +65,8 @@
 <ReferenceNuGetPackagesOnly>
   <Exception>
     <Project>SomeAnotherProject.csproj</Project>
-    <File>ApprovalTests.dll</File>
-    <File>ApprovalUtilities.dll</File>
+    <Assembly>ApprovalTests.dll</Assembly>
+    <Assembly>ApprovalUtilities.dll</Assembly>
   </Exception>
 </ReferenceNuGetPackagesOnly>");
             ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnly\HasReferencesToLocalBinaries.csproj").FullName);
@@ -78,8 +78,8 @@
             var xmlConfig = XElement.Parse(@"
 <ReferenceNuGetPackagesOnly>
   <Exception>
-    <File> ApprovalTests.dll</File>
-    <File>ApprovalUtilities.dll </File>
+    <Assembly> ApprovalTests.dll</Assembly>
+    <Assembly>ApprovalUtilities.dll </Assembly>
   </Exception>
 </ReferenceNuGetPackagesOnly>");
             ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnly\HasReferencesToLocalBinaries.csproj").FullName);
@@ -91,8 +91,8 @@
             var xmlConfig = XElement.Parse(@"
 <ReferenceNuGetPackagesOnly>
   <Exception>
-    <File>approvaltests.dll</File>
-    <File>APPROVALUTILITIES.DLL</File>
+    <Assembly>approvaltests.dll</Assembly>
+    <Assembly>APPROVALUTILITIES.DLL</Assembly>
   </Exception>
 </ReferenceNuGetPackagesOnly>");
             ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnly\HasReferencesToLocalBinaries.csproj").FullName);
@@ -105,8 +105,8 @@
             var xmlConfig = XElement.Parse(@"
 <ReferenceNuGetPackagesOnly>
   <Exception>
-    <File>ApprovalTests.dll</File>
-    <File>SomeNonExistingName.dll</File>
+    <Assembly>ApprovalTests.dll</Assembly>
+    <Assembly>SomeNonExistingName.dll</Assembly>
   </Exception>
 </ReferenceNuGetPackagesOnly>");
             ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\ReferenceNuGetPackagesOnly\HasReferencesToLocalBinaries.csproj").FullName);

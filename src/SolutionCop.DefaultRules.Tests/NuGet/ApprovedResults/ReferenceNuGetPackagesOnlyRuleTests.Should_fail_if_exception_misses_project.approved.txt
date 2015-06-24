@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule ReferenceNuGetPackagesOnly: <Project> or <File> elements are missing in exceptions list.
+﻿Errors[0] = Bad configuration for rule ReferenceNuGetPackagesOnly: <Project> or <Assembly> elements are missing in exceptions list.
