@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Runtime.InteropServices.ComTypes;
-
-namespace SolutionCop.CommandLine
+﻿namespace SolutionCop.CommandLine
 {
     using global::CommandLine;
     using global::CommandLine.Text;
