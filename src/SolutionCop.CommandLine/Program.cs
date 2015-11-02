@@ -78,12 +78,12 @@ namespace SolutionCop.CommandLine
             }
             else
             {
+                Console.Out.WriteLine("INFO: No errors found!");
+
                 if (commandLineParameters.BuildServerType == BuildServer.TeamCity && !commandLineParameters.HideSuccessStatus)
                 {
                     Console.Out.WriteLine("##teamcity[buildStatus status='SUCCESS' text='PASSED - {0}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)));
                 }
-
-                Console.Out.WriteLine("INFO: No errors found!");
             }
             Environment.Exit(errors.Any() ? -1 : 0);
         }
