@@ -54,9 +54,10 @@
         {
             var pathToPackagesConfigFile = Path.Combine(Path.GetDirectoryName(projectFilePath), "packages.config");
             var projectFileName = Path.GetFileName(projectFilePath);
+            XElement[] xmlUsedPackages;
             if (File.Exists(pathToPackagesConfigFile))
             {
-                var xmlUsedPackages = XDocument.Load(pathToPackagesConfigFile).Element("packages").Elements("package").ToArray();
+                xmlUsedPackages = XDocument.Load(pathToPackagesConfigFile).Element("packages").Elements("package").ToArray();
                 foreach (var xmlUsedPackage in xmlUsedPackages)
                 {
                     var packageId = xmlUsedPackage.Attribute("id").Value;
@@ -78,26 +79,27 @@
                     }
                 }
 
-                var xmlHintPathsToPackage = xmlProject.Descendants(Namespace + "HintPath").Where(x => x.Value.Contains(@"\packages\"));
-                foreach (var xmlHintPathToPackage in xmlHintPathsToPackage)
-                {
-                    var packageReference = xmlHintPathToPackage.Value;
-                    if (!xmlUsedPackages.Any(xmlUsedPackage =>
-                    {
-                        var packageId = xmlUsedPackage.Attribute("id").Value;
-                        var packageVersion = xmlUsedPackage.Attribute("version").Value;
-
-                        var hintPathSubstring = "\\packages\\" + packageId + "." + packageVersion + "\\";
-                        return packageReference.Contains(hintPathSubstring);
-                    }))
-                    {
-                        yield return string.Format("Package reference {0} in .csproj file without package entry in packages.config for project {1}", packageReference, projectFileName);
-                    }
-                }
             }
             else
             {
-                Console.Out.WriteLine("DEBUG: Skipping project without packages.config: {0}", projectFileName);
+                Console.Out.WriteLine("DEBUG: Project without packages.config: {0}", projectFileName);
+                xmlUsedPackages = new XElement[0];
+            }
+            var xmlHintPathsToPackage = xmlProject.Descendants(Namespace + "HintPath").Where(x => x.Value.Contains(@"\packages\"));
+            foreach (var xmlHintPathToPackage in xmlHintPathsToPackage)
+            {
+                var packageReference = xmlHintPathToPackage.Value;
+                if (!xmlUsedPackages.Any(xmlUsedPackage =>
+                {
+                    var packageId = xmlUsedPackage.Attribute("id").Value;
+                    var packageVersion = xmlUsedPackage.Attribute("version").Value;
+
+                    var hintPathSubstring = "\\packages\\" + packageId + "." + packageVersion + "\\";
+                    return packageReference.Contains(hintPathSubstring);
+                }))
+                {
+                    yield return string.Format("Package reference {0} in .csproj file without package entry in packages.config for project {1}", packageReference, projectFileName);
+                }
             }
         }
     }

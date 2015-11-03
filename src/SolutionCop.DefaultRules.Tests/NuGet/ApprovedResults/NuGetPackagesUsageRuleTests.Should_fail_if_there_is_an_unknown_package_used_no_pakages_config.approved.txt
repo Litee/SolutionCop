@@ -1,0 +1,1 @@
+﻿Errors[0] = Package reference ..\packages\ApprovalTests.2.2\lib\ApprovalTests.dll in .csproj file without package entry in packages.config for project UsesOnePackage.csproj
