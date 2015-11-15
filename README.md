@@ -1,10 +1,14 @@
 # SolutionCop
 
-SolutionCop is tool for analysing Visual Studio solutions and projects. It covers gap between FxCop (static analysis of binaries) and StyleCop (static analysis of isolated files) and allows to analyse solution/project structure and settings.
+SolutionCop is a tool for Visual Studio solution and project analysis. It covers the gap between [FxCop](https://msdn.microsoft.com/en-us/library/bb429476(v=vs.80).aspx) (static analysis of assemblies) and [StyleCop](http://stylecop.codeplex.com/) (static analysis of source code), and allows to analyze solution/project structure and settings.
 
-Usage: SolutionCop.exe -s MySolution.sln [-c SolutionCop.xml] [-b TeamCity]
+Usage: 
 
-If no configuration file is specified then tool will look for SolutionCop.xml file next to *.sln. If config file cannot be found then default one will be created next to VS solution with all rules disabled.
+```PowerShell
+SolutionCop.exe -s MySolution.sln [-c SolutionCop.xml] [-b TeamCity]
+```
+
+If no configuration file is specified, the tool will look for `SolutionCop.xml` file next to `*.sln`. If config file cannot be found, then the default one will be created next to VS solution with all rules disabled.
 
 ## Supported rules
 
@@ -26,7 +30,7 @@ If no configuration file is specified then tool will look for SolutionCop.xml fi
   * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
   * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)
 
-## How to get
+## How to install
 
     NuGet.exe Install SolutionCop
 
@@ -34,7 +38,7 @@ or
 
     NuGet.exe Install SolutionCop -Prerelease
 
-depending on how brave you are
+depends on how brave you are
 
 ## Compatibility
 
