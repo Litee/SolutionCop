@@ -10,7 +10,7 @@
     }
 
     // ReSharper disable UnusedAutoPropertyAccessor.Global
-    internal class CommandLineParameters
+    internal sealed class CommandLineParameters
     {
         [Option('s', "solution", Required = true, HelpText = "Path to the Visual Studio solution file to analyze.")]
         public string PathToSolution { get; set; }
@@ -20,6 +20,9 @@
 
         [Option('b', "build-server", Required = false, HelpText = "Specify this parameter if you want additional information to be sent to CI server via console interaction. Supported value: TeamCity")]
         public BuildServer BuildServerType { get; set; }
+        
+        [Option("suppress-success-status-message", DefaultValue = false, HelpText = "Hide success messages on TeamCity", Required = false)]
+        public bool HideSuccessStatus { get; set; }
 
         [HelpOption]
         // ReSharper disable once UnusedMember.Global
