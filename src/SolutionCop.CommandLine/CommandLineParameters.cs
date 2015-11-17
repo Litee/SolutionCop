@@ -1,13 +1,11 @@
-﻿namespace SolutionCop.CommandLine
+﻿using SolutionCop.Core;
+
+namespace SolutionCop.CommandLine
 {
     using global::CommandLine;
     using global::CommandLine.Text;
 
-    internal enum BuildServer
-    {
-        None,
-        TeamCity
-    }
+
 
     // ReSharper disable UnusedAutoPropertyAccessor.Global
     internal class CommandLineParameters

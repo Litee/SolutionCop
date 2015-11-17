@@ -1,4 +1,6 @@
-﻿namespace SolutionCop.Core
+﻿using System.IO;
+
+namespace SolutionCop.Core
 {
     using System;
     using System.ComponentModel.Composition.Hosting;
@@ -6,20 +8,27 @@
 
     public class RulesDirectoryCatalog
     {
+        private readonly IAnalysisLogger _logger;
+
+        public RulesDirectoryCatalog(IAnalysisLogger logger)
+        {
+            _logger = logger;
+        }
+
         public IProjectRule[] LoadRules()
         {
-            Console.Out.WriteLine("INFO: Scanning for rules...");
+            _logger.LogInfo("INFO: Scanning for rules...");
 
             var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog("."));
+            catalog.Catalogs.Add(new DirectoryCatalog(Path.GetDirectoryName(typeof(RulesDirectoryCatalog).Assembly.Location)));
             var container = new CompositionContainer(catalog);
             var rules = container.GetExports<IProjectRule>().Select(x => x.Value).ToArray();
             foreach (var rule in rules)
             {
-                Console.Out.WriteLine("INFO: Rule {0} found.", rule.Id);
+                _logger.LogInfo("INFO: Rule {0} found.", rule.Id);
             }
 
-            Console.Out.WriteLine("INFO: Scanning for rules finished! Rules found: {0}", rules.Count());
+            _logger.LogInfo("INFO: Scanning for rules finished! Rules found: {0}", rules.Count());
             return rules.ToArray();
         }
     }

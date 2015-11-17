@@ -1,10 +1,12 @@
-﻿using System.Xml.Linq;
-using SolutionCop.DefaultRules.Basic;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using Microsoft.Build.Utilities;
+using SolutionCop.Core;
 
 namespace SolutionCop.MSBuild
 {
-    using System.Diagnostics;
-    using Microsoft.Build.Utilities;
 
     public class SolutionCopTask : Task
     {
@@ -16,20 +18,47 @@ namespace SolutionCop.MSBuild
 #endif
         }
 
-        public string PathToConfig { get; set; }
+        public string ProjectFullPath { get; set; }
 
         public override bool Execute()
         {
-            var validationResult = new WarningLevelRule().ValidateAllProjects(new XElement("WarningLevel"), PathToConfig);
-            if (validationResult.Errors.Length > 0)
+            try
             {
-                foreach (var error in validationResult.Errors)
+                Log.LogMessage("SolutionCop: Starting analysis for project {0}", ProjectFullPath);
+                Log.LogMessage("SolutionCop: Working folder = {0}", Path.GetFullPath("."));
+                DirectoryInfo dir = Directory.GetParent(BuildEngine.ProjectFileOfTaskNode);
+                string pathToCofigFile;
+                while (true)
+                {
+                    if (dir == null)
+                    {
+                        Log.LogError("SolutionCop: Cannot find SolutionCop.xml config file in parent folders.");
+                        return false;
+                    }
+                    pathToCofigFile = Path.Combine(dir.FullName, "SolutionCop.xml");
+                    if (File.Exists(pathToCofigFile))
+                    {
+                        Log.LogMessage("SolutionCop: Found SolutionCop.xml config file: {0}", pathToCofigFile);
+                        break;
+                    }
+                    dir = dir.Parent;
+                }
+
+                var msBuileAnalysisLogger = new MsBuileAnalysisLogger(Log);
+                var projectsVerifier = new ProjectsVerifier(msBuileAnalysisLogger);
+                var errors = projectsVerifier.VerifyProjects(pathToCofigFile, new[] { ProjectFullPath });
+                foreach (var error in errors)
                 {
                     Log.LogError("SolutionCop: " + error);
                 }
+                Log.LogMessage("SolutionCop: Analysis finished!");
+                return !errors.Any();
+            }
+            catch (Exception e)
+            {
+                Log.LogError("SolutionCop: Unexpected error: {0}", e.Message);
                 return false;
             }
-            return true;
         }
     }
 }
