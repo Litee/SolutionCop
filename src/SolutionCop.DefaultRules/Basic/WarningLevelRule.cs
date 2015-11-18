@@ -81,7 +81,7 @@
             foreach (var xmlPropertyGroup in xmlGlobalPropertyGroups)
             {
                 var xmlWarningLevel = xmlPropertyGroup.Descendants(Namespace + "WarningLevel").FirstOrDefault();
-                var warningLevelInProject = xmlWarningLevel == null ? 0 : Int32.Parse(xmlWarningLevel.Value);
+                var warningLevelInProject = xmlWarningLevel == null ? 1 : Int32.Parse(xmlWarningLevel.Value);
                 if (warningLevelInProject >= requiredWarningLevel)
                 {
                     Console.Out.WriteLine("DEBUG: Project has acceptable warning level in global section {0}: {1}", warningLevelInProject, projectFileName);
