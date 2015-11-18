@@ -44,15 +44,21 @@ namespace SolutionCop.MSBuild
                     dir = dir.Parent;
                 }
 
-                var msBuileAnalysisLogger = new MsBuileAnalysisLogger(Log);
+                var msBuileAnalysisLogger = new MsBuildSolutionCopConsole(Log);
                 var projectsVerifier = new ProjectsVerifier(msBuileAnalysisLogger);
-                var errors = projectsVerifier.VerifyProjects(pathToCofigFile, new[] { ProjectFullPath });
-                foreach (var error in errors)
+                var verificationResult = projectsVerifier.VerifyProjects(pathToCofigFile, new[] { ProjectFullPath }, (errors, validationResults) =>
                 {
-                    Log.LogError("SolutionCop: " + error);
-                }
+                    if (errors.Any())
+                    {
+                        errors.ForEach(x => Log.LogError("SolutionCop: " + x));
+                    }
+                    else
+                    {
+                        msBuileAnalysisLogger.LogInfo("No errors found!");
+                    }
+                });
                 Log.LogMessage("SolutionCop: Analysis finished!");
-                return !errors.Any();
+                return verificationResult == VerificationResult.NoErrors;
             }
             catch (Exception e)
             {

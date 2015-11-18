@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -47,10 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultAnalysisLogger.cs" />
+    <Compile Include="DefaultSolutionCopConsole.cs" />
     <Compile Include="BuildServer.cs" />
     <Compile Include="ConfigurationFileParser.cs" />
-    <Compile Include="IAnalysisLogger.cs" />
+    <Compile Include="ISolutionCopConsole.cs" />
     <Compile Include="IProjectRule.cs" />
     <Compile Include="ProjectsVerifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -11,14 +11,14 @@
     public class ConfigurationFileParser
     {
         private readonly Action<string, byte[]> _saveConfigFileAction;
-        private readonly IAnalysisLogger _logger;
+        private readonly ISolutionCopConsole _logger;
 
-        public ConfigurationFileParser(IAnalysisLogger logger) : this(File.WriteAllBytes, logger)
+        public ConfigurationFileParser(ISolutionCopConsole logger) : this(File.WriteAllBytes, logger)
         {
         }
 
         // Constructor is used for testing
-        internal ConfigurationFileParser(Action<string, byte[]> saveConfigFileAction, IAnalysisLogger logger)
+        internal ConfigurationFileParser(Action<string, byte[]> saveConfigFileAction, ISolutionCopConsole logger)
         {
             _saveConfigFileAction = saveConfigFileAction;
             _logger = logger;
@@ -28,12 +28,12 @@
         {
             if (File.Exists(pathToConfigFile))
             {
-                _logger.LogInfo("INFO: Existing config file found: {0}", pathToConfigFile);
+                _logger.LogInfo("Existing config file found: {0}", pathToConfigFile);
                 return ParseConfigString(pathToConfigFile, File.ReadAllText(pathToConfigFile), rules, errors);
             }
             else
             {
-                _logger.LogWarning("WARN: Config file does not exist. Creating a new one {0}", pathToConfigFile);
+                _logger.LogWarning("Config file does not exist. Creating a new one {0}", pathToConfigFile);
                 return ParseConfigString(pathToConfigFile, "<Rules></Rules>", rules, errors);
             }
         }
@@ -61,7 +61,7 @@
 
                             // Adding default section into original DOM for saving
                             xmlRules.Add(rule.DefaultConfig);
-                            _logger.LogWarning("WARN: No config specified for rule {0} - adding default one", rule.Id);
+                            _logger.LogWarning("No config specified for rule {0} - adding default one", rule.Id);
                             saveConfigFileOnExit = true;
                         }
                         else
@@ -72,11 +72,11 @@
                     var unknownSectionNames = xmlRules.Elements().Select(x => x.Name.LocalName).Except(rules.Select(x => x.Id));
                     foreach (var unknownSectionName in unknownSectionNames)
                     {
-                        _logger.LogWarning("WARN: Unknown configuration section {0}", unknownSectionName);
+                        _logger.LogWarning("Unknown configuration section {0}", unknownSectionName);
                     }
                     if (saveConfigFileOnExit)
                     {
-                        _logger.LogDebug("DEBUG: Config file was updated. Saving...");
+                        _logger.LogDebug("Config file was updated. Saving...");
                         var settings = new XmlWriterSettings
                         {
                             Encoding = Encoding.UTF8,

@@ -2,26 +2,26 @@
 
 namespace SolutionCop.Core
 {
-    public class DefaultAnalysisLogger : IAnalysisLogger
+    public class DefaultSolutionCopConsole : ISolutionCopConsole
     {
         public void LogDebug(string message, params object[] args)
         {
-            Console.WriteLine(message, args);
+            Console.WriteLine("DEBUG: " + message, args);
         }
 
         public void LogInfo(string message, params object[] args)
         {
-            Console.WriteLine(message, args);
+            Console.WriteLine("INFO: " + message, args);
         }
 
         public void LogWarning(string message, params object[] args)
         {
-            Console.WriteLine(message);
+            Console.WriteLine("WARNING: " + message, args);
         }
 
         public void LogError(string message, params object[] args)
         {
-            Console.WriteLine(message);
+            Console.WriteLine("ERROR: " + message, args);
         }
     }
 }

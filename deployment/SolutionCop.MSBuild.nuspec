@@ -14,10 +14,17 @@
     <description>Tool for static analysis of Visual Studio solutions and projects.</description>
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
-    <releaseNotes>https://github.com/Litee/SolutionCop/releases</releaseNotes>
+    <releaseNotes>
+0.6.0-beta1 - First public release"
+...
+    </releaseNotes>
   </metadata>
   <files>
-    <file src="..\src\SolutionCop.MSBuild\Bin\Debug\*.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.MSBuild\Bin\Release\SolutionCop.MSBuild.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.MSBuild\Bin\Release\SolutionCop.Core.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\SolutionCop.DefaultRules.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\NuGet.Core.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
     <file src="..\src\build\*.Targets" target="build" />
   </files>
 </package>

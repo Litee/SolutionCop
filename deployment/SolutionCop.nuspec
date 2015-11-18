@@ -15,6 +15,7 @@
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
     <releaseNotes>
+0.6.0-beta1 - Refactoring for new SolutionCop.MSBuild package
 0.5.2 - {BugFix} Now error is properly reported when NuGet binary is referenced, but there is no packages.config file
 0.5.1 - {New} Assembly alias added for ReferenceNuGetPackagesOnly rule exceptions
 0.5.0 - {New} Possible to specify files in ReferenceNuGetPackagesOnly rule exceptions
@@ -24,11 +25,11 @@
     </releaseNotes>
   </metadata>
   <files>
-    <file src="..\src\Bin\Debug\SolutionCop.exe" target="tools/bin" />
-    <file src="..\src\Bin\Debug\SolutionCop.Core.dll" target="tools/bin" />
-    <file src="..\src\Bin\Debug\SolutionCop.DefaultRules.dll" target="tools/bin" />
-    <file src="..\src\Bin\Debug\CommandLine.dll" target="tools/bin" />
-    <file src="..\src\Bin\Debug\NuGet.Core.dll" target="tools/bin" />
-    <file src="..\src\Bin\Debug\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.CommandLine\Bin\Release\SolutionCop.exe" target="tools/bin" />
+    <file src="..\src\SolutionCop.CommandLine\Bin\Release\SolutionCop.Core.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.CommandLine\Bin\Release\CommandLine.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\SolutionCop.DefaultRules.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\NuGet.Core.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
   </files>
 </package>                                       

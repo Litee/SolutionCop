@@ -115,7 +115,7 @@
 
         private ConfigurationFileParser CreateInstance(Action<string, byte[]> saveConfigFileAction)
         {
-            return new ConfigurationFileParser(saveConfigFileAction, new DefaultAnalysisLogger());
+            return new ConfigurationFileParser(saveConfigFileAction, new DefaultSolutionCopConsole());
         }
 
         private class DummyRule : IProjectRule

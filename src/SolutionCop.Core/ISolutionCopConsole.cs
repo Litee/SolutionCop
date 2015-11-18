@@ -1,6 +1,6 @@
 ﻿namespace SolutionCop.Core
 {
-    public interface IAnalysisLogger
+    public interface ISolutionCopConsole
     {
         void LogDebug(string message, params object[] args);
 
