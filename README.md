@@ -5,7 +5,7 @@ SolutionCop is a tool for Visual Studio solution and project analysis. It covers
 Usage: 
 
 ```PowerShell
-SolutionCop.exe -s MySolution.sln [-c SolutionCop.xml] [-b TeamCity]
+SolutionCop.exe -s MySolution.sln [-c SolutionCop.xml] [-b TeamCity] [--build-server-no-success-messages]
 ```
 
 If no configuration file is specified, the tool will look for `SolutionCop.xml` file next to `*.sln`. If config file cannot be found, then the default one will be created next to VS solution with all rules disabled.
