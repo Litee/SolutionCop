@@ -15,6 +15,8 @@
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
     <releaseNotes>
+0.6.0-beta2 - {bugfix} Fixed WarningLevel parsing - now is correctly 1 if missing
+              {feature} Now possible to suppress success messages for build servers. PR from Igor Manushin.
 0.6.0-beta1 - Refactoring for new SolutionCop.MSBuild package
 0.5.2 - {BugFix} Now error is properly reported when NuGet binary is referenced, but there is no packages.config file
 0.5.1 - {New} Assembly alias added for ReferenceNuGetPackagesOnly rule exceptions
