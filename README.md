@@ -34,7 +34,7 @@ SolutionCop.MSBuild allows to run SolutionCop checks during project compilation 
   * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
   * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)
 
-## How to install Solution Cop
+## How to install SolutionCop
 
     NuGet.exe Install SolutionCop
 
