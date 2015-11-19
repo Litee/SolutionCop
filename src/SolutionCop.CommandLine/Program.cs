@@ -17,6 +17,7 @@ namespace SolutionCop.CommandLine
         private static void Main(string[] args)
         {
             var commandLineParameters = new CommandLineParameters();
+
             if (Parser.Default.ParseArguments(args, commandLineParameters))
             {
                 SolutionCopConsole.LogInfo("StyleCop version " + Assembly.GetEntryAssembly().GetName().Version);
@@ -59,7 +60,7 @@ namespace SolutionCop.CommandLine
                     else
                     {
                         SolutionCopConsole.LogInfo("No errors found!");
-                        if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
+                        if (commandLineParameters.BuildServerType == BuildServer.TeamCity && !commandLineParameters.BuildServerNoSuccessMessages)
                         {
                             Console.Out.WriteLine("##teamcity[buildStatus status='SUCCESS' text='PASSED - {0}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)));
                         }
