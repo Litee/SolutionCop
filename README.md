@@ -10,6 +10,10 @@ SolutionCop.exe -s MySolution.sln [-c SolutionCop.xml] [-b TeamCity]
 
 If no configuration file is specified, the tool will look for `SolutionCop.xml` file next to `*.sln`. If config file cannot be found, then the default one will be created next to VS solution with all rules disabled.
 
+# SolutionCop.MSBuild (beta)
+
+SolutionCop.MSBuild allows to run SolutionCop checks during project compilation and detect issues earlier. To add such checks into your project simply install SolutionCop.MSBuild package into VS project. Note that SolutionCop.MSBuild doesn't allow you to specify exact config file path - instead it looks for SolutionCop.xml file in parent folders starting with folder where .csproj file is defined. Once config file is found logic is the same. To see more detailed output select more verbose MSBuild output level in VS settings.
+
 ## Supported rules
 
 * Basic
@@ -30,7 +34,7 @@ If no configuration file is specified, the tool will look for `SolutionCop.xml` 
   * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
   * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)
 
-## How to install
+## How to install Solution Cop
 
     NuGet.exe Install SolutionCop
 
