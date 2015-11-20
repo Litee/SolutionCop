@@ -95,7 +95,7 @@
                 var warningLevelInProject = xmlWarningLevel == null ? 0 : Int32.Parse(xmlWarningLevel.Value);
                 if (warningLevelInProject < requiredWarningLevel)
                 {
-                    yield return string.Format("Warning level {0} is lower than required {1} in project {2}", warningLevelInProject, requiredWarningLevel, projectFileName);
+                    yield return string.Format("Warning level {0} is lower than required {1} in project {2}. Please make sure that setting is active for ALL configurations.", warningLevelInProject, requiredWarningLevel, projectFileName);
                     yield break;
                 }
             }

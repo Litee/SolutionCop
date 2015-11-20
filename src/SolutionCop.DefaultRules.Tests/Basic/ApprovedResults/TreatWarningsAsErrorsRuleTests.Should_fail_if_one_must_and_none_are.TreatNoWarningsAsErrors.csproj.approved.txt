@@ -1,2 +1,2 @@
-﻿Errors[0] = Warning 0465 is not treated as an error in project TreatNoWarningsAsErrors.csproj
-Errors[1] = Warning 0465 is not treated as an error in project TreatNoWarningsAsErrors.csproj
+﻿Errors[0] = Warning 0465 is not treated as an error in project TreatNoWarningsAsErrors.csproj. Please make sure that setting is active for ALL configurations.
+Errors[1] = Warning 0465 is not treated as an error in project TreatNoWarningsAsErrors.csproj. Please make sure that setting is active for ALL configurations.

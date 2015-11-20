@@ -1,1 +1,1 @@
-﻿Errors[0] = Warning level 2 is lower than required 3 in project WarningLevelTwoInOneConfigurationAndThreeInAnother.csproj
+﻿Errors[0] = Warning level 2 is lower than required 3 in project WarningLevelTwoInOneConfigurationAndThreeInAnother.csproj. Please make sure that setting is active for ALL configurations.

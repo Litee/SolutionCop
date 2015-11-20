@@ -83,12 +83,12 @@
                         var warningsNotAllowedToSuppress = suppressedWarnings.Except(warningsAllowedToSuppress).ToArray();
                         if (warningsNotAllowedToSuppress.Count() == 1)
                         {
-                            yield return string.Format("Unapproved warning {0} is suppressed in project {1}", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath));
+                            yield return string.Format("Unapproved warning {0} is suppressed in project {1}. Please make sure that setting is active for ALL configurations.", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath));
                             yield break;
                         }
                         if (warningsNotAllowedToSuppress.Count() > 1)
                         {
-                            yield return string.Format("Unapproved warnings {0} are suppressed in project {1}", string.Join(", ", warningsNotAllowedToSuppress), Path.GetFileName(projectFilePath));
+                            yield return string.Format("Unapproved warnings {0} are suppressed in project {1}. Please make sure that setting is active for ALL configurations.", string.Join(", ", warningsNotAllowedToSuppress), Path.GetFileName(projectFilePath));
                             yield break;
                         }
                     }
