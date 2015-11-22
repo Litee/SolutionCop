@@ -78,9 +78,10 @@ namespace SolutionCop.DefaultRules.Basic
                     yield break;
                 }
             }
+            var projectDirPath = Path.GetFullPath(Path.GetDirectoryName(projectFilePath));
             foreach (var filePatternToProcess in config.FilePatternsToProcess)
             {
-                var filePaths = Directory.EnumerateFiles(Path.GetDirectoryName(projectFilePath), filePatternToProcess, SearchOption.AllDirectories);
+                var filePaths = Directory.EnumerateFiles(projectDirPath, filePatternToProcess, SearchOption.AllDirectories);
 
                 // TODO More flexible folder exclusions
                 foreach (var filePath in filePaths.Where(x => !x.ToLower().Contains(@"\obj\") && !x.ToLower().Contains(@"\bin\")))
@@ -98,7 +99,7 @@ namespace SolutionCop.DefaultRules.Basic
                         if (!xmlHintPaths.Any())
                         {
                             // TODO Yak!
-                            var fileSubPath = Path.GetFileName(Path.GetDirectoryName(projectFilePath)) + Path.DirectorySeparatorChar + Path.GetFullPath(filePath).Substring(Path.GetDirectoryName(projectFilePath).Length + 1);
+                            var fileSubPath = Path.GetFileName(projectDirPath) + Path.DirectorySeparatorChar + Path.GetFullPath(filePath).Substring(projectDirPath.Length + 1);
                             yield return string.Format("File is not referenced in project: {0}", fileSubPath);
                         }
                     }
