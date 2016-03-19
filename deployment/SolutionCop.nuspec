@@ -15,6 +15,7 @@
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
     <releaseNotes>
+0.6.0 - No changes, releasing beta3 as stable version
 0.6.0-beta3 - {BugFix} Attempt to fix relative folders issue in FilesIncludedIntoProjectRule
               {New} Additional recommendations added into some error messages
 0.6.0-beta2 - {BugFix} Fixed WarningLevel parsing - now is correctly 1 if missing
