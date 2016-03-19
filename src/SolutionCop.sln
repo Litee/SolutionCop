@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCop.Core.Tests", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCop.CommandLine", "SolutionCop.CommandLine\SolutionCop.CommandLine.csproj", "{757840C4-6FBA-4BD1-9F52-7335AE90FFAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCop.MSBuild", "SolutionCop.MsBuild\SolutionCop.MSBuild.csproj", "{4B272761-1C37-4536-A164-9EF3055EEEAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{757840C4-6FBA-4BD1-9F52-7335AE90FFAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{757840C4-6FBA-4BD1-9F52-7335AE90FFAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{757840C4-6FBA-4BD1-9F52-7335AE90FFAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B272761-1C37-4536-A164-9EF3055EEEAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B272761-1C37-4536-A164-9EF3055EEEAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B272761-1C37-4536-A164-9EF3055EEEAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B272761-1C37-4536-A164-9EF3055EEEAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

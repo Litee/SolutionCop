@@ -1,1 +1,1 @@
-﻿Errors[0] = Unapproved warning 0420 is suppressed in project SuppressTwoWarnings.csproj
+﻿Errors[0] = Unapproved warning 0420 is suppressed in project SuppressTwoWarnings.csproj. Please make sure that setting is active for ALL configurations.

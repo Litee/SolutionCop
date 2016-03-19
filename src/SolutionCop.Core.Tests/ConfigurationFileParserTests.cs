@@ -27,7 +27,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldBeEmpty();
             newConfigFileContent.ShouldNotBeEmpty();
             Approvals.Verify(newConfigFileContent);
@@ -47,7 +47,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -68,7 +68,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -88,7 +88,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldNotBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -108,14 +108,14 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.Parse("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
             errors.ShouldNotBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
 
         private ConfigurationFileParser CreateInstance(Action<string, byte[]> saveConfigFileAction)
         {
-            return new ConfigurationFileParser(saveConfigFileAction);
+            return new ConfigurationFileParser(saveConfigFileAction, new DefaultSolutionCopConsole());
         }
 
         private class DummyRule : IProjectRule

@@ -1,4 +1,4 @@
-﻿Errors[0] = Warning 0466 is not treated as an error in project TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj
-Errors[1] = Warning 0421 is not treated as an error in project TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj
-Errors[2] = Warning 0466 is not treated as an error in project TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj
-Errors[3] = Warning 0421 is not treated as an error in project TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj
+﻿Errors[0] = Warning 0466 is not treated as an error in project TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj. Please make sure that setting is active for ALL configurations.
+Errors[1] = Warning 0421 is not treated as an error in project TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj. Please make sure that setting is active for ALL configurations.
+Errors[2] = Warning 0466 is not treated as an error in project TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj. Please make sure that setting is active for ALL configurations.
+Errors[3] = Warning 0421 is not treated as an error in project TreatTwoWarningsAsErrorsInGlobalConfiguration.csproj. Please make sure that setting is active for ALL configurations.

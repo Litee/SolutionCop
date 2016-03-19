@@ -98,7 +98,7 @@
                     var warningsNotTreatedAsErrorsInPropertyGroup = warningsThatMustBeTreatedAsErrors.Except(warningsTreatedAsErrorsInProject);
                     foreach (var warningId in warningsNotTreatedAsErrorsInPropertyGroup)
                     {
-                        yield return string.Format("Warning {0} is not treated as an error in project {1}", warningId, Path.GetFileName(projectFilePath));
+                        yield return string.Format("Warning {0} is not treated as an error in project {1}. Please make sure that setting is active for ALL configurations.", warningId, Path.GetFileName(projectFilePath));
                     }
                 }
             }

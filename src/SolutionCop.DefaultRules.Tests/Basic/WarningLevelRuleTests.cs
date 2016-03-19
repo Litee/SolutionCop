@@ -24,6 +24,13 @@ namespace SolutionCop.DefaultRules.Tests.Basic
         }
 
         [Fact]
+        public void Should_pass_if_no_warning_level_in_project_but_default_level_is_required()
+        {
+            var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>1</MinimalValue></WarningLevel>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\WarningLevel\NoWarningLevel.csproj").FullName);
+        }
+
+        [Fact]
         public void Should_pass_if_warning_level_in_project_is_as_expected_in_global_section()
         {
             var xmlConfig = XElement.Parse("<WarningLevel><MinimalValue>2</MinimalValue></WarningLevel>");
