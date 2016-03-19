@@ -22,7 +22,7 @@ SolutionCop.MSBuild allows to run SolutionCop checks during project compilation 
   * [SuppressWarnings](https://github.com/Litee/SolutionCop/wiki/SuppressWarnings)
   * [WarningLevel](https://github.com/Litee/SolutionCop/wiki/WarningLevel)
   * [FilesIncludedIntoProject](https://github.com/Litee/SolutionCop/wiki/FilesIncludedIntoProject)
-  * [SameNameForAssemblyAndRootNamespaTargetFrameworkProfilece](https://github.com/Litee/SolutionCop/wiki/TargetFrameworkProfile)
+  * [TargetFrameworkProfilece](https://github.com/Litee/SolutionCop/wiki/TargetFrameworkProfile)
   * [SameNameForAssemblyAndRootNamespace](https://github.com/Litee/SolutionCop/wiki/SameNameForAssemblyAndRootNamespace)
 * NuGet
   * [NuGetAutomaticPackagesRestore](https://github.com/Litee/SolutionCop/wiki/NuGetAutomaticPackagesRestore)
@@ -36,13 +36,15 @@ SolutionCop.MSBuild allows to run SolutionCop checks during project compilation 
 
 ## How to install SolutionCop
 
+Run 
+
     NuGet.exe Install SolutionCop
 
 or 
 
     NuGet.exe Install SolutionCop -Prerelease
 
-depends on how brave you are
+depending on how brave you are :)
 
 ## Compatibility
 
