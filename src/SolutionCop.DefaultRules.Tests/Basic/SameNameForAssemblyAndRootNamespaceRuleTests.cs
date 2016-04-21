@@ -61,5 +61,12 @@ namespace SolutionCop.DefaultRules.Tests.Basic
             var xmlConfig = XElement.Parse("<SameNameForAssemblyAndRootNamespace><Exception/></SameNameForAssemblyAndRootNamespace>");
             ShouldFailOnConfiguration(xmlConfig, new FileInfo(@"..\..\Data\SameNameForAssemblyAndRootNamespace\SameNames.csproj").FullName);
         }
+
+        [Fact]
+        public void Should_fail_if_assemblyname_is_missing()
+        {
+            var xmlConfig = XElement.Parse("<SameNameForAssemblyAndRootNamespace></SameNameForAssemblyAndRootNamespace>");
+            ShouldFailNormally(xmlConfig, new FileInfo(@"..\..\Data\SameNameForAssemblyAndRootNamespace\MissingAssemblyName.csproj").FullName);
+        }
     }
 }
