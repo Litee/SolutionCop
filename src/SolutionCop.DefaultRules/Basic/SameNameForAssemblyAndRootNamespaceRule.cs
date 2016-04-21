@@ -55,7 +55,7 @@ namespace SolutionCop.DefaultRules.NuGet
                 var rootNamespace = xmlProject.Descendants(Namespace + "RootNamespace").First().Value;
                 if (assemblyName == null)
                 {
-                    yield return string.Format("Assembly name missing in project {0}", Path.GetFileName(projectFilePath));
+                    yield return string.Format("Assembly name is missing in project {0}", Path.GetFileName(projectFilePath));
                 }
                 else if (assemblyName.Value != rootNamespace)
                 {
