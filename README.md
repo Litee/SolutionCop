@@ -39,9 +39,9 @@ I recommend to enabled rules gradually, especially if you have large project.
 
 1. Install SolutionCop (see instruction above) and generate rules for your solution 
 2. Install **SolutionCop.MSBuild** NuGet package into every VS project you want to check and watch for errors in build output. Some notes:
-* SolutionCop.MSBuild doesn't allow to specify path to config file - instead it looks for *SolutionCop.xml* file in parent folders starting with folder where .csproj file is defined. Once config file is found logic is the same as in SolutionCop.
-* SameNuGetPackageVersions rule won't work in SolutionCop.MSBuild because tool processes each project separately, so has no chance to compare package versions between different projects.
-* To see more detailed output select verbose MSBuild output level in VS settings
+ * SolutionCop.MSBuild doesn't allow to specify path to config file - instead it looks for *SolutionCop.xml* file in parent folders starting with folder where .csproj file is defined. Once config file is found logic is the same as in SolutionCop.
+ * SameNuGetPackageVersions rule won't work in SolutionCop.MSBuild because tool processes each project separately, so has no chance to compare package versions between different projects.
+ * To see more detailed output select verbose MSBuild output level in VS settings
 
 ## TODO - Rules (in priority order)
 * Check for "Copy Local" used
