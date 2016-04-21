@@ -51,11 +51,15 @@ namespace SolutionCop.DefaultRules.NuGet
             }
             else
             {
-                var assemblyName = xmlProject.Descendants(Namespace + "AssemblyName").First().Value;
+                var assemblyName = xmlProject.Descendants(Namespace + "AssemblyName").FirstOrDefault();
                 var rootNamespace = xmlProject.Descendants(Namespace + "RootNamespace").First().Value;
-                if (assemblyName != rootNamespace)
+                if (assemblyName == null)
                 {
-                    yield return string.Format("Assembly name '{0}' and root namespace '{1}' are different in project {2}", assemblyName, rootNamespace, Path.GetFileName(projectFilePath));
+                    yield return string.Format("Assembly name missing in project {0}", Path.GetFileName(projectFilePath));
+                }
+                else if (assemblyName.Value != rootNamespace)
+                {
+                    yield return string.Format("Assembly name '{0}' and root namespace '{1}' are different in project {2}", assemblyName.Value, rootNamespace, Path.GetFileName(projectFilePath));
                 }
             }
         }
