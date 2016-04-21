@@ -15,6 +15,10 @@
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
     <releaseNotes>
+0.7.0-beta1 - Contributions from https://github.com/skurdiukov:
+              {New} XSD Schema added
+              {New} Failed checks are reported as failed tests into TeamCity
+              {BugFix} SameNameForAssemblyAndRootNamespace rule now doesn't crash on missing assembly name
 0.6.0 - No changes, releasing beta3 as stable version
 0.6.0-beta3 - {BugFix} Attempt to fix relative folders issue in FilesIncludedIntoProjectRule
               {New} Additional recommendations added into some error messages
@@ -36,6 +40,6 @@
     <file src="..\src\SolutionCop.DefaultRules\Bin\Release\SolutionCop.DefaultRules.dll" target="tools/bin" />
     <file src="..\src\SolutionCop.DefaultRules\Bin\Release\NuGet.Core.dll" target="tools/bin" />
     <file src="..\src\SolutionCop.DefaultRules\Bin\Release\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
-    <file src="..\srv\SolutionCop.xsd" target="tools/bin" />
+    <file src="..\src\SolutionCop.xsd" target="tools/bin" />
   </files>
 </package>                                       
