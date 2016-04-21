@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="Rules">
+    <xs:annotation>
+      <xs:documentation>Rules list</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="FilesIncludedIntoProject" type="FilesIncludedIntoProjectRule" minOccurs="0"/>
+        <xs:element name="TargetFrameworkVersion" type="xs:anyType" minOccurs="0"/>
+        <xs:element name="ReferenceNuGetPackagesOnly" type="ReferenceNuGetPackagesOnlyRule" minOccurs="0"/>
+        <xs:element name="SameNameForAssemblyAndRootNamespace" type="BasicWihtoutSettingsRule" minOccurs="0"/>
+        <xs:element name="TargetFrameworkProfile" type="TargetFrameworkProfileRule" minOccurs="0"/>
+        <xs:element name="NuGetAutomaticPackagesRestore" type="NuGetAutomaticPackagesRestoreRule" minOccurs="0"/>
+        <xs:element name="SameNuGetPackageVersions" type="CommonPackageRule" minOccurs="0"/>
+        <xs:element name="NuGetPackagesUsage" type="CommonPackageRule" minOccurs="0"/>
+        <xs:element name="NuGetPackageVersions" type="NuGetPackageVersionsRule" minOccurs="0"/>
+        <xs:element name="StyleCopEnabled" type="StyleCopEnabledRule" minOccurs="0"/>
+        <xs:element name="SuppressWarnings" type="SuppressWarningsRule" minOccurs="0"/>
+        <xs:element name="TreatStyleCopWarningsAsErrors" type="BasicWihtoutSettingsRule" minOccurs="0"/>
+        <xs:element name="TreatWarningsAsErrors" type="TreatWarningsAsErrorsRule" minOccurs="0"/>
+        <xs:element name="WarningLevel" type="WarningLevelRule" minOccurs="0"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="TargetFrameworkProfile">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value=""/>
+      <xs:enumeration value="Client"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ExceptionType">
+    <xs:sequence>
+      <xs:element name="Project" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProjectRule" abstract="true">
+    <xs:annotation>
+      <xs:documentation>Base type for project rules</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="enabled" type="xs:boolean"/>
+  </xs:complexType>
+  <xs:complexType name="FilesIncludedIntoProjectRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="FileName" type="xs:string" maxOccurs="unbounded"/>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:choice maxOccurs="2">
+                <xs:element name="Project" type="xs:string"/>
+                <xs:element name="FileName" type="xs:string" maxOccurs="unbounded"/>
+              </xs:choice>
+            </xs:complexType>
+            <xs:unique name="ProjectInFilesIncludedIntoProjectException">
+              <xs:selector xpath="."/>
+              <xs:field xpath="Project"/>
+            </xs:unique>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ReferenceNuGetPackagesOnlyRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Project" type="xs:string" minOccurs="0"/>
+                <xs:element name="Assembly" type="xs:string" maxOccurs="unbounded"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BasicWihtoutSettingsRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Project" type="xs:string"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TargetFrameworkProfileRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="Profile" type="TargetFrameworkProfile" maxOccurs="unbounded"/>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Project" type="xs:string"/>
+                <xs:element name="Profile" type="TargetFrameworkProfile" minOccurs="0" maxOccurs="unbounded"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NuGetAutomaticPackagesRestoreRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Project" type="xs:string"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CommonPackageRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:choice maxOccurs="2">
+                <xs:element name="Project" type="xs:string"/>
+                <xs:element name="Package" type="xs:string" maxOccurs="unbounded"/>
+              </xs:choice>
+            </xs:complexType>
+            <xs:unique name="project">
+              <xs:selector xpath="."/>
+              <xs:field xpath="Project"/>
+            </xs:unique>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NuGetPackageVersionsRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="Package" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:attribute name="id" type="xs:string" use="required"/>
+              <xs:attribute name="version" type="xs:string" use="required"/>
+              <xs:attribute name="prerelease" type="xs:boolean"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Exception" type="ExceptionType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="StyleCopEnabledRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Project"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SuppressWarningsRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="Warning" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Project" type="xs:string"/>
+                <xs:element name="Warning" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TreatWarningsAsErrorsRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:choice>
+            <xs:element name="AllWarnings"/>
+            <xs:element name="Warning" type="xs:string" maxOccurs="unbounded"/>
+          </xs:choice>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="ExceptionType">
+                  <xs:sequence>
+                    <xs:element name="Warning" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WarningLevelRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:sequence>
+          <xs:element name="MinimalValue">
+            <xs:simpleType>
+              <xs:restriction base="xs:int">
+                <xs:minInclusive value="0"/>
+                <xs:maxInclusive value="4"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="ExceptionType">
+                  <xs:sequence>
+                    <xs:element name="MinimalValue" minOccurs="0">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                          <xs:minInclusive value="0"/>
+                          <xs:maxInclusive value="4"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
