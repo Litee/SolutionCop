@@ -1,1 +1,1 @@
-﻿Errors[0] = Assembly name missing in project MissingAssemblyName.csproj
+﻿Errors[0] = Assembly name is missing in project MissingAssemblyName.csproj
