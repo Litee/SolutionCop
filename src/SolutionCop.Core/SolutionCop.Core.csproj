@@ -50,13 +50,16 @@
     <Compile Include="DefaultSolutionCopConsole.cs" />
     <Compile Include="BuildServer.cs" />
     <Compile Include="ConfigurationFileParser.cs" />
+    <Compile Include="IBuildServerReporter.cs" />
     <Compile Include="ISolutionCopConsole.cs" />
     <Compile Include="IProjectRule.cs" />
+    <Compile Include="NullBuildServerReporter.cs" />
     <Compile Include="ProjectsVerifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesDirectoryCatalog.cs" />
     <Compile Include="SolutionInfo.cs" />
     <Compile Include="SolutionParser.cs" />
+    <Compile Include="TeamCityReporter.cs" />
     <Compile Include="ValidationResult.cs" />
   </ItemGroup>
   <ItemGroup>
