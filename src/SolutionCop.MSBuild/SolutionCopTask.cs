@@ -45,7 +45,7 @@ namespace SolutionCop.MSBuild
                 }
 
                 var msBuileAnalysisLogger = new MsBuildSolutionCopConsole(Log);
-                var projectsVerifier = new ProjectsVerifier(msBuileAnalysisLogger);
+                var projectsVerifier = new ProjectsVerifier(msBuileAnalysisLogger, new NullBuildServerReporter());
                 var verificationResult = projectsVerifier.VerifyProjects(pathToCofigFile, new[] { ProjectFullPath }, (errors, validationResults) =>
                 {
                     if (errors.Any())
