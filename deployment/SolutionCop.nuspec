@@ -36,5 +36,6 @@
     <file src="..\src\SolutionCop.DefaultRules\Bin\Release\SolutionCop.DefaultRules.dll" target="tools/bin" />
     <file src="..\src\SolutionCop.DefaultRules\Bin\Release\NuGet.Core.dll" target="tools/bin" />
     <file src="..\src\SolutionCop.DefaultRules\Bin\Release\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
+    <file src="..\srv\SolutionCop.xsd" target="tools/bin" />
   </files>
 </package>                                       

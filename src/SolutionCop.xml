@@ -1,26 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Rules>
+<?xml version="1.0" encoding="utf-8"?>
+<Rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SolutionCop.xsd">
   <TargetFrameworkVersion enabled="true">
     <FrameworkVersion>4.0</FrameworkVersion>
   </TargetFrameworkVersion>
-  <ReferenceNuGetPackagesOnly enabled="true" />
+  <ReferenceNuGetPackagesOnly enabled="true"/>
   <TreatWarningsAsErrors enabled="true">
-    <AllWarnings />
+    <AllWarnings/>
   </TreatWarningsAsErrors>
-  <SuppressWarnings enabled="true"></SuppressWarnings>
+  <SuppressWarnings enabled="true"/>
   <WarningLevel>
     <MinimalValue>4</MinimalValue>
   </WarningLevel>
-  <StyleCopEnabled enabled="false" />
-  <NuGetAutomaticPackagesRestore enabled="true"></NuGetAutomaticPackagesRestore>
+  <StyleCopEnabled enabled="false"/>
+  <NuGetAutomaticPackagesRestore enabled="true"/>
   <NuGetPackagesUsage enabled="true">
     <Exception>
       <Package>StyleCop.MSBuild</Package>
     </Exception>
   </NuGetPackagesUsage>
-  <NuGetPackageVersions enabled="false" />
-  <TreatStyleCopWarningsAsErrors enabled="false"></TreatStyleCopWarningsAsErrors>
-  <SameNuGetPackageVersions enabled="true"></SameNuGetPackageVersions>
+  <NuGetPackageVersions enabled="false"/>
+  <TreatStyleCopWarningsAsErrors enabled="false"/>
+  <SameNuGetPackageVersions enabled="true"/>
   <FilesIncludedIntoProject enabled="true">
     <FileName>*.cs</FileName>
     <Exception>
@@ -37,6 +37,6 @@
     </Exception>
   </SameNameForAssemblyAndRootNamespace>
   <TargetFrameworkProfile enabled="true">
-    <Profile></Profile>
+    <Profile/>
   </TargetFrameworkProfile>
 </Rules>
