@@ -1,1 +1,1 @@
-﻿Errors[0] = Package xunit uses different versions 1.9.1 and 1.9.0  in project Project.csproj
+﻿Errors[0] = Package xunit uses different versions 1.9.0 and 1.9.1 in projects ProjectThree.csproj, ProjectThree.csproj

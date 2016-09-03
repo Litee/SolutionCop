@@ -22,8 +22,8 @@
             var xmlConfig = XElement.Parse("<SameNuGetPackageVersions/>");
             ShouldPassNormally(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName);
         }
 
         [Fact]
@@ -32,8 +32,8 @@
             var xmlConfig = XElement.Parse("<SameNuGetPackageVersions/>");
             ShouldFailNormally(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\ProjectTwo.csproj").FullName);
         }
 
         [Fact]
@@ -42,7 +42,7 @@
             var xmlConfig = XElement.Parse("<SameNuGetPackageVersions/>");
             ShouldFailNormally(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\DuplicateIds\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\DuplicateIds\ProjectThree.csproj").FullName);
         }
 
         [Fact]
@@ -55,8 +55,8 @@
 </SameNuGetPackageVersions>");
             ShouldPassNormally(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\ProjectTwo.csproj").FullName);
         }
 
         [Fact]
@@ -65,12 +65,12 @@
             var xmlConfig = XElement.Parse(@"
 <SameNuGetPackageVersions>
   <Exception><Project>NonExistingProject.csproj</Project></Exception>
-  <Exception><Project>Project.csproj</Project></Exception>
+  <Exception><Project>ProjectOne.csproj</Project></Exception>
 </SameNuGetPackageVersions>");
             ShouldPassNormally(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\ProjectTwo.csproj").FullName);
         }
 
         [Fact]
@@ -85,8 +85,8 @@
 </SameNuGetPackageVersions>");
             ShouldFailNormally(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\ProjectTwo.csproj").FullName);
         }
 
         [Fact]
@@ -101,8 +101,8 @@
 </SameNuGetPackageVersions>");
             ShouldFailNormally(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\ProjectTwo.csproj").FullName);
         }
 
         [Fact]
@@ -115,8 +115,8 @@
 </SameNuGetPackageVersions>");
             ShouldFailOnConfiguration(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName);
         }
 
         [Fact]
@@ -129,8 +129,8 @@
 </SameNuGetPackageVersions>");
             ShouldFailOnConfiguration(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName);
         }
 
         [Fact]
@@ -139,8 +139,8 @@
             var xmlConfig = XElement.Parse("<SameNuGetPackageVersions enabled=\"false\"/>");
             ShouldPassAsDisabled(
                 xmlConfig,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\Project.csproj").FullName,
-                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\Project.csproj").FullName);
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionOne\ProjectOne.csproj").FullName,
+                new FileInfo(@"..\..\Data\SameNuGetPackageVersions\UsesVersionTwo\ProjectOne.csproj").FullName);
         }
     }
 }

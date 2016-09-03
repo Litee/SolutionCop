@@ -11,7 +11,8 @@
     [Export(typeof(IProjectRule))]
     public class SameNuGetPackageVersionsRule : ProjectRule<Tuple<string, string>[]>
     {
-        private readonly Dictionary<string, HashSet<string>> _usedIds = new Dictionary<string, HashSet<string>>();
+        // Hash table would be faster, but List is more readable
+        private readonly List<Tuple<string, string, string>> _projectsPackageIdsAndVersions = new List<Tuple<string, string, string>>();
 
         public override string Id
         {
@@ -71,21 +72,16 @@
                     }
                     else
                     {
-                        HashSet<string> value;
-                        if (_usedIds.TryGetValue(packageId, out value))
+                        var differentVersionsOfTheSamePackage = _projectsPackageIdsAndVersions.Where(x => x.Item2 == packageId && x.Item3 != packageVersion).ToArray();
+                        if (differentVersionsOfTheSamePackage.Any())
                         {
-                            var otherUsedPackageIds = value.Where(x => x != packageVersion).ToArray();
-                            if (otherUsedPackageIds.Any())
-                            {
-                                yield return string.Format("Package {0} uses different versions {1} and {2}  in project {3}", packageId, otherUsedPackageIds.First(), packageVersion, projectFileName);
-                            }
+                            yield return string.Format(
+                                "Package {0} uses different versions {1} in projects {2}",
+                                packageId,
+                                string.Join(" and ", Enumerable.Repeat(packageVersion, 1).Concat(differentVersionsOfTheSamePackage.Select(x => x.Item3))),
+                                string.Join(", ", Enumerable.Repeat(projectFileName, 1).Concat(differentVersionsOfTheSamePackage.Select(x => x.Item1)).Take(5))); // Take(5) protects from too many items in message
                         }
-                        else
-                        {
-                            _usedIds[packageId] = new HashSet<string>();
-                        }
-
-                        _usedIds[packageId].Add(packageVersion);
+                        _projectsPackageIdsAndVersions.Add(new Tuple<string, string, string>(projectFileName, packageId, packageVersion));
                     }
                 }
             }
