@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SolutionCop.Core
+﻿namespace SolutionCop.Core
 {
+    using System;
+
     public class DefaultSolutionCopConsole : ISolutionCopConsole
     {
         public void LogDebug(string message, params object[] args)

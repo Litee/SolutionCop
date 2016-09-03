@@ -13,7 +13,8 @@
         private readonly Action<string, byte[]> _saveConfigFileAction;
         private readonly ISolutionCopConsole _logger;
 
-        public ConfigurationFileParser(ISolutionCopConsole logger) : this(File.WriteAllBytes, logger)
+        public ConfigurationFileParser(ISolutionCopConsole logger)
+            : this(File.WriteAllBytes, logger)
         {
         }
 

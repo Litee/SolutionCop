@@ -11,7 +11,8 @@
     [UseApprovalSubdirectory("ApprovedResults")]
     public class ReferenceNuGetPackagesOnlyRuleTests : ProjectRuleTest
     {
-        public ReferenceNuGetPackagesOnlyRuleTests() : base(new ReferenceNuGetPackagesOnlyRule())
+        public ReferenceNuGetPackagesOnlyRuleTests()
+            : base(new ReferenceNuGetPackagesOnlyRule())
         {
         }
 

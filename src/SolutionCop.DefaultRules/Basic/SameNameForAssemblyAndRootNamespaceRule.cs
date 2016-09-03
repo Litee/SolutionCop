@@ -1,4 +1,4 @@
-namespace SolutionCop.DefaultRules.NuGet
+﻿namespace SolutionCop.DefaultRules.NuGet
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-namespace SolutionCop.DefaultRules.Tests.Basic
+﻿namespace SolutionCop.DefaultRules.Tests.Basic
 {
     using System.IO;
     using System.Xml.Linq;
@@ -11,7 +11,8 @@ namespace SolutionCop.DefaultRules.Tests.Basic
     [UseApprovalSubdirectory("ApprovedResults")]
     public class FilesIncludedIntoProjectRuleTests : ProjectRuleTest
     {
-        public FilesIncludedIntoProjectRuleTests() : base(new FilesIncludedIntoProjectRule())
+        public FilesIncludedIntoProjectRuleTests()
+            : base(new FilesIncludedIntoProjectRule())
         {
         }
 

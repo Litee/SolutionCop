@@ -1,9 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace SolutionCop.Core
+﻿namespace SolutionCop.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    public enum VerificationResult
+    {
+        NoErrors,
+        ErrorsFound
+    }
+
     public class ProjectsVerifier
     {
         private readonly ISolutionCopConsole _logger;
@@ -35,11 +41,11 @@ namespace SolutionCop.Core
             foreach (var rule in rules)
             {
                 var xmlRuleConfigs = ruleConfigsMap[rule.Id];
-                var testName = String.Concat(SuiteName, ".", rule.Id);
+                var testName = string.Concat(SuiteName, ".", rule.Id);
 
                 if (xmlRuleConfigs == null)
                 {
-                    var error = String.Format("Configuration section is not found for rule {0}", rule.Id);
+                    var error = string.Format("Configuration section is not found for rule {0}", rule.Id);
                     errors.Add(error);
                     _buildServerReporter.TestStarted(testName);
                     _buildServerReporter.TestFailed(testName, error, error);
@@ -56,7 +62,7 @@ namespace SolutionCop.Core
 
                     if (validationResult.Errors.Any())
                     {
-                        _buildServerReporter.TestFailed(testName, String.Format("Validation failed for rule {0}",  rule.Id), String.Join("\n", validationResult.Errors));
+                        _buildServerReporter.TestFailed(testName, string.Format("Validation failed for rule {0}",  rule.Id), string.Join("\n", validationResult.Errors));
                     }
 
                     _buildServerReporter.TestFinished(testName);
@@ -76,11 +82,5 @@ namespace SolutionCop.Core
             dumpResultsAction(errors, validationResults);
             return errors.Any() ? VerificationResult.ErrorsFound : VerificationResult.NoErrors;
         }
-    }
-
-    public enum VerificationResult
-    {
-        NoErrors,
-        ErrorsFound
     }
 }

@@ -1,4 +1,4 @@
-namespace SolutionCop.DefaultRules.Tests.NuGet
+﻿namespace SolutionCop.DefaultRules.Tests.NuGet
 {
     using System.IO;
     using System.Xml.Linq;
@@ -11,7 +11,8 @@ namespace SolutionCop.DefaultRules.Tests.NuGet
     [UseApprovalSubdirectory("ApprovedResults")]
     public class NuGetPackagesUsageRuleTests : ProjectRuleTest
     {
-        public NuGetPackagesUsageRuleTests() : base(new NuGetPackagesUsageRule())
+        public NuGetPackagesUsageRuleTests()
+            : base(new NuGetPackagesUsageRule())
         {
         }
 

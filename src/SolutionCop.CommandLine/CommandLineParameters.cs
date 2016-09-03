@@ -1,11 +1,8 @@
-﻿using SolutionCop.Core;
-
-namespace SolutionCop.CommandLine
+﻿namespace SolutionCop.CommandLine
 {
     using global::CommandLine;
     using global::CommandLine.Text;
-
-
+    using SolutionCop.Core;
 
     // ReSharper disable UnusedAutoPropertyAccessor.Global
     internal sealed class CommandLineParameters
@@ -23,7 +20,6 @@ namespace SolutionCop.CommandLine
         public bool BuildServerNoSuccessMessages { get; set; }
 
         [HelpOption]
-        // ReSharper disable once UnusedMember.Global
         public string GetUsage()
         {
             return HelpText.AutoBuild(this);

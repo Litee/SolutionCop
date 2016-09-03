@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-
-namespace SolutionCop.CommandLine
+﻿namespace SolutionCop.CommandLine
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
-
-    using global::CommandLine;
+    using System.Reflection;
     using Core;
+    using global::CommandLine;
 
     internal static class Program
     {
@@ -46,7 +44,8 @@ namespace SolutionCop.CommandLine
 
                 var verificationResult = new ProjectsVerifier(SolutionCopConsole, reporter).VerifyProjects(
                     pathToConfigFile,
-                    solutionInfo.ProjectFilePaths.ToArray(), (errors, validationResults) =>
+                    solutionInfo.ProjectFilePaths.ToArray(),
+                    (errors, validationResults) =>
                         {
                             if (errors.Any())
                             {
@@ -57,7 +56,7 @@ namespace SolutionCop.CommandLine
                                     // adding empty line for a better formatting in TC output
                                     // var extendedErrorsInfo = Enumerable.Repeat(string.Empty, 1).Concat(errors.Select((x, idx) => string.Format("ERROR ({0}/{1}): {2}", idx + 1, errors.Count, x))).Concat(Enumerable.Repeat(String.Empty, 1)).Concat(validationResults.Select(x => String.Format("INFO: Rule {0} is {1}", x.RuleId, x.IsEnabled ? "enabled" : "disabled")));
                                     // Console.Out.WriteLine("##teamcity[testFailed name='SolutionCop' message='FAILED - {0}' details='{1}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)), string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
-                                    TeamCityReporter.WriteCommand("buildProblem", new KeyValuePair<string, string>("description", String.Concat("FAILED - ", Path.GetFileName(pathToConfigFile))));
+                                    TeamCityReporter.WriteCommand("buildProblem", new KeyValuePair<string, string>("description", string.Concat("FAILED - ", Path.GetFileName(pathToConfigFile))));
                                 }
                             }
                             else
@@ -67,7 +66,7 @@ namespace SolutionCop.CommandLine
                                 // TODO: BuildServerNoSuccessMessages is probably obsolete now
                                 if (commandLineParameters.BuildServerType == BuildServer.TeamCity && !commandLineParameters.BuildServerNoSuccessMessages)
                                 {
-                                    TeamCityReporter.WriteCommand("progressMessage", new KeyValuePair<string, string>("text", String.Concat("PASSED - ", Path.GetFileName(pathToConfigFile))));
+                                    TeamCityReporter.WriteCommand("progressMessage", new KeyValuePair<string, string>("text", string.Concat("PASSED - ", Path.GetFileName(pathToConfigFile))));
                                 }
                             }
                         });
