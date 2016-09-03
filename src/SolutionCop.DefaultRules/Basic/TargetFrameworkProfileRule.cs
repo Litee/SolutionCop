@@ -1,4 +1,4 @@
-namespace SolutionCop.DefaultRules.Basic
+﻿namespace SolutionCop.DefaultRules.Basic
 {
     using System;
     using System.Collections.Generic;

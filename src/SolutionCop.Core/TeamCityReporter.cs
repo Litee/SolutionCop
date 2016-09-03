@@ -6,7 +6,18 @@
 
     public class TeamCityReporter : IBuildServerReporter
     {
-        #region Implementation of IBuildServerReporter
+        public static void WriteCommand(string command, params Param[] args)
+        {
+            Console.Out.Write("##teamcity[");
+            Console.Out.Write(command);
+
+            foreach (var arg in args)
+            {
+                Console.Out.Write(" {0}='{1}'", arg.Key, EscapeForTeamCity(arg.Value));
+            }
+
+            Console.Out.WriteLine("]");
+        }
 
         /// <summary>
         /// Report about started test suite.
@@ -66,21 +77,6 @@
                 new Param("name", testName),
                 new Param("message", message),
                 new Param("details", details));
-        }
-
-        #endregion
-
-        public static void WriteCommand(string command, params Param[] args)
-        {
-            Console.Out.Write("##teamcity[");
-            Console.Out.Write(command);
-
-            foreach (var arg in args)
-            {
-                Console.Out.Write(" {0}='{1}'", arg.Key, EscapeForTeamCity(arg.Value));
-            }
-
-            Console.Out.WriteLine("]");
         }
 
         /// <summary>

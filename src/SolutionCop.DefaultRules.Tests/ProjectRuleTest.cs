@@ -1,4 +1,4 @@
-namespace SolutionCop.DefaultRules.Tests
+﻿namespace SolutionCop.DefaultRules.Tests
 {
     using System;
     using System.Xml.Linq;

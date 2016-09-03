@@ -11,7 +11,8 @@
     [UseApprovalSubdirectory("ApprovedResults")]
     public class TargetFrameworkVersionRuleTests : ProjectRuleTest
     {
-        public TargetFrameworkVersionRuleTests() : base(new TargetFrameworkVersionRule())
+        public TargetFrameworkVersionRuleTests()
+            : base(new TargetFrameworkVersionRule())
         {
         }
 

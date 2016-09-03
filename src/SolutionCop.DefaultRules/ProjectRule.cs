@@ -10,7 +10,7 @@
 
     public abstract class ProjectRule<T> : IProjectRule
     {
-        protected readonly XNamespace Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
+        private readonly XNamespace _namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
         public abstract string Id { get; }
 
@@ -21,6 +21,14 @@
                 var element = new XElement(Id);
                 element.SetAttributeValue("enabled", "false");
                 return element;
+            }
+        }
+
+        protected XNamespace Namespace
+        {
+            get
+            {
+                return _namespace;
             }
         }
 

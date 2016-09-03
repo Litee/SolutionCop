@@ -1,4 +1,4 @@
-namespace SolutionCop.DefaultRules.Tests.Basic
+﻿namespace SolutionCop.DefaultRules.Tests.Basic
 {
     using System.IO;
     using System.Xml.Linq;
@@ -11,7 +11,8 @@ namespace SolutionCop.DefaultRules.Tests.Basic
     [UseApprovalSubdirectory("ApprovedResults")]
     public class TargetFrameworkProfileRuleTests : ProjectRuleTest
     {
-        public TargetFrameworkProfileRuleTests() : base(new TargetFrameworkProfileRule())
+        public TargetFrameworkProfileRuleTests()
+            : base(new TargetFrameworkProfileRule())
         {
         }
 

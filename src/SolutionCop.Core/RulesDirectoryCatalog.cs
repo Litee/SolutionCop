@@ -1,9 +1,8 @@
-﻿using System.IO;
-
-namespace SolutionCop.Core
+﻿namespace SolutionCop.Core
 {
     using System;
     using System.ComponentModel.Composition.Hosting;
+    using System.IO;
     using System.Linq;
 
     public class RulesDirectoryCatalog

@@ -1,4 +1,4 @@
-namespace SolutionCop.DefaultRules.Tests.NuGet
+﻿namespace SolutionCop.DefaultRules.Tests.NuGet
 {
     using System.IO;
     using System.Xml.Linq;

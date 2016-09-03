@@ -1,4 +1,4 @@
-namespace SolutionCop.DefaultRules.Tests.StyleCop
+﻿namespace SolutionCop.DefaultRules.Tests.StyleCop
 {
     using System.IO;
     using System.Xml.Linq;
@@ -11,7 +11,8 @@ namespace SolutionCop.DefaultRules.Tests.StyleCop
     [UseApprovalSubdirectory("ApprovedResults")]
     public class StyleCopEnabledRuleTests : ProjectRuleTest
     {
-        public StyleCopEnabledRuleTests() : base(new StyleCopEnabledRule())
+        public StyleCopEnabledRuleTests()
+            : base(new StyleCopEnabledRule())
         {
         }
 
