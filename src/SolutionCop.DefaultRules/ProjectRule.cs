@@ -84,37 +84,8 @@
 
         protected void ValidateConfigSectionForAllowedElements(XElement xmlElement, List<string> errors, params string[] allowedElementNames)
         {
-            var unknownElements = xmlElement.Elements()
-                .Select(x => x.Name.LocalName)
-                .Where(x => allowedElementNames.All(y => y != x))
-                .Select(x => string.Format("<{0}>", x))
-                .ToArray();
-            if (unknownElements.Any())
-            {
-                var entryOrEntries = unknownElements.Count() == 1 ? "entry" : "entries";
-                var allowedElementsList = string.Join(", ", allowedElementNames.Select(x => string.Format("<{0}>", x)));
-                var errorDetails = string.Format("Unknown {0} within <{1}>: {2}. Allowed entries: {3}.", entryOrEntries, xmlElement.Name.LocalName, string.Join(", ", unknownElements), allowedElementsList);
-                errors.Add(string.Format(Resources.BadConfiguration, Id, errorDetails));
-            }
+            ConfigValidation.ValidateConfigSectionForAllowedElements(xmlElement, errors, Id, allowedElementNames);
         }
-
-/*
-        protected void ValidateConfigSectionForRequiredElements(XElement xmlElement, List<string> errors, params string[] requiredElementNames)
-        {
-            var missingElements = requiredElementNames
-                .Where(x => xmlElement.Element(x) == null)
-                .Select(x => string.Format("<{0}>", x))
-                .ToArray();
-            if (missingElements.Count() == 1)
-            {
-                errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("Missing configuration entry {0}.", string.Join(",", missingElements))));
-            }
-            else if (missingElements.Count() > 1)
-            {
-                errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("Missing configuration entries {0}.", string.Join(",", missingElements))));
-            }
-        }
-*/
 
         protected abstract IEnumerable<string> ValidateSingleProject(XDocument xmlProject, string projectFilePath, T exceptions);
     }
