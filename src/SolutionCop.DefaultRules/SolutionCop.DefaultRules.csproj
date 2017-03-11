@@ -58,8 +58,11 @@
     <Compile Include="Basic\TargetFrameworkProfileRule.cs" />
     <Compile Include="ConfigValidation.cs" />
     <Compile Include="NuGet\NuGetAutomaticPackagesRestoreRule.cs" />
+    <Compile Include="NuGet\NuspecDependencyInfo.cs" />
+    <Compile Include="NuGet\NuspecFileData.cs" />
     <Compile Include="NuGet\NuspecHasTheSameVersionsWithPackagesConfig.cs" />
-    <Compile Include="NuGet\NuspecValidationConfig.cs" />
+    <Compile Include="NuGet\PackageInfo.cs" />
+    <Compile Include="NuGet\PackagesFileData.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -19,6 +19,8 @@
         private const string ProjectAttributeName = "projectName";
         private const string PackageAttributeName = "packageName";
 
+        private static readonly StringComparer WordComparer = StringComparer.OrdinalIgnoreCase;
+
         public string Id => "NuspecHasTheSameVersionsWithPackagesConfig";
 
         public XElement DefaultConfig
@@ -37,7 +39,7 @@
 
                 var projectExclusion = new XElement(ProjectExceptionTagName);
                 projectExclusion.SetAttributeValue(ProjectAttributeName, "ProjectWithAnotherReferences.csproj");
-                
+
                 var packageExclusion = new XElement(PackageExceptionTagName);
                 packageExclusion.SetAttributeValue(PackageAttributeName, "package-id");
 
@@ -77,7 +79,109 @@
                 return new ValidationResult(Id, false, false, new string[0]);
             }
 
+            var projectAndPackages = GetProjectToPackagesMap(projectFilePaths.Where(File.Exists), config.ExcludedProjects);
+
+            foreach (var nuspecTag in config.Specs)
+            {
+                var excludedProjects = new HashSet<string>(config.ExcludedProjects.Union(nuspecTag.ExcludedProjects, WordComparer));
+                var excludedPackages = new HashSet<string>(config.ExcludedPackages.Union(nuspecTag.ExcludedPackages, WordComparer));
+
+                var packageFiles = projectAndPackages.Where(kv => !excludedProjects.Contains(Path.GetFileName(kv.Key))).Select(kv => kv.Value);
+
+                var packageToVersions = GetPackageToAllowedVersion(packageFiles);
+
+                foreach (var specsPathes in nuspecTag.Pathes)
+                {
+                    foreach (var nuspecFilePath in GetNuspecFiles(specsPathes))
+                    {
+                        var nuspecFile = NuspecFileData.ReadFile(nuspecFilePath);
+
+                        foreach (var dependency in nuspecFile.Dependencies)
+                        {
+                            var packageId = dependency.PackageId;
+
+                            if (excludedPackages.Contains(packageId))
+                            {
+                                continue;
+                            }
+
+                            if (!packageToVersions.ContainsKey(packageId))
+                            {
+                                continue;
+                            }
+
+                            var allowedVersions = packageToVersions[packageId];
+
+                            var version = dependency.PackageVersion;
+
+                            if (allowedVersions.Contains(version))
+                            {
+                                continue;
+                            }
+
+                            errors.Add($"There is inconsistent between Nuspec file {nuspecFilePath} and solution. Nuspec has dependency '{packageId}' with version '{version}'. Solution has the same packages, but with versions: {string.Join(" ,", allowedVersions)}");
+                        }
+                    }
+                }
+            }
+
             return new ValidationResult(Id, true, false, new string[0]);
+        }
+
+        private static Dictionary<string, HashSet<string>> GetPackageToAllowedVersion(IEnumerable<PackagesFileData> packagesFileDatas)
+        {
+            return packagesFileDatas.SelectMany(d => d.Packages)
+                .ToLookup(p => p.Name, p => p.Version)
+                .ToDictionary(kv => kv.Key, kv => new HashSet<string>(kv, WordComparer));
+        }
+
+        private static string[] GetNuspecFiles(string pathToFiles)
+        {
+            if (string.IsNullOrWhiteSpace(pathToFiles))
+            {
+                return new string[0];
+            }
+
+            if (File.Exists(pathToFiles))
+            {
+                return new[] { pathToFiles };
+            }
+
+            var directoryName = Path.GetDirectoryName(pathToFiles);
+            var pattern = Path.GetFileName(pathToFiles);
+
+            if (string.IsNullOrWhiteSpace(directoryName) || !Directory.Exists(directoryName))
+            {
+                return new string[0];
+            }
+
+            return Directory.GetFiles(directoryName, pattern, SearchOption.AllDirectories);
+        }
+
+        private static Dictionary<string, PackagesFileData> GetProjectToPackagesMap(IEnumerable<string> projectFilePathes, HashSet<string> excludedProjects)
+        {
+            var projectsAndPackages = from projectPath in projectFilePathes
+                let fileName = Path.GetFileName(projectPath)
+                let projectFolder = Path.GetDirectoryName(projectPath)
+                let packagesFilePath = Path.Combine(projectPath, "packages.config")
+                where !excludedProjects.Contains(fileName) && File.Exists(projectPath) && File.Exists(packagesFilePath)
+                select new { ProjectPath = projectPath, PackageFile = PackagesFileData.ReadFile(packagesFilePath) };
+
+            return projectsAndPackages.ToDictionary(pp => pp.ProjectPath, pp => pp.PackageFile);
+        }
+
+        private static string ParseProjectExclusion(XElement element)
+        {
+            var packageName = element.Attributes(ProjectAttributeName).FirstOrDefault()?.Value ?? string.Empty;
+
+            return packageName.Trim();
+        }
+
+        private static string ParsePackageExclusion(XElement element)
+        {
+            var packageName = element.Attributes(PackageAttributeName).FirstOrDefault()?.Value ?? string.Empty;
+
+            return packageName.Trim();
         }
 
         private sealed class RuleConfiguration
@@ -85,17 +189,17 @@
             private RuleConfiguration()
             {
                 Specs = new List<NuspecTag>();
-                ExcludedPackages = new List<PackageExclusion>();
-                ExcludedProjects = new List<ProjectExclusion>();
+                ExcludedPackages = new HashSet<string>(WordComparer);
+                ExcludedProjects = new HashSet<string>(WordComparer);
             }
 
             public bool IsEnabled { get; private set; }
 
             public List<NuspecTag> Specs { get; }
 
-            public List<ProjectExclusion> ExcludedProjects { get; }
+            public HashSet<string> ExcludedProjects { get; }
 
-            public List<PackageExclusion> ExcludedPackages { get; }
+            public HashSet<string> ExcludedPackages { get; }
 
             public static RuleConfiguration Parse(XElement ruleConfig)
             {
@@ -114,49 +218,15 @@
                     }
                     else if (string.Equals(name, ProjectExceptionTagName, StringComparison.OrdinalIgnoreCase))
                     {
-                        result.ExcludedProjects.Add(ProjectExclusion.Parse(mainElement));
+                        result.ExcludedProjects.Add(ParseProjectExclusion(mainElement));
                     }
                     else if (string.Equals(name, PackageExceptionTagName, StringComparison.OrdinalIgnoreCase))
                     {
-                        result.ExcludedPackages.Add(PackageExclusion.Parse(mainElement));
+                        result.ExcludedPackages.Add(ParsePackageExclusion(mainElement));
                     }
                 }
 
                 return result;
-            }
-        }
-
-        private sealed class PackageExclusion
-        {
-            private PackageExclusion(string packageName)
-            {
-                PackageName = packageName;
-            }
-
-            public string PackageName { get; }
-
-            public static PackageExclusion Parse(XElement element)
-            {
-                var packageName = element.Attributes(PackageAttributeName).FirstOrDefault()?.Value ?? string.Empty;
-
-                return new PackageExclusion(packageName);
-            }
-        }
-
-        private sealed class ProjectExclusion
-        {
-            private ProjectExclusion(string projectName)
-            {
-                ProjectName = projectName;
-            }
-
-            public string ProjectName { get; }
-
-            public static ProjectExclusion Parse(XElement element)
-            {
-                var packageName = element.Attributes(ProjectAttributeName).FirstOrDefault()?.Value ?? string.Empty;
-
-                return new ProjectExclusion(packageName);
             }
         }
 
@@ -165,15 +235,15 @@
             private NuspecTag()
             {
                 Pathes = new List<string>();
-                ExcludedPackages = new List<PackageExclusion>();
-                ExcludedProjects = new List<ProjectExclusion>();
+                ExcludedPackages = new HashSet<string>(WordComparer);
+                ExcludedProjects = new HashSet<string>(WordComparer);
             }
 
             public List<string> Pathes { get; }
 
-            public List<ProjectExclusion> ExcludedProjects { get; }
+            public HashSet<string> ExcludedProjects { get; }
 
-            public List<PackageExclusion> ExcludedPackages { get; }
+            public HashSet<string> ExcludedPackages { get; }
 
             public static NuspecTag Parse(XElement element)
             {
@@ -189,11 +259,11 @@
                     }
                     else if (string.Equals(name, ProjectExceptionTagName, StringComparison.OrdinalIgnoreCase))
                     {
-                        result.ExcludedProjects.Add(ProjectExclusion.Parse(nuspecSubtag));
+                        result.ExcludedProjects.Add(ParseProjectExclusion(nuspecSubtag));
                     }
                     else if (string.Equals(name, PackageExceptionTagName, StringComparison.OrdinalIgnoreCase))
                     {
-                        result.ExcludedPackages.Add(PackageExclusion.Parse(nuspecSubtag));
+                        result.ExcludedPackages.Add(ParsePackageExclusion(nuspecSubtag));
                     }
                 }
 
