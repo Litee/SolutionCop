@@ -1,0 +1,15 @@
+﻿<NuspecHasTheSameVersionsWithPackagesConfig enabled="false">
+  <Nupspec>
+    <Path>NuspecFiles/MyPackage.nuspec</Path>
+  </Nupspec>
+  <Nupspec>
+    <Path>../../NuspecFiles/*.nuspec</Path>
+  </Nupspec>
+  <Nupspec>
+    <Path>MyPackage.nuspec</Path>
+    <ExcludePackageId packageId="package-id" />
+    <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
+  </Nupspec>
+  <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
+  <ExcludePackagesOfProject packageId="package-id" />
+</NuspecHasTheSameVersionsWithPackagesConfig>

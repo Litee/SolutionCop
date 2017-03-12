@@ -37,7 +37,11 @@
         {
             var validationResult = _instance.ValidateAllProjects(xmlConfig, projectFileNames);
             validationResult.IsEnabled.ShouldBe(true);
-            validationResult.HasErrorsInConfiguration.ShouldBe(false);
+
+            validationResult.HasErrorsInConfiguration.ShouldBe(
+                false,
+                () => $"HasErrorsInConfiguration should be false. Errors: {string.Join(", ", validationResult.Errors ?? new string[0])}");
+
             validationResult.Errors.ShouldBeEmpty();
         }
 

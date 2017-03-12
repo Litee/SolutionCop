@@ -17,7 +17,7 @@
         private const string ProjectExceptionTagName = "ExcludePackagesOfProject";
         private const string NupsecPathTagName = "Path";
         private const string ProjectAttributeName = "projectName";
-        private const string PackageAttributeName = "packageName";
+        private const string PackageAttributeName = "packageId";
 
         private static readonly StringComparer WordComparer = StringComparer.OrdinalIgnoreCase;
 
@@ -65,7 +65,7 @@
         {
             var errors = new List<string>();
 
-            ConfigValidation.ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, Id, NuspecTagName, ProjectExceptionTagName);
+            ConfigValidation.ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, Id, NuspecTagName, ProjectExceptionTagName, PackageExceptionTagName);
 
             if (errors.Any())
             {
@@ -125,7 +125,7 @@
                 }
             }
 
-            return new ValidationResult(Id, true, false, new string[0]);
+            return new ValidationResult(Id, true, false, errors.ToArray());
         }
 
         private static Dictionary<string, HashSet<string>> GetPackageToAllowedVersion(IEnumerable<PackagesFileData> packagesFileDatas)
