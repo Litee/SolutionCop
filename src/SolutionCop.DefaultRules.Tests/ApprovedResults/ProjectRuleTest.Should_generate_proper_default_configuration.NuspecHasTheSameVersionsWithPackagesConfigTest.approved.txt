@@ -18,5 +18,5 @@
   <!--Target package will be ignored for all nuspec files-->
   <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
   <!--This project will be ignored by all nuspec files. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT-->
-  <ExcludePackagesOfProject packageId="package-id" />
+  <ExcludePackageId packageId="package-id" />
 </NuspecHasTheSameVersionsWithPackagesConfig>

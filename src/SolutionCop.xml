@@ -21,6 +21,16 @@
   <NuGetPackageVersions enabled="false"/>
   <TreatStyleCopWarningsAsErrors enabled="false"/>
   <SameNuGetPackageVersions enabled="true"/>
+  <NuspecHasTheSameVersionsWithPackagesConfig enabled="true">
+    <!--all exclusions are needed for xsd schema validation only-->
+    <Nupspec>
+      <Path>../deployment/*.nuspec</Path>
+      <ExcludePackageId packageId="package-id" />
+      <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
+    </Nupspec>
+    <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
+    <ExcludePackageId packageId="package-id" />
+  </NuspecHasTheSameVersionsWithPackagesConfig>
   <FilesIncludedIntoProject enabled="true">
     <FileName>*.cs</FileName>
     <Exception>

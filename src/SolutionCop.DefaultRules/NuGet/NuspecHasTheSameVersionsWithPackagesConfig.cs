@@ -61,7 +61,7 @@
                 var globalProjectExclusion = new XElement(ProjectExceptionTagName);
                 globalProjectExclusion.SetAttributeValue(ProjectAttributeName, "ProjectWithAnotherReferences.csproj");
 
-                var globalPackageExclusion = new XElement(ProjectExceptionTagName);
+                var globalPackageExclusion = new XElement(PackageExceptionTagName);
                 globalPackageExclusion.SetAttributeValue(PackageAttributeName, "package-id");
 
                 element.Add(new XComment("Target package will be ignored for all nuspec files"));
