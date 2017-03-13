@@ -63,6 +63,26 @@
         }
 
         [Fact]
+        public void ShouldFindMultipleNuspecPackagesByMask()
+        {
+            var testSubfolder = "MultipleNuspecFiles";
+            var testFolder = TestDirectory.GetDirectories(testSubfolder).Single();
+
+            var xmlConfig = XElement.Parse(@"
+<NuspecHasTheSameVersionsWithPackagesConfig>
+  <Nupspec>
+        <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultipleNuspecFiles\*.nuspec</Path>
+  </Nupspec>  
+</NuspecHasTheSameVersionsWithPackagesConfig>");
+
+            var projects = testFolder.GetFiles("*.csproj", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
+
+            projects.Length.ShouldBe(1);
+
+            ShouldFailNormally(xmlConfig, projects);
+        }
+
+        [Fact]
         public void ShouldIgnoreNuspecWithoutDependencies()
         {
             var testSubfolder = "EmptyNuspec";
