@@ -6,6 +6,7 @@
     using ApprovalTests.Namers;
     using ApprovalTests.Reporters;
     using DefaultRules.NuGet;
+    using Shouldly;
     using Xunit;
 
     [UseReporter(typeof(DiffReporter))]
@@ -56,7 +57,31 @@
 
             var projects = testFolder.GetFiles("*.csproj", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
 
+            projects.Length.ShouldBe(3);
+
             ShouldFailNormally(xmlConfig, projects);
+        }
+
+        [Fact]
+        public void ShouldIgnoreNuspecWithoutDependencies()
+        {
+            var testSubfolder = "EmptyNuspec";
+            var testFolder = TestDirectory.GetDirectories(testSubfolder).Single();
+
+            var xmlConfig = XElement.Parse(@"
+<NuspecHasTheSameVersionsWithPackagesConfig>
+  <ExcludePackagesOfProject projectName='IgnoredProject.csproj'/>  
+  <ExcludePackageId packageId='incorrect-ignored-global-package'/>
+  <Nupspec>
+        <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\EmptyNuspec\Empty.nuspec</Path>
+  </Nupspec>  
+</NuspecHasTheSameVersionsWithPackagesConfig>");
+
+            var projects = testFolder.GetFiles("*.csproj", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
+
+            projects.Length.ShouldBe(1);
+
+            ShouldPassNormally(xmlConfig, projects);
         }
     }
 }
