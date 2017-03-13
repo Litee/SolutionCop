@@ -27,7 +27,7 @@
             var testFolder = TestDirectory.GetDirectories(testSubfolder).Single();
 
             var xmlConfig = XElement.Parse(@"
-<NuspecHasTheSameVersionsWithPackagesConfig>
+<NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
   <ExcludePackagesOfProject projectName='IgnoredProject.csproj'/>  
   <ExcludePackageId packageId='incorrect-ignored-global-package'/>
   <Nupspec>
@@ -51,7 +51,7 @@
             var testFolder = TestDirectory.GetDirectories(testSubfolder).Single();
 
             var xmlConfig = XElement.Parse(@"
-<NuspecHasTheSameVersionsWithPackagesConfig>
+<NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
   <Nupspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultipleNuspecFiles\*.nuspec</Path>
   </Nupspec>  
@@ -71,7 +71,7 @@
             var testFolder = TestDirectory.GetDirectories(testSubfolder).Single();
 
             var xmlConfig = XElement.Parse(@"
-<NuspecHasTheSameVersionsWithPackagesConfig>
+<NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
   <ExcludePackagesOfProject projectName='IgnoredProject.csproj'/>  
   <ExcludePackageId packageId='incorrect-ignored-global-package'/>
   <Nupspec>
@@ -90,7 +90,7 @@
         public void ShouldFailForInvalidNuspecFilesLookupPatterns()
         {
             var xmlConfig = XElement.Parse(@"
-<NuspecHasTheSameVersionsWithPackagesConfig>
+<NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
   <Nupspec>
         <Path></Path>
   </Nupspec>  
@@ -107,6 +107,43 @@
 </NuspecHasTheSameVersionsWithPackagesConfig>");
 
             ShouldFailNormally(xmlConfig);
+        }
+
+        [Fact]
+        public void ShouldFailIfUnknownTagsAreExists()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
+  <UnknownTag>
+        <Path></Path>
+  </UnknownTag>
+</NuspecHasTheSameVersionsWithPackagesConfig>");
+
+            ShouldFailOnConfiguration(xmlConfig);
+        }
+
+        [Fact]
+        public void ShouldNotBeExecutedForDisabledConfig()
+        {
+            var testSubfolder = "MultiplePackages";
+            var testFolder = TestDirectory.GetDirectories(testSubfolder).Single();
+
+            var xmlConfig = XElement.Parse(@"
+<NuspecHasTheSameVersionsWithPackagesConfig >
+  <ExcludePackagesOfProject projectName='IgnoredProject.csproj'/>  
+  <ExcludePackageId packageId='incorrect-ignored-global-package'/>
+  <Nupspec>
+        <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultiplePackages\project.nuspec</Path>
+        <ExcludePackagesOfProject projectName='SomeMissingProject.csproj'/>  
+        <ExcludePackageId packageId='incorrect-ignored-local-package'/>
+  </Nupspec>  
+</NuspecHasTheSameVersionsWithPackagesConfig>");
+
+            var projects = testFolder.GetFiles("*.csproj", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
+
+            projects.Length.ShouldBe(3);
+
+            ShouldPassAsDisabled(xmlConfig, projects);
         }
     }
 }

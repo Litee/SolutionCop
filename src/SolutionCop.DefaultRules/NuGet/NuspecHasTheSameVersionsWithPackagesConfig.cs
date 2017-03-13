@@ -217,7 +217,7 @@
                 var result = new RuleConfiguration();
 
                 var enabledValue = ruleConfig.Attribute(EnabledAttributeName)?.Value;
-                result.IsEnabled = string.IsNullOrEmpty(enabledValue) || string.Equals(enabledValue, "true", StringComparison.OrdinalIgnoreCase);
+                result.IsEnabled = string.Equals(enabledValue, "true", StringComparison.OrdinalIgnoreCase);
 
                 foreach (var mainElement in ruleConfig.Elements())
                 {
