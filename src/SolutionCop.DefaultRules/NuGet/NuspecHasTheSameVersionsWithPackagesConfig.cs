@@ -163,7 +163,7 @@
             var projectsAndPackages = from projectPath in projectFilePathes
                 let fileName = Path.GetFileName(projectPath)
                 let projectFolder = Path.GetDirectoryName(projectPath)
-                let packagesFilePath = Path.Combine(projectPath, "packages.config")
+                let packagesFilePath = Path.Combine(projectFolder, "packages.config")
                 where !excludedProjects.Contains(fileName) && File.Exists(projectPath) && File.Exists(packagesFilePath)
                 select new { ProjectPath = projectPath, PackageFile = PackagesFileData.ReadFile(packagesFilePath) };
 

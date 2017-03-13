@@ -1,0 +1,2 @@
+﻿Errors[0] = There is inconsistent between Nuspec file ..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultiplePackages\project.nuspec and solution. Nuspec has dependency 'first-incorrect-reference' with version '1.0.0.0'. Solution has the same packages, but with versions: 2.0.0.0
+Errors[1] = There is inconsistent between Nuspec file ..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultiplePackages\project.nuspec and solution. Nuspec has dependency 'second-incorrect-reference' with version '1.0.0.0'. Solution has the same packages, but with versions: 2.0.0.0

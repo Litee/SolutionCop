@@ -27,6 +27,11 @@
                 var packageId = xmlUsedPackage.Attribute("id")?.Value ?? string.Empty;
                 var packageVersion = xmlUsedPackage.Attribute("version")?.Value ?? string.Empty;
 
+                if (string.IsNullOrWhiteSpace(packageId) || string.IsNullOrWhiteSpace(packageVersion))
+                {
+                    continue;
+                }
+
                 result.Packages.Add(new PackageInfo(packageId, packageVersion));
             }
 

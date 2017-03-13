@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <dependencies>
+      <dependency id="first-incorrect-reference" version="1.0.0.0" />
+      <dependency id="second-incorrect-reference" version="1.0.0.0" />
+      <dependency id="incorrect-ignored-global-package" version="1.0.0.0" />
+      <dependency id="incorrect-ignored-local-package" version="1.0.0.0" />
+      <dependency id="right-reference-with-different-packages-versions" version="1.0.0.0" />
+      <dependency id="right-reference" version="2.0.0.0" />
+      <dependency id="invalid-package-without-version-in-nuspec"/>
+      <dependency id="invalid-package-without-version-in-packages-config" version="1.0.0.0"/>
+    </dependencies>
+    <tags>nlog, xml, config</tags>
+  </metadata>
+</package>
