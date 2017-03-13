@@ -21,24 +21,6 @@
         }
 
         [Fact]
-        public void ShouldNotFailIfNoNuspecAndNoProjectsFilesWereFoundByMask()
-        {
-            var xmlConfig = XElement.Parse(@"
-<NuspecHasTheSameVersionsWithPackagesConfig>
-  <Nupspec><Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\NoFiles\*.nuspec</Path></Nupspec>  
-  <ExcludePackagesOfProject projectName='SomeMissingProject.csproj'/>  
-  <ExcludePackageId packageId='ApprovalTests'/>
-  <Nupspec>
-        <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\NoFiles\*.nuspec</Path>
-        <ExcludePackagesOfProject projectName='SomeMissingProject.csproj'/>  
-        <ExcludePackageId packageId='ApprovalTests'/>
-  </Nupspec>  
-</NuspecHasTheSameVersionsWithPackagesConfig>");
-
-            ShouldPassNormally(xmlConfig, "..\\..\\Data\\NuspecHasTheSameVersionsWithPackagesConfig\\NoFiles\\missingProject.csproj");
-        }
-
-        [Fact]
         public void ShouldUnionVersionsFromDifferentProjects()
         {
             var testSubfolder = "MultiplePackages";
@@ -102,6 +84,29 @@
             projects.Length.ShouldBe(1);
 
             ShouldPassNormally(xmlConfig, projects);
+        }
+
+        [Fact]
+        public void ShouldFailForInvalidNuspecFilesLookupPatterns()
+        {
+            var xmlConfig = XElement.Parse(@"
+<NuspecHasTheSameVersionsWithPackagesConfig>
+  <Nupspec>
+        <Path></Path>
+  </Nupspec>  
+  <Nupspec/>  
+  <Nupspec>
+        <Path>ZZ:\</Path>
+  </Nupspec>
+  <Nupspec>
+        <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\NoFiles\*.nuspec</Path>
+  </Nupspec>
+  <Nupspec>
+        <Path>MissingNuspecFile.nuspec</Path>
+  </Nupspec>
+</NuspecHasTheSameVersionsWithPackagesConfig>");
+
+            ShouldFailNormally(xmlConfig);
         }
     }
 }

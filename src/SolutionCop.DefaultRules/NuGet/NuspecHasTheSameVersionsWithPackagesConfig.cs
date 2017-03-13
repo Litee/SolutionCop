@@ -90,9 +90,18 @@
 
                 var packageToVersions = GetPackageToAllowedVersion(packageFiles);
 
-                foreach (var specsPathes in nuspecTag.Pathes)
+                foreach (var specPathesPattern in nuspecTag.Pathes)
                 {
-                    foreach (var nuspecFilePath in GetNuspecFiles(specsPathes))
+                    var resolvedNuspecPathes = GetNuspecFiles(specPathesPattern);
+
+                    if (ReferenceEquals(resolvedNuspecPathes, null))
+                    {
+                        errors.Add($"Unable to find nuspec files by using pattern {specPathesPattern}");
+
+                        continue;
+                    }
+
+                    foreach (var nuspecFilePath in resolvedNuspecPathes)
                     {
                         var nuspecFile = NuspecFileData.ReadFile(nuspecFilePath);
 
@@ -139,7 +148,7 @@
         {
             if (string.IsNullOrWhiteSpace(pathToFiles))
             {
-                return new string[0];
+                return null;
             }
 
             if (File.Exists(pathToFiles))
@@ -152,10 +161,12 @@
 
             if (string.IsNullOrWhiteSpace(directoryName) || !Directory.Exists(directoryName))
             {
-                return new string[0];
+                return null;
             }
 
-            return Directory.GetFiles(directoryName, pattern, SearchOption.AllDirectories);
+            var files = Directory.GetFiles(directoryName, pattern, SearchOption.AllDirectories);
+
+            return files.Any() ? files : null;
         }
 
         private static Dictionary<string, PackagesFileData> GetProjectToPackagesMap(IEnumerable<string> projectFilePathes, HashSet<string> excludedProjects)
