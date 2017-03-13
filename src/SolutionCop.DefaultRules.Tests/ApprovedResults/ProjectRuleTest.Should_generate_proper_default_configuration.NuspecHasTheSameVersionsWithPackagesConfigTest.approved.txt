@@ -1,15 +1,22 @@
 ﻿<NuspecHasTheSameVersionsWithPackagesConfig enabled="false">
+  <!--See also here: https://github.com/Litee/SolutionCop/wiki/NuspecHasTheSameVersionsWithPackagesConfig-->
   <Nupspec>
+    <!--One simple nuspec file. Relative and absolute pathes are supported.-->
     <Path>NuspecFiles/MyPackage.nuspec</Path>
   </Nupspec>
   <Nupspec>
+    <!--Mask-based nuspec file pattern. SolutionCop will resolve folder '../../NuspecFiles/' and then will try to find all files *.nuspec in this directory and in all subdirectories (see .Net option 'SearchOption.AllDirectories')-->
     <Path>../../NuspecFiles/*.nuspec</Path>
   </Nupspec>
   <Nupspec>
     <Path>MyPackage.nuspec</Path>
+    <!--Target package will be ignored for current nuspec pattern only-->
     <ExcludePackageId packageId="package-id" />
+    <!--This project will be ignored for current nuspec pattern only. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT-->
     <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
   </Nupspec>
+  <!--Target package will be ignored for all nuspec files-->
   <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
+  <!--This project will be ignored by all nuspec files. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT-->
   <ExcludePackagesOfProject packageId="package-id" />
 </NuspecHasTheSameVersionsWithPackagesConfig>

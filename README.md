@@ -20,6 +20,7 @@ SolutionCop.MSBuild allows to run SolutionCop checks during project compilation 
   * [ReferenceNuGetPackagesOnly](https://github.com/Litee/SolutionCop/wiki/ReferenceNuGetPackagesOnly) - very useful to detect when reference switches from NuGet binary to raw binaries in Bin/Debug. Hard to notice, but may cause weird hard-to-understand side effects.
   * [NuGetPackageVersions](https://github.com/Litee/SolutionCop/wiki/NuGetPackageVersions) - super-useful if you have large project or set of projects and want to control all changes for external dependencies - here all dependencies and versions will be in a single file, which helps a lot.
   * [SameNuGetPackageVersions](https://github.com/Litee/SolutionCop/wiki/SameNuGetPackageVersions) - one more useful rule to avoid partial NuGet upgrades when only some projects were upgraded. It may also cause strange side effects.  
+  * [NuspecHasTheSameVersionsWithPackagesConfig](https://github.com/Litee/SolutionCop/wiki/NuspecHasTheSameVersionsWithPackagesConfig) - checks, that nuspec file has the same version dependencies with solution's packages
 * StyleCop-related rules
   * [StyleCopEnabled](https://github.com/Litee/SolutionCop/wiki/StyleCopEnabled)
   * [TreatStyleCopWarningsAsErrors](https://github.com/Litee/SolutionCop/wiki/TreatStyleCopWarningsAsErrors)

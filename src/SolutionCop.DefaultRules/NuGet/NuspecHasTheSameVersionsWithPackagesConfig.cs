@@ -29,9 +29,16 @@
             {
                 var element = new XElement(Id);
                 element.SetAttributeValue(EnabledAttributeName, "false");
+                element.Add(new XComment("See also here: https://github.com/Litee/SolutionCop/wiki/NuspecHasTheSameVersionsWithPackagesConfig"));
 
-                var simpleNuspecElement = new XElement(NuspecTagName, new XElement(NupsecPathTagName, "NuspecFiles/MyPackage.nuspec"));
-                var folderNuspecElement = new XElement(NuspecTagName, new XElement(NupsecPathTagName, "../../NuspecFiles/*.nuspec"));
+                var simpleNuspecElement = new XElement(NuspecTagName);
+                simpleNuspecElement.Add(new XComment("One simple nuspec file. Relative and absolute pathes are supported."));
+                simpleNuspecElement.Add(new XElement(NupsecPathTagName, "NuspecFiles/MyPackage.nuspec"));
+
+                var folderNuspecElement = new XElement(NuspecTagName);
+                folderNuspecElement.Add(new XComment("Mask-based nuspec file pattern. SolutionCop will resolve folder '../../NuspecFiles/' and then will try to find all files *.nuspec in this directory and in all subdirectories (see .Net option 'SearchOption.AllDirectories')"));
+                folderNuspecElement.Add(new XElement(NupsecPathTagName, "../../NuspecFiles/*.nuspec"));
+
                 var nuspecForExclusion = new XElement(NuspecTagName, new XElement(NupsecPathTagName, "MyPackage.nuspec"));
 
                 element.Add(simpleNuspecElement);
@@ -43,7 +50,10 @@
                 var packageExclusion = new XElement(PackageExceptionTagName);
                 packageExclusion.SetAttributeValue(PackageAttributeName, "package-id");
 
+                nuspecForExclusion.Add(new XComment("Target package will be ignored for current nuspec pattern only"));
                 nuspecForExclusion.Add(packageExclusion);
+
+                nuspecForExclusion.Add(new XComment("This project will be ignored for current nuspec pattern only. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT"));
                 nuspecForExclusion.Add(projectExclusion);
 
                 element.Add(nuspecForExclusion);
@@ -54,7 +64,10 @@
                 var globalPackageExclusion = new XElement(ProjectExceptionTagName);
                 globalPackageExclusion.SetAttributeValue(PackageAttributeName, "package-id");
 
+                element.Add(new XComment("Target package will be ignored for all nuspec files"));
                 element.Add(globalProjectExclusion);
+
+                element.Add(new XComment("This project will be ignored by all nuspec files. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT"));
                 element.Add(globalPackageExclusion);
 
                 return element;
