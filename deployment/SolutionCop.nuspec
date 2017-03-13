@@ -1,5 +1,47 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
+    <id>SolutionCop</id>
+    <version>$version$</version>
+    <title>SolutionCop</title>
+    <authors>Andrey Lipatkin</authors>
+    <owners>litee</owners>
+    <copyright>2017 Andrey Lipatkin</copyright>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/Litee/SolutionCop</projectUrl>
+    <!--<iconUrl></iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Tool for static analysis of Visual Studio solutions and projects.</description>
+    <language>en-US</language>
+    <tags>VS, VisualStudio, StyleCop, FxCop</tags>
+    <releaseNotes>
+0.8.0-beta1 - Add NuspecHasTheSameVersionsWithPackagesConfig rule
+0.7.0 - No changes, releasing beta1 as stable version
+0.7.0-beta1 - Contributions from https://github.com/skurdiukov:
+              {New} XSD Schema added
+              {New} Failed checks are reported as failed tests into TeamCity
+              {BugFix} SameNameForAssemblyAndRootNamespace rule now doesn't crash on missing assembly name
+0.6.0 - No changes, releasing beta3 as stable version
+0.6.0-beta3 - {BugFix} Attempt to fix relative folders issue in FilesIncludedIntoProjectRule
+              {New} Additional recommendations added into some error messages
+0.6.0-beta2 - {BugFix} Fixed WarningLevel parsing - now is correctly 1 if missing
+              {New} Now possible to suppress success messages for build servers. PR from Igor Manushin.
+0.6.0-beta1 - Refactoring for new SolutionCop.MSBuild package
+0.5.2 - {BugFix} Now error is properly reported when NuGet binary is referenced, but there is no packages.config file
+0.5.1 - {New} Assembly alias added for ReferenceNuGetPackagesOnly rule exceptions
+0.5.0 - {New} Possible to specify files in ReferenceNuGetPackagesOnly rule exceptions
+0.4.1 - {New} Writing app version to console
+0.4.0 - {New} Multiple version ranges supported - e.g. "[0.1.1, 0.2)|[0.2.1, 0.3)"
+...
+    </releaseNotes>
   </metadata>
+  <files>
+    <file src="..\src\SolutionCop.CommandLine\Bin\Release\SolutionCop.exe" target="tools/bin" />
+    <file src="..\src\SolutionCop.CommandLine\Bin\Release\SolutionCop.Core.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.CommandLine\Bin\Release\CommandLine.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\SolutionCop.DefaultRules.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\NuGet.Core.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.xsd" target="tools/bin" />
+  </files>
 </package>                                       
