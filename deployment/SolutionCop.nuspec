@@ -36,12 +36,12 @@
     </releaseNotes>
   </metadata>
   <files>
-    <file src="..\src\SolutionCop.CommandLine\Bin\Release\SolutionCop.exe" target="tools/bin" />
-    <file src="..\src\SolutionCop.CommandLine\Bin\Release\SolutionCop.Core.dll" target="tools/bin" />
-    <file src="..\src\SolutionCop.CommandLine\Bin\Release\CommandLine.dll" target="tools/bin" />
-    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\SolutionCop.DefaultRules.dll" target="tools/bin" />
-    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\NuGet.Core.dll" target="tools/bin" />
-    <file src="..\src\SolutionCop.DefaultRules\Bin\Release\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
-    <file src="..\src\SolutionCop.xsd" target="tools/bin" />
+    <file src="..\src\Bin\Release\SolutionCop.exe" target="tools/bin" />
+    <file src="..\src\Bin\Release\SolutionCop.Core.dll" target="tools/bin" />
+    <file src="..\src\Bin\Release\CommandLine.dll" target="tools/bin" />
+    <file src="..\src\Bin\Release\SolutionCop.DefaultRules.dll" target="tools/bin" />
+    <file src="..\src\Bin\Release\NuGet.Core.dll" target="tools/bin" />
+    <file src="..\src\Bin\Release\Microsoft.Web.XmlTransform.dll" target="tools/bin" />
+    <file src="..\src\SolutionCop.Core\SolutionCop.xsd" target="tools/bin" />
   </files>
 </package>                                       

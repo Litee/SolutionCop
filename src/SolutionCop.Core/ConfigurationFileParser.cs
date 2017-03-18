@@ -32,16 +32,16 @@
             if (File.Exists(pathToConfigFile))
             {
                 _logger.LogInfo("Existing config file found: {0}", pathToConfigFile);
-                return ParseConfigString(pathToConfigFile, File.ReadAllText(pathToConfigFile), rules, errors);
+                return ParseConfigString(pathToConfigFile, File.ReadAllText(pathToConfigFile), rules, errors, true);
             }
             else
             {
                 _logger.LogWarning("Config file does not exist. Creating a new one {0}", pathToConfigFile);
-                return ParseConfigString(pathToConfigFile, "<Rules></Rules>", rules, errors);
+                return ParseConfigString(pathToConfigFile, "<Rules></Rules>", rules, errors, true);
             }
         }
 
-        public Dictionary<string, XElement> ParseConfigString(string pathToConfigFile, string rulesConfiguration, IEnumerable<IProjectRule> knownRules, List<string> errors)
+        public Dictionary<string, XElement> ParseConfigString(string pathToConfigFile, string rulesConfiguration, IEnumerable<IProjectRule> knownRules, List<string> errors, bool restoreMissingSchemaFile)
         {
             try
             {
@@ -61,7 +61,7 @@
                         xmlRules.Add(new XAttribute(_xsi + "noNamespaceSchemaLocation", SolutionCopXsdFileName));
                         saveConfigFileOnExit = true;
                         var pathToSchemaFile = Path.GetDirectoryName(pathToConfigFile) + Path.DirectorySeparatorChar + SolutionCopXsdFileName;
-                        if (!File.Exists(pathToSchemaFile))
+                        if (restoreMissingSchemaFile && !File.Exists(pathToSchemaFile))
                         {
                             using (var stream = typeof(ConfigurationFileParser).Assembly.GetManifestResourceStream("SolutionCop.Core." + SolutionCopXsdFileName))
                             {

@@ -27,7 +27,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors, false);
             errors.ShouldBeEmpty();
             newConfigFileContent.ShouldNotBeEmpty();
             Approvals.Verify(newConfigFileContent);
@@ -37,7 +37,7 @@
         public void Should_pass_for_config_with_valid_section()
         {
             const string xmlRules = @"
-<Rules>
+<Rules xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='SolutionCop.xsd'>
   <Dummy />
 </Rules>";
             var newConfigFileContent = string.Empty;
@@ -47,7 +47,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors, false);
             errors.ShouldBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -56,7 +56,7 @@
         public void Should_pass_for_config_with_unknown_section()
         {
             const string xmlRules = @"
-<Rules>
+<Rules xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='SolutionCop.xsd'>
   <NonExistingId />
   <Dummy />
 </Rules>
@@ -68,7 +68,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors, false);
             errors.ShouldBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -88,7 +88,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors, false);
             errors.ShouldNotBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
@@ -108,7 +108,7 @@
             };
             var instance = CreateInstance(saveConfigFileAction);
             var errors = new List<string>();
-            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors);
+            instance.ParseConfigString("SolutionCop.xml", xmlRules, new IProjectRule[] { new DummyRule() }, errors, false);
             errors.ShouldNotBeEmpty();
             newConfigFileContent.ShouldBeEmpty();
         }
