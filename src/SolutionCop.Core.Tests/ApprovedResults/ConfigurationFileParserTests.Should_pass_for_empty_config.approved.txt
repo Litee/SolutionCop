@@ -1,4 +1,4 @@
 ﻿﻿<?xml version="1.0" encoding="utf-8"?>
-<Rules>
+<Rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SolutionCop.xsd">
   <Dummy />
 </Rules>

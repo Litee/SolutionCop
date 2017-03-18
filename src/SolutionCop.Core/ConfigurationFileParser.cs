@@ -10,6 +10,7 @@
 
     public class ConfigurationFileParser
     {
+        private readonly XNamespace _xsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
         private readonly Action<string, byte[]> _saveConfigFileAction;
         private readonly ISolutionCopConsole _logger;
 
@@ -53,6 +54,17 @@
                 }
                 else
                 {
+                    if (!xmlRules.Attributes().Any(x => x.Value == "http://www.w3.org/2001/XMLSchema-instance"))
+                    {
+                        xmlRules.Add(new XAttribute(XNamespace.Xmlns + "xsi", _xsi));
+                        xmlRules.Add(new XAttribute(_xsi + "noNamespaceSchemaLocation", "SolutionCop.xsd"));
+                        saveConfigFileOnExit = true;
+                        var pathToSchemaFile = Path.GetDirectoryName(pathToConfigFile) + Path.DirectorySeparatorChar + "SolutionCop.xsd";
+                        if (!File.Exists(pathToSchemaFile))
+                        {
+                            File.Copy("SolutionCop.xsd", pathToSchemaFile);
+                        }
+                    }
                     foreach (var rule in rules)
                     {
                         var xmlRuleConfig = xmlRules.Element(rule.Id);

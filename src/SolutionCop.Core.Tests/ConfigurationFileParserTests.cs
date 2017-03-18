@@ -16,10 +16,10 @@
     public class ConfigurationFileParserTests
     {
         [Theory]
-        [InlineData]
-        public void Should_pass_for_empty_config()
+        [InlineData("<Rules></Rules>")]
+        [InlineData("<Rules xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"SolutionCop.xsd\"></Rules>")]
+        public void Should_pass_for_empty_config(string xmlRules)
         {
-            const string xmlRules = @"<Rules></Rules>";
             var newConfigFileContent = string.Empty;
             Action<string, byte[]> saveConfigFileAction = (s, bytes) =>
             {
