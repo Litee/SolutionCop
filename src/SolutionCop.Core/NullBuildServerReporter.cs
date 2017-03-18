@@ -28,5 +28,13 @@
         public void TestFailed(string testName, string message, string details)
         {
         }
+
+        public void SolutionVerificationFailed(string description)
+        {
+        }
+
+        public void SolutionVerificationPassed(string description)
+        {
+        }
     }
 }

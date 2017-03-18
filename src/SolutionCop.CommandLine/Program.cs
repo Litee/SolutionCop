@@ -1,7 +1,6 @@
 ﻿namespace SolutionCop.CommandLine
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -18,6 +17,15 @@
 
             if (Parser.Default.ParseArguments(args, commandLineParameters))
             {
+                // Process legacy parameters
+                if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
+                {
+                    commandLineParameters.ReportFormat = ReportFormatType.TeamCityVerbose;
+                }
+                if (commandLineParameters.BuildServerNoSuccessMessages && commandLineParameters.ReportFormat == ReportFormatType.TeamCityVerbose)
+                {
+                    commandLineParameters.ReportFormat = ReportFormatType.TeamCityNoSuccessMessage;
+                }
                 SolutionCopConsole.LogInfo("StyleCop version " + Assembly.GetEntryAssembly().GetName().Version);
                 VerifySolution(commandLineParameters);
             }
@@ -27,7 +35,7 @@
             }
         }
 
-        private static void VerifySolution(CommandLineParameters commandLineParameters)
+        private static void VerifySolution(ICommandLineParameters commandLineParameters)
         {
             var solutionInfo = SolutionParser.LoadFromFile(SolutionCopConsole, commandLineParameters.PathToSolution);
 
@@ -40,7 +48,7 @@
                     SolutionCopConsole.LogInfo("Custom path to config file is not specified, using default one: {0}", pathToConfigFile);
                 }
 
-                var reporter = CreateBuildServerReporter(commandLineParameters);
+                var reporter = CreateBuildServerReporter(commandLineParameters.ReportFormat);
 
                 var verificationResult = new ProjectsVerifier(SolutionCopConsole, reporter).VerifyProjects(
                     pathToConfigFile,
@@ -51,23 +59,12 @@
                             {
                                 SolutionCopConsole.LogError("***** Full list of errors: *****");
                                 errors.ForEach(x => SolutionCopConsole.LogError(x));
-                                if (commandLineParameters.BuildServerType == BuildServer.TeamCity)
-                                {
-                                    // adding empty line for a better formatting in TC output
-                                    // var extendedErrorsInfo = Enumerable.Repeat(string.Empty, 1).Concat(errors.Select((x, idx) => string.Format("ERROR ({0}/{1}): {2}", idx + 1, errors.Count, x))).Concat(Enumerable.Repeat(String.Empty, 1)).Concat(validationResults.Select(x => String.Format("INFO: Rule {0} is {1}", x.RuleId, x.IsEnabled ? "enabled" : "disabled")));
-                                    // Console.Out.WriteLine("##teamcity[testFailed name='SolutionCop' message='FAILED - {0}' details='{1}']", EscapeForTeamCity(Path.GetFileName(pathToConfigFile)), string.Join("|r|n", extendedErrorsInfo.Select(EscapeForTeamCity)));
-                                    TeamCityReporter.WriteCommand("buildProblem", new KeyValuePair<string, string>("description", string.Concat("FAILED - ", Path.GetFileName(pathToConfigFile))));
-                                }
+                                reporter.SolutionVerificationFailed(string.Concat("FAILED - ", Path.GetFileName(pathToConfigFile)));
                             }
                             else
                             {
                                 SolutionCopConsole.LogInfo("No errors found!");
-
-                                // TODO: BuildServerNoSuccessMessages is probably obsolete now
-                                if (commandLineParameters.BuildServerType == BuildServer.TeamCity && !commandLineParameters.BuildServerNoSuccessMessages)
-                                {
-                                    TeamCityReporter.WriteCommand("progressMessage", new KeyValuePair<string, string>("text", string.Concat("PASSED - ", Path.GetFileName(pathToConfigFile))));
-                                }
+                                reporter.SolutionVerificationPassed(string.Concat("PASSED - ", Path.GetFileName(pathToConfigFile)));
                             }
                         });
                 Environment.Exit(verificationResult == VerificationResult.ErrorsFound ? -1 : 0);
@@ -79,13 +76,16 @@
             }
         }
 
-        private static IBuildServerReporter CreateBuildServerReporter(CommandLineParameters commandLineParameters)
+        private static IBuildServerReporter CreateBuildServerReporter(ReportFormatType reportFormat)
         {
             IBuildServerReporter reporter;
-            switch (commandLineParameters.BuildServerType)
+            switch (reportFormat)
             {
-                case BuildServer.TeamCity:
-                    reporter = new TeamCityReporter();
+                case ReportFormatType.TeamCityVerbose:
+                    reporter = new TeamCityReporter(showSuccessMessage: true);
+                    break;
+                case ReportFormatType.TeamCityNoSuccessMessage:
+                    reporter = new TeamCityReporter(showSuccessMessage: false);
                     break;
                 default:
                     reporter = new NullBuildServerReporter();

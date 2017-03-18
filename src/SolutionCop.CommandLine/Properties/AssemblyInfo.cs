@@ -10,7 +10,7 @@ using CommandLine;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SolutionCop.CommandLine")]
-[assembly: AssemblyCopyright("Copyright (c) 2015 Andrey Lipatkin")]
+[assembly: AssemblyCopyright("Copyright (c) 2015-2017 Andrey Lipatkin")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyLicense("This is free software distributed under Apache License 2.0")]
