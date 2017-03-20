@@ -1,11 +1,18 @@
 ﻿namespace SolutionCop.Core
 {
     using System;
-
+    using System.IO;
     using Param = System.Collections.Generic.KeyValuePair<string, string>;
 
     public class TeamCityReporter : IBuildServerReporter
     {
+        private readonly bool _showSuccessMessage = true;
+
+        public TeamCityReporter(bool showSuccessMessage)
+        {
+            _showSuccessMessage = showSuccessMessage;
+        }
+
         public static void WriteCommand(string command, params Param[] args)
         {
             Console.Out.Write("##teamcity[");
@@ -77,6 +84,27 @@
                 new Param("name", testName),
                 new Param("message", message),
                 new Param("details", details));
+        }
+
+        /// <summary>
+        /// Report that solution verification failed.
+        /// </summary>
+        /// <param name="description">Additional information.</param>
+        public void SolutionVerificationFailed(string description)
+        {
+            WriteCommand("buildProblem", new Param("description", description));
+        }
+
+        /// <summary>
+        /// Report that solution verification passed.
+        /// </summary>
+        /// <param name="description">Additional information.</param>
+        public void SolutionVerificationPassed(string description)
+        {
+            if (_showSuccessMessage)
+            {
+                WriteCommand("progressMessage", new Param("text", description));
+            }
         }
 
         /// <summary>
