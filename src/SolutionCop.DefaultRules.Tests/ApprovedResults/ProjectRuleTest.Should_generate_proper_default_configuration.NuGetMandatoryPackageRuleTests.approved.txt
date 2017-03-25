@@ -1,5 +1,5 @@
 ﻿<NuGetMandatoryPackage enabled="false">
-  <!--This package must be defined in all projects-->
+  <!--This package must be referenced in all projects-->
   <Package id="mandatory-package-id" />
   <!--SomeProject.csproj does not have to reference mandatory packages-->
   <Exception>
