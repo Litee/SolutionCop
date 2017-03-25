@@ -39,11 +39,11 @@
             int requiredWarningLevel = 4;
             if (xmlMinimalValue == null)
             {
-                errors.Add(string.Format("Bad configuration for rule {0}: <MinimalValue> element is missing.", Id));
+                errors.Add($"Bad configuration for rule {Id}: <MinimalValue> element is missing.");
             }
             else if (!Int32.TryParse((string)xmlMinimalValue, out requiredWarningLevel))
             {
-                errors.Add(string.Format(Resources.BadConfiguration, Id, string.Format("<MinimalValue> element must contain an integer.")));
+                errors.Add(string.Format(Resources.BadConfiguration, Id, "<MinimalValue> element must contain an integer."));
             }
             var exceptions = new Dictionary<string, int>();
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
@@ -51,7 +51,7 @@
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
                 }
                 else
                 {
@@ -95,7 +95,7 @@
                 var warningLevelInProject = xmlWarningLevel == null ? 0 : Int32.Parse(xmlWarningLevel.Value);
                 if (warningLevelInProject < requiredWarningLevel)
                 {
-                    yield return string.Format("Warning level {0} is lower than required {1} in project {2}. Please make sure that setting is active for ALL configurations.", warningLevelInProject, requiredWarningLevel, projectFileName);
+                    yield return $"Warning level {warningLevelInProject} is lower than required {requiredWarningLevel} in project {projectFileName}. Please make sure that setting is active for ALL configurations.";
                     yield break;
                 }
             }

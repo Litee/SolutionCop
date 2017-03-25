@@ -39,7 +39,7 @@
             config.FilePatternsToProcess.AddRange(xmlRuleConfigs.Elements("FileName").Select(x => x.Value.Trim()));
             if (!config.FilePatternsToProcess.Any())
             {
-                errors.Add(string.Format("Bad configuration for rule {0}: No file names to process.", Id));
+                errors.Add($"Bad configuration for rule {Id}: No file names to process.");
             }
 
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
@@ -48,7 +48,7 @@
                 var xmlFile = xmlException.Element("FileName");
                 if (xmlProject == null && xmlFile == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> or <FileName> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> or <FileName> element is missing in exceptions list.");
                 }
                 else if (xmlProject != null)
                 {
@@ -100,7 +100,7 @@
                         {
                             // TODO Yak!
                             var fileSubPath = Path.GetFileName(projectDirPath) + Path.DirectorySeparatorChar + Path.GetFullPath(filePath).Substring(projectDirPath.Length + 1);
-                            yield return string.Format("File is not referenced in project: {0}", fileSubPath);
+                            yield return $"File is not referenced in project: {fileSubPath}";
                         }
                     }
                 }

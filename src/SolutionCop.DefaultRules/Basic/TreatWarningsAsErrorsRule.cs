@@ -43,7 +43,7 @@
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
                 }
                 else
                 {
@@ -86,19 +86,19 @@
                 }
                 if (allWarningsMustBeTreatedAsErrors)
                 {
-                    yield return string.Format("Not all warnings are treated as an error in project {0}", projectFileName);
+                    yield return $"Not all warnings are treated as an error in project {projectFileName}";
                 }
                 else
                 {
                     var xmlWarningsAsErrors = xmlPropertyGroupWithCondition.Descendants(Namespace + "WarningsAsErrors").Concat(xmlPropertyGlobalGroups.Descendants(Namespace + "WarningsAsErrors")).FirstOrDefault();
-                    var warningsTreatedAsErrorsInProject = xmlWarningsAsErrors == null ? new string[0] : xmlWarningsAsErrors.Value.Split(',').Select(x => x.Trim()).ToArray();
+                    var warningsTreatedAsErrorsInProject = xmlWarningsAsErrors?.Value.Split(',').Select(x => x.Trim()).ToArray() ?? new string[0];
 
                     Console.Out.WriteLine("{0} vs {1}", string.Join(", ", warningsThatMustBeTreatedAsErrors), string.Join(", ", warningsTreatedAsErrorsInProject));
 
                     var warningsNotTreatedAsErrorsInPropertyGroup = warningsThatMustBeTreatedAsErrors.Except(warningsTreatedAsErrorsInProject);
                     foreach (var warningId in warningsNotTreatedAsErrorsInPropertyGroup)
                     {
-                        yield return string.Format("Warning {0} is not treated as an error in project {1}. Please make sure that setting is active for ALL configurations.", warningId, Path.GetFileName(projectFilePath));
+                        yield return $"Warning {warningId} is not treated as an error in project {Path.GetFileName(projectFilePath)}. Please make sure that setting is active for ALL configurations.";
                     }
                 }
             }

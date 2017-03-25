@@ -35,7 +35,7 @@
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
                 }
             }
 
@@ -54,7 +54,7 @@
                 var importedProjectPaths = xmlProject.Descendants(Namespace + "Import").Select(x => (string)x.Attribute("Project"));
                 if (importedProjectPaths.Any(x => x.ToLower().Contains(".nuget\\nuget.targets")))
                 {
-                    yield return string.Format("Obsolete NuGet restore mode is used in project {0}", Path.GetFileName(projectFilePath));
+                    yield return $"Obsolete NuGet restore mode is used in project {Path.GetFileName(projectFilePath)}";
                 }
             }
         }

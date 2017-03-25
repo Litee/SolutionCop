@@ -39,9 +39,9 @@
                 var xmlFiles = xmlException.Elements("File").Concat(xmlException.Elements("Assembly")).ToArray();
                 if (xmlProject == null && !xmlFiles.Any())
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> or <Assembly> elements are missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> or <Assembly> elements are missing in exceptions list.");
                 }
-                exceptions.Add(new Tuple<string, string[]>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlFiles.Select(x => x.Value.Trim()).ToArray()));
+                exceptions.Add(new Tuple<string, string[]>(xmlProject?.Value.Trim(), xmlFiles.Select(x => x.Value.Trim()).ToArray()));
             }
             return exceptions;
         }
@@ -61,7 +61,7 @@
                     {
                         hintPathsNotMatchingAnyException.Remove(hintPath);
                     }
-                    if (hintPathsThatMatchCurrentException.Count() == hintPaths.Count())
+                    if (hintPathsThatMatchCurrentException.Length == hintPaths.Length)
                     {
                         break;
                     }
@@ -73,7 +73,7 @@
                     break;
                 }
             }
-            return hintPathsNotMatchingAnyException.Select(badReference => string.Format("Reference '{0}' is not pointing to NuGet package in project {1}", badReference, projectFileName));
+            return hintPathsNotMatchingAnyException.Select(badReference => $"Reference '{badReference}' is not pointing to NuGet package in project {projectFileName}");
         }
     }
 }

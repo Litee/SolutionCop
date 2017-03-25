@@ -41,11 +41,11 @@
                 var xmlPackage = xmlException.Element("Package");
                 if (xmlProject == null && xmlPackage == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> or <Package> elements are missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> or <Package> elements are missing in exceptions list.");
                 }
                 else
                 {
-                    exceptions.Add(new Tuple<string, string>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlPackage == null ? null : xmlPackage.Value.Trim()));
+                    exceptions.Add(new Tuple<string, string>(xmlProject?.Value.Trim(), xmlPackage?.Value.Trim()));
                 }
             }
 
@@ -77,7 +77,7 @@
                             var otherUsedPackageIds = value.Where(x => x != packageVersion).ToArray();
                             if (otherUsedPackageIds.Any())
                             {
-                                yield return string.Format("Package {0} uses different versions {1} and {2}  in project {3}", packageId, otherUsedPackageIds.First(), packageVersion, projectFileName);
+                                yield return $"Package {packageId} uses different versions {otherUsedPackageIds.First()} and {packageVersion}  in project {projectFileName}";
                             }
                         }
                         else

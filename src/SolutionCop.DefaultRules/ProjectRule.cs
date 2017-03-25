@@ -6,7 +6,6 @@
     using System.Linq;
     using System.Xml.Linq;
     using Core;
-    using Properties;
 
     public abstract class ProjectRule<T> : IProjectRule
     {
@@ -68,14 +67,14 @@
                         }
                         else
                         {
-                            errors.Add(string.Format("Project file not found: {0}", Path.GetFileName(projectFilePath)));
+                            errors.Add($"Project file not found: {Path.GetFileName(projectFilePath)}");
                         }
                     }
                 }
             }
             else if (isEnabledString.ToLower() != "false")
             {
-                errors.Add(string.Format("Error in config for rule {0} - 'enabled' attribute has wrong value.", Id));
+                errors.Add($"Error in config for rule {Id} - 'enabled' attribute has wrong value.");
             }
             return new ValidationResult(Id, isEnabled, hasErrorsInConfiguration, errors.ToArray());
         }

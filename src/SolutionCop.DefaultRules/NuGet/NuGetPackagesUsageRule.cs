@@ -39,11 +39,11 @@
                 var xmlPackage = xmlException.Element("Package");
                 if (xmlProject == null && xmlPackage == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> or <Package> elements are missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> or <Package> elements are missing in exceptions list.");
                 }
                 else
                 {
-                    exceptions.Add(new Tuple<string, string>(xmlProject == null ? null : xmlProject.Value.Trim(), xmlPackage == null ? null : xmlPackage.Value.Trim()));
+                    exceptions.Add(new Tuple<string, string>(xmlProject?.Value.Trim(), xmlPackage?.Value.Trim()));
                 }
             }
 
@@ -74,7 +74,7 @@
                         var xmlHintPaths = xmlProject.Descendants(Namespace + "HintPath").Where(x => x.Value.Contains(hintPathSubstring));
                         if (!xmlHintPaths.Any())
                         {
-                            yield return string.Format("Package {0} with version {1} is declared in packages.config, but not referenced in project {2}", packageId, packageVersion, projectFileName);
+                            yield return $"Package {packageId} with version {packageVersion} is declared in packages.config, but not referenced in project {projectFileName}";
                         }
                     }
                 }
@@ -97,7 +97,7 @@
                     return packageReference.Contains(hintPathSubstring);
                 }))
                 {
-                    yield return string.Format("Package reference {0} in .csproj file without package entry in packages.config for project {1}", packageReference, projectFileName);
+                    yield return $"Package reference {packageReference} in .csproj file without package entry in packages.config for project {projectFileName}";
                 }
             }
         }

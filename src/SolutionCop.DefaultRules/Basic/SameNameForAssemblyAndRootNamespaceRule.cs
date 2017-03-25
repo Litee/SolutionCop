@@ -35,7 +35,7 @@
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
                 }
             }
 
@@ -55,11 +55,11 @@
                 var rootNamespace = xmlProject.Descendants(Namespace + "RootNamespace").First().Value;
                 if (assemblyName == null)
                 {
-                    yield return string.Format("Assembly name is missing in project {0}", Path.GetFileName(projectFilePath));
+                    yield return $"Assembly name is missing in project {Path.GetFileName(projectFilePath)}";
                 }
                 else if (assemblyName.Value != rootNamespace)
                 {
-                    yield return string.Format("Assembly name '{0}' and root namespace '{1}' are different in project {2}", assemblyName.Value, rootNamespace, Path.GetFileName(projectFilePath));
+                    yield return $"Assembly name '{assemblyName.Value}' and root namespace '{rootNamespace}' are different in project {Path.GetFileName(projectFilePath)}";
                 }
             }
         }

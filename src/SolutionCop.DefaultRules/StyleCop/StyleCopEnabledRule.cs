@@ -33,7 +33,7 @@
             var badExceptionConfigs = xmlRuleConfigs.Elements("Exception")
                 .Select(x => x.Element("Project"))
                 .Where(x => x == null)
-                .Select(xmlProject => string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                .Select(xmlProject => $"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
             errors.AddRange(badExceptionConfigs);
             return xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
         }
@@ -50,7 +50,7 @@
                 var importedProjectPaths = xmlProject.Descendants(Namespace + "Import").Select(x => (string)x.Attribute("Project"));
                 if (!importedProjectPaths.Any(x => x.Contains("StyleCop.MSBuild.Targets") || x.Contains("Microsoft.SourceAnalysis.targets")))
                 {
-                    yield return string.Format("StyleCop is missing in project {0}", projectFileName);
+                    yield return $"StyleCop is missing in project {projectFileName}";
                 }
             }
         }

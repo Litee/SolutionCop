@@ -36,7 +36,7 @@
             var targetFrameworkVersions = xmlRuleConfigs.Elements("FrameworkVersion").Select(x => x.Value.Trim()).ToArray();
             if (!targetFrameworkVersions.Any())
             {
-                errors.Add(string.Format("No target version specified for rule {0}", Id));
+                errors.Add($"No target version specified for rule {Id}");
             }
             var exceptions = new Dictionary<string, string[]>();
             foreach (var xmlException in xmlRuleConfigs.Elements("Exception"))
@@ -44,7 +44,7 @@
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
                 }
                 else
                 {
@@ -76,7 +76,7 @@
             var invalidFrameworkVersions = xmlProject.Descendants(Namespace + "TargetFrameworkVersion").Select(x => x.Value.Substring(1)).Where(x => targetFrameworkVersions.All(y => y != x)).ToArray();
             if (invalidFrameworkVersions.Any())
             {
-                yield return string.Format("Invalid target .NET framework version '{0}' in project {1}", invalidFrameworkVersions.First(), Path.GetFileName(projectFilePath));
+                yield return $"Invalid target .NET framework version '{invalidFrameworkVersions.First()}' in project {Path.GetFileName(projectFilePath)}";
             }
         }
     }

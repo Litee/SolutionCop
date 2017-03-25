@@ -35,7 +35,7 @@
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
                 }
             }
             return xmlRuleConfigs.Elements("Exception").Select(x => x.Value.Trim()).ToArray();
@@ -62,7 +62,7 @@
                             continue;
                         }
                     }
-                    yield return string.Format("StyleCop warnings are not treated as errors in project {0}", projectFileName);
+                    yield return $"StyleCop warnings are not treated as errors in project {projectFileName}";
                 }
             }
         }

@@ -40,7 +40,7 @@
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
                 }
                 else
                 {
@@ -81,14 +81,14 @@
                     if (suppressedWarnings.Any())
                     {
                         var warningsNotAllowedToSuppress = suppressedWarnings.Except(warningsAllowedToSuppress).ToArray();
-                        if (warningsNotAllowedToSuppress.Count() == 1)
+                        if (warningsNotAllowedToSuppress.Length == 1)
                         {
-                            yield return string.Format("Unapproved warning {0} is suppressed in project {1}. Please make sure that setting is active for ALL configurations.", warningsNotAllowedToSuppress.First(), Path.GetFileName(projectFilePath));
+                            yield return $"Unapproved warning {warningsNotAllowedToSuppress.First()} is suppressed in project {Path.GetFileName(projectFilePath)}. Please make sure that setting is active for ALL configurations.";
                             yield break;
                         }
-                        if (warningsNotAllowedToSuppress.Count() > 1)
+                        if (warningsNotAllowedToSuppress.Length > 1)
                         {
-                            yield return string.Format("Unapproved warnings {0} are suppressed in project {1}. Please make sure that setting is active for ALL configurations.", string.Join(", ", warningsNotAllowedToSuppress), Path.GetFileName(projectFilePath));
+                            yield return $"Unapproved warnings {string.Join(", ", warningsNotAllowedToSuppress)} are suppressed in project {Path.GetFileName(projectFilePath)}. Please make sure that setting is active for ALL configurations.";
                             yield break;
                         }
                     }

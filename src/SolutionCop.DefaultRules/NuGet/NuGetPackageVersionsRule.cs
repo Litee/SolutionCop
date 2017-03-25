@@ -39,7 +39,7 @@
                 var xmlProject = xmlException.Element("Project");
                 if (xmlProject == null)
                 {
-                    errors.Add(string.Format("Bad configuration for rule {0}: <Project> element is missing in exceptions list.", Id));
+                    errors.Add($"Bad configuration for rule {Id}: <Project> element is missing in exceptions list.");
                 }
             }
 
@@ -53,7 +53,7 @@
                 IVersionSpec versionSpec;
                 if (packageRuleVersions.Split('|').Select(x => x.Trim()).Any(x => !VersionUtility.TryParseVersionSpec(x, out versionSpec)))
                 {
-                    errors.Add(string.Format("Cannot parse package version rule {0} for package {1} in config {2}", packageRuleVersions, packageRuleId, Id));
+                    errors.Add($"Cannot parse package version rule {packageRuleVersions} for package {packageRuleId} in config {Id}");
                 }
                 else
                 {
@@ -86,7 +86,7 @@
                         var xmlPackageRule = xmlPackageRules.FirstOrDefault(x => x.Attribute("id").Value == packageId);
                         if (xmlPackageRule == null)
                         {
-                            yield return string.Format("Unknown package '{0}' with version {1} in project {2}", packageId, packageVersion, projectFileName);
+                            yield return $"Unknown package '{packageId}' with version {packageVersion} in project {projectFileName}";
                         }
                         else
                         {
@@ -96,11 +96,11 @@
                             var usedSemanticVersion = SemanticVersion.Parse(packageVersion);
                             if (!versionSpecs.Any(x => x.Satisfies(usedSemanticVersion)))
                             {
-                                yield return string.Format("Version {0} for package '{1}' does not match rule {2} in project {3}", packageVersion, packageId, packageRuleVersions, projectFileName);
+                                yield return $"Version {packageVersion} for package '{packageId}' does not match rule {packageRuleVersions} in project {projectFileName}";
                             }
                             else if (noPrereleaseVersions && !string.IsNullOrEmpty(usedSemanticVersion.SpecialVersion))
                             {
-                                yield return string.Format("Version {0} for package '{1}' must be stable in project {2}", packageVersion, packageId, projectFileName);
+                                yield return $"Version {packageVersion} for package '{packageId}' must be stable in project {projectFileName}";
                             }
                         }
                     }

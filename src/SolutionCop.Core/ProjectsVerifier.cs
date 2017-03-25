@@ -45,7 +45,7 @@
 
                 if (xmlRuleConfigs == null)
                 {
-                    var error = string.Format("Configuration section is not found for rule {0}", rule.Id);
+                    var error = $"Configuration section is not found for rule {rule.Id}";
                     errors.Add(error);
                     _buildServerReporter.TestStarted(testName);
                     _buildServerReporter.TestFailed(testName, error, error);
@@ -62,7 +62,7 @@
 
                     if (validationResult.Errors.Any())
                     {
-                        _buildServerReporter.TestFailed(testName, string.Format("Validation failed for rule {0}",  rule.Id), string.Join("\n", validationResult.Errors));
+                        _buildServerReporter.TestFailed(testName, $"Validation failed for rule {rule.Id}", string.Join("\n", validationResult.Errors));
                     }
 
                     _buildServerReporter.TestFinished(testName);
