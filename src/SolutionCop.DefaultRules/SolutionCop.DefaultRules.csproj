@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SolutionCop.DefaultRules</RootNamespace>
     <AssemblyName>SolutionCop.DefaultRules</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -36,12 +36,11 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Web.XmlTransform">
+    <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.12.0.817, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Core.2.12.0\lib\net40-Client\NuGet.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -57,7 +56,15 @@
     <Compile Include="Basic\FilesIncludedIntoProjectRuleConfig.cs" />
     <Compile Include="Basic\SameNameForAssemblyAndRootNamespaceRule.cs" />
     <Compile Include="Basic\TargetFrameworkProfileRule.cs" />
+    <Compile Include="ConfigValidation.cs" />
     <Compile Include="NuGet\NuGetAutomaticPackagesRestoreRule.cs" />
+    <Compile Include="NuGet\NuspecDependencyInfo.cs" />
+    <Compile Include="NuGet\NuspecFileData.cs" />
+    <Compile Include="NuGet\NuspecHasTheSameVersionsWithPackagesConfig.cs" />
+    <Compile Include="NuGet\PackageInfo.cs" />
+    <Compile Include="NuGet\PackageProjectException.cs" />
+    <Compile Include="NuGet\PackagesFileData.cs" />
+    <Compile Include="NuGet\XmlNodeExtensions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

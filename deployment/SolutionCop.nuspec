@@ -6,7 +6,7 @@
     <title>SolutionCop</title>
     <authors>Andrey Lipatkin</authors>
     <owners>litee</owners>
-    <copyright>2015 Andrey Lipatkin</copyright>
+    <copyright>2015-2017 Andrey Lipatkin</copyright>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/Litee/SolutionCop</projectUrl>
     <!--<iconUrl></iconUrl>-->
@@ -15,6 +15,7 @@
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
     <releaseNotes>
+0.8.0-beta1 - Add NuspecHasTheSameVersionsWithPackagesConfig rule
 0.7.0 - No changes, releasing beta1 as stable version
 0.7.0-beta1 - Contributions from https://github.com/skurdiukov:
               {New} XSD Schema added

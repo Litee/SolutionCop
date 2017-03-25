@@ -1,0 +1,4 @@
+﻿Errors[0] = Unable to find nuspec files by using pattern 
+Errors[1] = Unable to find nuspec files by using pattern ZZ:\
+Errors[2] = Unable to find nuspec files by using pattern ..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\NoFiles\*.nuspec
+Errors[3] = Unable to find nuspec files by using pattern MissingNuspecFile.nuspec

@@ -15,6 +15,7 @@
         <xs:element name="SameNuGetPackageVersions" type="CommonPackageRule" minOccurs="0"/>
         <xs:element name="NuGetPackagesUsage" type="CommonPackageRule" minOccurs="0"/>
         <xs:element name="NuGetPackageVersions" type="NuGetPackageVersionsRule" minOccurs="0"/>
+        <xs:element name="NuspecHasTheSameVersionsWithPackagesConfig" type="NuspecHasTheSameVersionsWithPackagesConfigRule" minOccurs="0"/>
         <xs:element name="StyleCopEnabled" type="StyleCopEnabledRule" minOccurs="0"/>
         <xs:element name="SuppressWarnings" type="SuppressWarningsRule" minOccurs="0"/>
         <xs:element name="TreatStyleCopWarningsAsErrors" type="BasicWihtoutSettingsRule" minOccurs="0"/>
@@ -124,22 +125,17 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:complexType name="PackageProjectException">
+    <xs:choice minOccurs="1" maxOccurs="2">
+      <xs:element name="Project" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Package" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:choice>
+  </xs:complexType>
   <xs:complexType name="CommonPackageRule">
     <xs:complexContent>
       <xs:extension base="ProjectRule">
         <xs:sequence>
-          <xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
-            <xs:complexType>
-              <xs:choice maxOccurs="2">
-                <xs:element name="Project" type="xs:string"/>
-                <xs:element name="Package" type="xs:string" maxOccurs="unbounded"/>
-              </xs:choice>
-            </xs:complexType>
-            <xs:unique name="project">
-              <xs:selector xpath="."/>
-              <xs:field xpath="Project"/>
-            </xs:unique>
-          </xs:element>
+          <xs:element name="Exception" type="PackageProjectException" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -160,6 +156,25 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  
+  <xs:complexType name="NuspecHasTheSameVersionsWithPackagesConfigRule">
+    <xs:complexContent>
+      <xs:extension base="ProjectRule">
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="Nuspec" minOccurs="1" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:choice maxOccurs="unbounded">
+                <xs:element name="Path" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element name="Exception" type="PackageProjectException" minOccurs="0" maxOccurs="unbounded"/>
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Exception" type="PackageProjectException" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="StyleCopEnabledRule">
     <xs:complexContent>
       <xs:extension base="ProjectRule">
