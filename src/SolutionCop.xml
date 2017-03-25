@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SolutionCop.xsd">
   <TargetFrameworkVersion enabled="true">
-    <FrameworkVersion>4.0</FrameworkVersion>
+    <FrameworkVersion>4.5</FrameworkVersion>
   </TargetFrameworkVersion>
   <ReferenceNuGetPackagesOnly enabled="true"/>
   <TreatWarningsAsErrors enabled="true">
@@ -16,6 +16,12 @@
   <NuGetPackagesUsage enabled="true">
     <Exception>
       <Package>StyleCop.MSBuild</Package>
+    </Exception>
+    <Exception>
+      <Package>StyleCop.Analyzers</Package>
+    </Exception>
+    <Exception>
+      <Package>xunit.runner.visualstudio</Package>
     </Exception>
   </NuGetPackagesUsage>
   <NuGetPackageVersions enabled="false"/>
