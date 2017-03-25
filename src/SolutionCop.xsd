@@ -126,9 +126,9 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="PackageProjectException">
-    <xs:choice>
-      <xs:element name="Project" type="xs:string"/>
-      <xs:element name="Package" type="xs:string" maxOccurs="unbounded"/>
+    <xs:choice minOccurs="1" maxOccurs="2">
+      <xs:element name="Project" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Package" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:choice>
   </xs:complexType>
   <xs:complexType name="CommonPackageRule">
@@ -156,14 +156,7 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="ExcludePackagesOfProjectType">
-    <xs:attribute name="projectName" type="xs:string" use="required"/>
-  </xs:complexType>
-
-  <xs:complexType name="ExcludeIdentitiesType">
-    <xs:attribute name="packageId" type="xs:string" use="required"/>
-  </xs:complexType>
-
+  
   <xs:complexType name="NuspecHasTheSameVersionsWithPackagesConfigRule">
     <xs:complexContent>
       <xs:extension base="ProjectRule">

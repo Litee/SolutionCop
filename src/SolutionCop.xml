@@ -21,15 +21,40 @@
   <NuGetPackageVersions enabled="false"/>
   <TreatStyleCopWarningsAsErrors enabled="false"/>
   <SameNuGetPackageVersions enabled="true"/>
-  <NuspecHasTheSameVersionsWithPackagesConfig enabled="true">
-    <!--all exclusions are needed for xsd schema validation only-->
+  <NuspecHasTheSameVersionsWithPackagesConfig enabled="false">
+    <!--See also here: https://github.com/Litee/SolutionCop/wiki/NuspecHasTheSameVersionsWithPackagesConfig-->
     <Nuspec>
-      <Path>../deployment/*.nuspec</Path>
-      <ExcludePackageId packageId="package-id" />
-      <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
+      <!--One simple nuspec file. Relative and absolute pathes are supported.-->
+      <Path>NuspecFiles/MyPackage.nuspec</Path>
     </Nuspec>
-    <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
-    <ExcludePackageId packageId="package-id" />
+    <Nuspec>
+      <!--Mask-based nuspec file pattern. SolutionCop will resolve folder '../../NuspecFiles/' and then will try to find all files *.nuspec in this directory and in all subdirectories (see .Net option 'SearchOption.AllDirectories')-->
+      <Path>../../NuspecFiles/*.nuspec</Path>
+    </Nuspec>
+    <Nuspec>
+      <Path>MyPackage.nuspec</Path>
+      <!--Target package will be ignored for current nuspec pattern only-->
+      <Exception>
+        <Package>package-id</Package>
+      </Exception>
+      <!--This project will be ignored for current nuspec pattern only. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT-->
+      <Exception>
+        <Project>ProjectWithAnotherReferences.csproj</Project>
+      </Exception>
+    </Nuspec>
+    <!--Target package will be ignored for all nuspec files-->
+    <Exception>
+      <Package>package-id</Package>
+    </Exception>
+    <!--This project will be ignored by all nuspec files. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT-->
+    <Exception>
+      <Project>ProjectWithAnotherReferences.csproj</Project>
+    </Exception>
+    <!--To exclude project and package (e.g. exclude with AND mark) union both exclusions in the same Exception tag-->
+    <Exception>
+      <Project>ProjectWithAnotherReferences.csproj</Project>
+      <Package>package-id</Package>
+    </Exception>
   </NuspecHasTheSameVersionsWithPackagesConfig>
   <FilesIncludedIntoProject enabled="true">
     <FileName>*.cs</FileName>
