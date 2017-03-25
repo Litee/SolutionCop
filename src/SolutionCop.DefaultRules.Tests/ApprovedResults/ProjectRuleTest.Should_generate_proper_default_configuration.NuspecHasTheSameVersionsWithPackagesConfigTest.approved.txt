@@ -11,12 +11,25 @@
   <Nupspec>
     <Path>MyPackage.nuspec</Path>
     <!--Target package will be ignored for current nuspec pattern only-->
-    <ExcludePackageId packageId="package-id" />
+    <Exception>
+      <Package>package-id</Package>
+    </Exception>
     <!--This project will be ignored for current nuspec pattern only. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT-->
-    <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
+    <Exception>
+      <Project>ProjectWithAnotherReferences.csproj</Project>
+    </Exception>
   </Nupspec>
   <!--Target package will be ignored for all nuspec files-->
-  <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
+  <Exception>
+    <Package>package-id</Package>
+  </Exception>
   <!--This project will be ignored by all nuspec files. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT-->
-  <ExcludePackageId packageId="package-id" />
+  <Exception>
+    <Project>ProjectWithAnotherReferences.csproj</Project>
+  </Exception>
+  <!--To exclude project and package (e.g. exclude with AND mark) union both exclusions in the same Exception tag-->
+  <Exception>
+    <Project>ProjectWithAnotherReferences.csproj</Project>
+    <Package>package-id</Package>
+  </Exception>
 </NuspecHasTheSameVersionsWithPackagesConfig>

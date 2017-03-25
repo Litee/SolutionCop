@@ -1,1 +1,1 @@
-﻿Errors[0] = Bad configuration for rule NuspecHasTheSameVersionsWithPackagesConfig: Unknown entry within <NuspecHasTheSameVersionsWithPackagesConfig>: <UnknownTag>. Allowed entries: <Nupspec>, <ExcludePackagesOfProject>, <ExcludePackageId>.
+﻿Errors[0] = Bad configuration for rule NuspecHasTheSameVersionsWithPackagesConfig: Unknown entry within <NuspecHasTheSameVersionsWithPackagesConfig>: <UnknownTag>. Allowed entries: <Nupspec>, <Exception>.

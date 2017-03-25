@@ -56,10 +56,10 @@
                 var globalPackageExclusion = PackageProjectException.Generate(null, "package-id");
 
                 element.Add(new XComment("Target package will be ignored for all nuspec files"));
-                element.Add(globalProjectExclusion);
+                element.Add(globalPackageExclusion);
 
                 element.Add(new XComment("This project will be ignored by all nuspec files. All these declarations are the same: 'myProject.csproj', 'myProject', MYPROJECT"));
-                element.Add(globalPackageExclusion);
+                element.Add(globalProjectExclusion);
 
                 var unionedGlobalExclusion = PackageProjectException.Generate("ProjectWithAnotherReferences.csproj", "package-id");
 
@@ -74,7 +74,7 @@
         {
             var errors = new List<string>();
 
-            ConfigValidation.ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, Id, NuspecTagName, PackageProjectException.ProjectExceptionTagName, PackageProjectException.PackageExceptionTagName);
+            ConfigValidation.ValidateConfigSectionForAllowedElements(xmlRuleConfigs, errors, Id, NuspecTagName, PackageProjectException.ExceptionTagName);
 
             if (errors.Any())
             {
