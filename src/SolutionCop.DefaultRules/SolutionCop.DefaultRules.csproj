@@ -62,6 +62,7 @@
     <Compile Include="NuGet\NuspecFileData.cs" />
     <Compile Include="NuGet\NuspecHasTheSameVersionsWithPackagesConfig.cs" />
     <Compile Include="NuGet\PackageInfo.cs" />
+    <Compile Include="NuGet\PackageProjectException.cs" />
     <Compile Include="NuGet\PackagesFileData.cs" />
     <Compile Include="NuGet\XmlNodeExtensions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

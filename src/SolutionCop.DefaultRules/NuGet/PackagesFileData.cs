@@ -7,9 +7,14 @@
 
     internal sealed class PackagesFileData
     {
-        private PackagesFileData()
+        private PackagesFileData(List<PackageInfo> packages)
         {
-            Packages = new List<PackageInfo>();
+            Packages = packages;
+        }
+
+        private PackagesFileData()
+            : this(new List<PackageInfo>())
+        {
         }
 
         public List<PackageInfo> Packages { get; }
@@ -36,6 +41,13 @@
             }
 
             return result;
+        }
+
+        public PackagesFileData WithoutExceptions(PackageProjectException[] exceptions, string projectName)
+        {
+            var resultList = Packages.Where(p => exceptions.All(ex => !ex.Matches(p.Name, projectName))).ToList();
+
+            return new PackagesFileData(resultList);
         }
     }
 }
