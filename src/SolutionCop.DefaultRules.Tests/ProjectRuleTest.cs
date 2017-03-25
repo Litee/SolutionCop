@@ -20,6 +20,7 @@
             _instance = instance;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "Safe to call multiple times")]
         public void Dispose()
         {
             // Setting to null to switch back to standard file naming for approvals.
