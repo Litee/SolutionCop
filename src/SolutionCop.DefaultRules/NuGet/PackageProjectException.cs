@@ -78,7 +78,7 @@
             {
                 var message = $"At least one of the following exceptions should be declared: {AvailableChildrenList}";
 
-                throw new InvalidOperationException(message);
+                throw new ArgumentException(message);
             }
 
             return new PackageProjectException(projectId, packageId);
