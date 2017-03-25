@@ -4,6 +4,8 @@ SolutionCop is a tool for analyzing Visual Studio solutions and projects. It cov
 
 SolutionCop.MSBuild allows to run SolutionCop checks during project compilation and detect issues earlier.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/laycp76h8l738cdu/branch/master?svg=true)](https://ci.appveyor.com/project/Litee/solutioncop/branch/master)
+
 ## Supported rules - see more details for each rule by clicking its name
 
 * Basic rules
