@@ -1,17 +1,18 @@
 ﻿namespace SolutionCop.DefaultRules.NuGet
 {
     using System;
+    using System.IO;
     using System.Xml.Linq;
 
     internal sealed class PackageProjectException
     {
         public const string ExceptionTagName = "Exception";
-        public const string PackageExceptionTagName = "Package";
-        public const string ProjectExceptionTagName = "Project";
+        private const string PackageExceptionTagName = "Package";
+        private const string ProjectExceptionTagName = "Project";
 
         private static readonly string AvailableChildrenList = string.Join(", ", PackageExceptionTagName, ProjectExceptionTagName);
 
-        public PackageProjectException(string projectId, string packageId)
+        private PackageProjectException(string projectId, string packageId)
         {
             ProjectId = projectId;
             PackageId = packageId;
@@ -63,7 +64,7 @@
                 }
                 else if (string.Equals(nodeName, ProjectExceptionTagName, StringComparison.OrdinalIgnoreCase))
                 {
-                    projectId = nodeValue;
+                    projectId = Path.GetFileNameWithoutExtension(nodeValue);
                 }
                 else
                 {
@@ -89,7 +90,7 @@
                                  string.Equals(packageId, PackageId, StringComparison.OrdinalIgnoreCase);
 
             var matchesProject = ReferenceEquals(ProjectId, null) ||
-                                 string.Equals(projectName, ProjectId, StringComparison.OrdinalIgnoreCase);
+                                 string.Equals(Path.GetFileNameWithoutExtension(projectName), ProjectId, StringComparison.OrdinalIgnoreCase);
 
             return matchesPackage && matchesProject;
         }
