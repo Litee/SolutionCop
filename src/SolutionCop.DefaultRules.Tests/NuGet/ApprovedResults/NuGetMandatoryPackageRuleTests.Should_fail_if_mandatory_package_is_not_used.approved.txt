@@ -1,0 +1,1 @@
+﻿Errors[0] = Missing mandatory package 'MissingPackage' in project Project.csproj

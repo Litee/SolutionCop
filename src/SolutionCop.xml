@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SolutionCop.xsd">
   <TargetFrameworkVersion enabled="true">
     <FrameworkVersion>4.5</FrameworkVersion>
   </TargetFrameworkVersion>
-  <ReferenceNuGetPackagesOnly enabled="true"/>
+  <ReferenceNuGetPackagesOnly enabled="true" />
   <TreatWarningsAsErrors enabled="true">
-    <AllWarnings/>
+    <AllWarnings />
   </TreatWarningsAsErrors>
-  <SuppressWarnings enabled="true"/>
+  <SuppressWarnings enabled="true" />
   <WarningLevel>
     <MinimalValue>4</MinimalValue>
   </WarningLevel>
-  <StyleCopEnabled enabled="false"/>
-  <NuGetAutomaticPackagesRestore enabled="true"/>
+  <StyleCopEnabled enabled="false" />
+  <NuGetAutomaticPackagesRestore enabled="true" />
   <NuGetPackagesUsage enabled="true">
     <Exception>
       <Package>StyleCop.MSBuild</Package>
@@ -24,9 +24,9 @@
       <Package>xunit.runner.visualstudio</Package>
     </Exception>
   </NuGetPackagesUsage>
-  <NuGetPackageVersions enabled="false"/>
-  <TreatStyleCopWarningsAsErrors enabled="false"/>
-  <SameNuGetPackageVersions enabled="true"/>
+  <NuGetPackageVersions enabled="false" />
+  <TreatStyleCopWarningsAsErrors enabled="false" />
+  <SameNuGetPackageVersions enabled="true" />
   <NuspecHasTheSameVersionsWithPackagesConfig enabled="false">
     <!--See also here: https://github.com/Litee/SolutionCop/wiki/NuspecHasTheSameVersionsWithPackagesConfig-->
     <Nuspec>
@@ -78,6 +78,14 @@
     </Exception>
   </SameNameForAssemblyAndRootNamespace>
   <TargetFrameworkProfile enabled="true">
-    <Profile/>
+    <Profile />
   </TargetFrameworkProfile>
+  <NuGetMandatoryPackage enabled="false">
+    <!--This package must be referenced in all projects-->
+    <Package id="mandatory-package-id" />
+    <!--SomeProject.csproj does not have to reference mandatory packages-->
+    <Exception>
+      <Project>SomeProject.csproj</Project>
+    </Exception>
+  </NuGetMandatoryPackage>
 </Rules>

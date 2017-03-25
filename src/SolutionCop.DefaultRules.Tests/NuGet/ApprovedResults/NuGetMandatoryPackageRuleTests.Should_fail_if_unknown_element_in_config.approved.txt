@@ -1,0 +1,1 @@
+﻿Errors[0] = Bad configuration for rule NuGetMandatoryPackage: Unknown entry within <NuGetMandatoryPackage>: <Dummy>. Allowed entries: <Exception>, <Package>.

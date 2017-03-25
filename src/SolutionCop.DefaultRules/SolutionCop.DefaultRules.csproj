@@ -56,6 +56,7 @@
     <Compile Include="Basic\TargetFrameworkProfileRule.cs" />
     <Compile Include="ConfigValidation.cs" />
     <Compile Include="NuGet\NuGetAutomaticPackagesRestoreRule.cs" />
+    <Compile Include="NuGet\NuGetMandatoryPackageRule.cs" />
     <Compile Include="NuGet\NuspecDependencyInfo.cs" />
     <Compile Include="NuGet\NuspecFileData.cs" />
     <Compile Include="NuGet\NuspecHasTheSameVersionsWithPackagesConfig.cs" />

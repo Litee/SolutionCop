@@ -65,6 +65,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Basic\SameNameForAssemblyAndRootNamespaceRuleTests.cs" />
+    <Compile Include="NuGet\NuGetMandatoryPackageRuleTests.cs" />
     <Compile Include="NuGet\NuspecHasTheSameVersionsWithPackagesConfigTest.cs" />
     <Compile Include="NuGet\PackageProjectExceptionTest.cs" />
     <Compile Include="NuGet\SameNuGetPackageVersionsRuleTests.cs" />
