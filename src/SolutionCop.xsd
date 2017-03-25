@@ -173,7 +173,7 @@
     <xs:complexContent>
       <xs:extension base="ProjectRule">
         <xs:choice maxOccurs="unbounded">
-          <xs:element name="Nupspec" minOccurs="1" maxOccurs="unbounded">
+          <xs:element name="Nuspec" minOccurs="1" maxOccurs="unbounded">
             <xs:complexType>
               <xs:choice maxOccurs="unbounded">
                 <xs:element name="Path" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>

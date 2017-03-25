@@ -34,7 +34,7 @@
     <Exception>
       <Project>IgnoredProject.csproj</Project>
     </Exception>
-  <Nupspec>
+  <Nuspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultiplePackages\project.nuspec</Path>
     <Exception>
       <Package>incorrect-ignored-local-package</Package>
@@ -42,7 +42,7 @@
     <Exception>
       <Project>SomeMissingProject.csproj</Project>
     </Exception>
-  </Nupspec>  
+  </Nuspec>  
 </NuspecHasTheSameVersionsWithPackagesConfig>");
 
             var projects = testFolder.GetFiles("*.csproj", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
@@ -60,9 +60,9 @@
 
             var xmlConfig = XElement.Parse(@"
 <NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
-  <Nupspec>
+  <Nuspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultipleNuspecFiles\*.nuspec</Path>
-  </Nupspec>  
+  </Nuspec>  
 </NuspecHasTheSameVersionsWithPackagesConfig>");
 
             var projects = testFolder.GetFiles("*.csproj", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
@@ -86,9 +86,9 @@
     <Exception>
       <Project>IgnoredProject.csproj</Project>
     </Exception>
-  <Nupspec>
+  <Nuspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\EmptyNuspec\Empty.nuspec</Path>
-  </Nupspec>  
+  </Nuspec>  
 </NuspecHasTheSameVersionsWithPackagesConfig>");
 
             var projects = testFolder.GetFiles("*.csproj", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
@@ -103,19 +103,19 @@
         {
             var xmlConfig = XElement.Parse(@"
 <NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
-  <Nupspec>
+  <Nuspec>
         <Path></Path>
-  </Nupspec>  
-  <Nupspec/>  
-  <Nupspec>
+  </Nuspec>  
+  <Nuspec/>  
+  <Nuspec>
         <Path>ZZ:\</Path>
-  </Nupspec>
-  <Nupspec>
+  </Nuspec>
+  <Nuspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\NoFiles\*.nuspec</Path>
-  </Nupspec>
-  <Nupspec>
+  </Nuspec>
+  <Nuspec>
         <Path>MissingNuspecFile.nuspec</Path>
-  </Nupspec>
+  </Nuspec>
 </NuspecHasTheSameVersionsWithPackagesConfig>");
 
             ShouldFailNormally(xmlConfig);
@@ -148,7 +148,7 @@
     <Exception>
       <Project>IgnoredProject.csproj</Project>
     </Exception>
-  <Nupspec>
+  <Nuspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultiplePackages\project.nuspec</Path>
     <Exception>
       <Package>incorrect-ignored-local-package</Package>
@@ -156,7 +156,7 @@
     <Exception>
       <Project>SomeMissingProject.csproj</Project>
     </Exception>
-  </Nupspec>  
+  </Nuspec>  
 </NuspecHasTheSameVersionsWithPackagesConfig>");
 
             var projects = testFolder.GetFiles("*.csproj", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();

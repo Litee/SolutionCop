@@ -23,11 +23,11 @@
   <SameNuGetPackageVersions enabled="true"/>
   <NuspecHasTheSameVersionsWithPackagesConfig enabled="true">
     <!--all exclusions are needed for xsd schema validation only-->
-    <Nupspec>
+    <Nuspec>
       <Path>../deployment/*.nuspec</Path>
       <ExcludePackageId packageId="package-id" />
       <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
-    </Nupspec>
+    </Nuspec>
     <ExcludePackagesOfProject projectName="ProjectWithAnotherReferences.csproj" />
     <ExcludePackageId packageId="package-id" />
   </NuspecHasTheSameVersionsWithPackagesConfig>

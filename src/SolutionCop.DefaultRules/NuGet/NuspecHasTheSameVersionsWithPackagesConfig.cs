@@ -12,7 +12,7 @@
     public sealed class NuspecHasTheSameVersionsWithPackagesConfig : IProjectRule
     {
         private const string EnabledAttributeName = "enabled";
-        private const string NuspecTagName = "Nupspec";
+        private const string NuspecTagName = "Nuspec";
         private const string NupsecPathTagName = "Path";
 
         private static readonly StringComparer WordComparer = StringComparer.OrdinalIgnoreCase;
