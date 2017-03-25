@@ -28,12 +28,20 @@
 
             var xmlConfig = XElement.Parse(@"
 <NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
-  <ExcludePackagesOfProject projectName='IgnoredProject.csproj'/>  
-  <ExcludePackageId packageId='incorrect-ignored-global-package'/>
+    <Exception>
+      <Package>incorrect-ignored-global-package</Package>
+    </Exception>    
+    <Exception>
+      <Project>IgnoredProject.csproj</Project>
+    </Exception>
   <Nupspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultiplePackages\project.nuspec</Path>
-        <ExcludePackagesOfProject projectName='SomeMissingProject.csproj'/>  
-        <ExcludePackageId packageId='incorrect-ignored-local-package'/>
+    <Exception>
+      <Package>incorrect-ignored-local-package</Package>
+    </Exception>    
+    <Exception>
+      <Project>SomeMissingProject.csproj</Project>
+    </Exception>
   </Nupspec>  
 </NuspecHasTheSameVersionsWithPackagesConfig>");
 
@@ -72,8 +80,12 @@
 
             var xmlConfig = XElement.Parse(@"
 <NuspecHasTheSameVersionsWithPackagesConfig enabled='true'>
-  <ExcludePackagesOfProject projectName='IgnoredProject.csproj'/>  
-  <ExcludePackageId packageId='incorrect-ignored-global-package'/>
+    <Exception>
+      <Package>incorrect-ignored-global-package</Package>
+    </Exception>    
+    <Exception>
+      <Project>IgnoredProject.csproj</Project>
+    </Exception>
   <Nupspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\EmptyNuspec\Empty.nuspec</Path>
   </Nupspec>  
@@ -130,12 +142,20 @@
 
             var xmlConfig = XElement.Parse(@"
 <NuspecHasTheSameVersionsWithPackagesConfig >
-  <ExcludePackagesOfProject projectName='IgnoredProject.csproj'/>  
-  <ExcludePackageId packageId='incorrect-ignored-global-package'/>
+    <Exception>
+      <Package>incorrect-ignored-global-package</Package>
+    </Exception>    
+    <Exception>
+      <Project>IgnoredProject.csproj</Project>
+    </Exception>
   <Nupspec>
         <Path>..\..\Data\NuspecHasTheSameVersionsWithPackagesConfig\MultiplePackages\project.nuspec</Path>
-        <ExcludePackagesOfProject projectName='SomeMissingProject.csproj'/>  
-        <ExcludePackageId packageId='incorrect-ignored-local-package'/>
+    <Exception>
+      <Package>incorrect-ignored-local-package</Package>
+    </Exception>    
+    <Exception>
+      <Project>SomeMissingProject.csproj</Project>
+    </Exception>
   </Nupspec>  
 </NuspecHasTheSameVersionsWithPackagesConfig>");
 
