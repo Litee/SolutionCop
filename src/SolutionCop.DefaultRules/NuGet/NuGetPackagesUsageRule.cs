@@ -62,11 +62,16 @@
                 {
                     var packageId = xmlUsedPackage.Attribute("id").Value;
                     var packageVersion = xmlUsedPackage.Attribute("version").Value;
+                    var developmentDependency = xmlUsedPackage.Attribute("developmentDependency")?.Value.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
 
                     // TODO Simplify
                     if (exceptions.Contains(new Tuple<string, string>(projectFileName, null)) || exceptions.Contains(new Tuple<string, string>(null, packageId)) || exceptions.Contains(new Tuple<string, string>(projectFileName, packageId)))
                     {
                         Console.Out.WriteLine("DEBUG: Skipping package {0} as an exception in project {1}", packageId, projectFileName);
+                    }
+                    else if (developmentDependency)
+                    {
+                        Console.Out.WriteLine("DEBUG: Skipping package {0} as development dependency", packageId);
                     }
                     else
                     {
