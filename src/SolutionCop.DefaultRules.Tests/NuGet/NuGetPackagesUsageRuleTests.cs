@@ -120,5 +120,12 @@
             var xmlConfig = XElement.Parse("<NuGetPackagesUsage enabled=\"false\"/>");
             ShouldPassAsDisabled(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_2\UsesOnePackage.csproj").FullName);
         }
+
+        [Fact]
+        public void Should_pass_if_package_is_development_dependency()
+        {
+            var xmlConfig = XElement.Parse("<NuGetPackagesUsage/>");
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\NuGetPackagesUsage_6\UsesDevelopmentDependency.csproj").FullName);
+        }
     }
 }
