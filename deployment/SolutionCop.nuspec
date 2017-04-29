@@ -15,8 +15,10 @@
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
     <releaseNotes>
+0.9.0-beta1 - {New} Added new NuGetMandatoryPackage rule
+              {New} developmentDependency attribute is taken into account for NuGetPackagesUsage rule
 0.8.0 - No changes, releasing beta1 as stable version
-0.8.0-beta1 - {New} Add NuspecHasTheSameVersionsWithPackagesConfig rule
+0.8.0-beta1 - {New} Added NuspecHasTheSameVersionsWithPackagesConfig rule
               {New} SolutionCop.xsd is added if missing 
 0.7.0 - No changes, releasing beta1 as stable version
 0.7.0-beta1 - Contributions from https://github.com/skurdiukov:
