@@ -48,7 +48,7 @@
             else
             {
                 var importedProjectPaths = xmlProject.Descendants(Namespace + "Import").Select(x => (string)x.Attribute("Project"));
-                if (!importedProjectPaths.Any(x => x.Contains("StyleCop.MSBuild.Targets") || x.Contains("Microsoft.SourceAnalysis.targets")))
+                if (!importedProjectPaths.Any(x => x.EndsWith("StyleCop.MSBuild.targets", StringComparison.OrdinalIgnoreCase) || x.Contains("Microsoft.SourceAnalysis.targets")))
                 {
                     yield return $"StyleCop is missing in project {projectFileName}";
                 }
