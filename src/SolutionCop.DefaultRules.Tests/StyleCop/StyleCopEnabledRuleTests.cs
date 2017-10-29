@@ -6,6 +6,7 @@
     using ApprovalTests.Reporters;
     using DefaultRules.StyleCop;
     using Xunit;
+    using Xunit.Extensions;
 
     [UseReporter(typeof(DiffReporter))]
     [UseApprovalSubdirectory("ApprovedResults")]
@@ -16,11 +17,13 @@
         {
         }
 
-        [Fact]
-        public void Should_pass_if_StyleCop_is_enabled()
+        [Theory]
+        [InlineData("StyleCopEnabled.csproj")]
+        [InlineData("StyleCopEnabled_Lower_Case.csproj")]
+        public void Should_pass_if_StyleCop_is_enabled(string csproj)
         {
             var xmlConfig = XElement.Parse("<StyleCopEnabled/>");
-            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\StyleCopEnabled.csproj").FullName);
+            ShouldPassNormally(xmlConfig, new FileInfo(@"..\..\Data\StyleCopEnabled\" + csproj).FullName);
         }
 
         [Fact]
