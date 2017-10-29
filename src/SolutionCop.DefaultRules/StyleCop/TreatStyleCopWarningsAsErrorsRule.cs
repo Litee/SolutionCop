@@ -54,15 +54,14 @@
                 var xmlPropertyGroupsWithConditions = xmlProject.Descendants(Namespace + "PropertyGroup").Where(x => x.Attribute("Condition") != null);
                 foreach (var xmlPropertyGroupWithCondition in xmlPropertyGroupsWithConditions)
                 {
-                    var xmlTreatWarningsAsErrors = xmlPropertyGroupWithCondition.Descendants(Namespace + "StyleCopTreatErrorsAsWarnings").Concat(xmlPropertyGlobalGroups.Descendants(Namespace + "StyleCopTreatErrorsAsWarnings")).FirstOrDefault();
-                    if (xmlTreatWarningsAsErrors != null)
+                    var xmlTreatErrorsAsWarnings = xmlPropertyGroupWithCondition.Descendants(Namespace + "StyleCopTreatErrorsAsWarnings").Concat(xmlPropertyGlobalGroups.Descendants(Namespace + "StyleCopTreatErrorsAsWarnings")).FirstOrDefault();
+                    if (xmlTreatErrorsAsWarnings != null)
                     {
-                        if (xmlTreatWarningsAsErrors.Value == "true")
+                        if (xmlTreatErrorsAsWarnings.Value == "true")
                         {
-                            continue;
+                            yield return $"StyleCop errors are treated as warnings in project {projectFileName}";
                         }
                     }
-                    yield return $"StyleCop warnings are not treated as errors in project {projectFileName}";
                 }
             }
         }

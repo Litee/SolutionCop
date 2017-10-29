@@ -15,6 +15,8 @@
     <language>en-US</language>
     <tags>VS, VisualStudio, StyleCop, FxCop</tags>
     <releaseNotes>
+0.9.1 - {BugFix} Improved the error message for TreatStyleCopWarningsAsErrorsRule
+0.9.0 - {BugFix} Fixed logic for TreatStyleCopWarningsAsErrorsRule - it was reversed (facepalm)
 0.9.0-beta1 - {New} Added new NuGetMandatoryPackage rule
               {New} developmentDependency attribute is taken into account for NuGetPackagesUsage rule
 0.8.0 - No changes, releasing beta1 as stable version

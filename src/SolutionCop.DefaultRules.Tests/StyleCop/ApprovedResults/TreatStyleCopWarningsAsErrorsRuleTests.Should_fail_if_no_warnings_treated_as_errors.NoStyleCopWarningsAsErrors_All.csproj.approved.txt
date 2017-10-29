@@ -1,2 +1,0 @@
-﻿Errors[0] = StyleCop warnings are not treated as errors in project NoStyleCopWarningsAsErrors_All.csproj
-Errors[1] = StyleCop warnings are not treated as errors in project NoStyleCopWarningsAsErrors_All.csproj

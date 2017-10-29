@@ -1,0 +1,2 @@
+﻿Errors[0] = StyleCop errors are treated as warnings in project True_Global.csproj
+Errors[1] = StyleCop errors are treated as warnings in project True_Global.csproj
